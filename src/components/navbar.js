@@ -1,22 +1,26 @@
 import React from 'react';
-import { AppBar, Toolbar, Stack, Typography, Link as MaterialLink } from '@mui/material';
-import { Link } from 'react-router-dom';
-
+import { Stack, Box } from '@mui/material';
+import { Link, NavLink } from 'react-router-dom';
+import './../App.css';
 export const Navbar = (props) => {
     return (
         <>
-            <AppBar position='static'>
-                <Toolbar>
-                    <Stack direction='row' spacing={2}>
-                        <Link to='/'>
-                            <Typography color='white'>HOME</Typography>
-                        </Link>
-                        <Link to='login'>
-                            <Typography color='white'>LOGIN</Typography>
-                        </Link>
-                    </Stack>
-                </Toolbar>
-            </AppBar>
+            <Box className='menu' sx={{ mb: 8 }}>
+                <Link className='menu-button' to='/'>
+                    TUTAJ LOGO
+                </Link>
+                <Stack direction='row'>
+                    <NavLink className='menu-button' to='/'>
+                        Home
+                    </NavLink>
+                    <NavLink className='menu-button' to='login'>
+                        Login
+                    </NavLink>
+                    <NavLink className='menu-button' to='rejestracja'>
+                        Rejestracja
+                    </NavLink>
+                </Stack>
+            </Box>
         </>
     );
 };
