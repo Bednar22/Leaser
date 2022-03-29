@@ -6,7 +6,7 @@ export const Homepage = (props) => {
 
     const handleClick = () => {
         axios
-            .get('/testowy')
+            .get('/api/Accounts')
             .then((res) => {
                 setTestMessage(res.data);
                 console.log('UDALO SIE');
@@ -20,11 +20,10 @@ export const Homepage = (props) => {
     return (
         <>
             <h1>Homepage</h1>
-            <h3>Przycisk prowadzi do /testowy, zapytanie GET</h3>
+            <h3>Przycisk prowadzi do /api/Accounts --- sprawdz wynik w konsoli(ctrl+shift+i)</h3>
             <Button variant='outlined' onClick={handleClick}>
                 Testowy przycisk do sprawdzenia polaczenia back front
             </Button>
-            {testMessage ? testMessage : ''}
         </>
     );
 };
