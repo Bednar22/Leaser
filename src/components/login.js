@@ -11,7 +11,7 @@ export const Login = () => {
 
     return (
         <>
-            <Container sx={{ width: 1 / 2 }}>
+            <Container maxWidth='xs'>
                 <Paper sx={{ p: 4 }}>
                     <Grid container direction='column' justifyContent='center' alignItems='center' spacing={4}>
                         <Grid item sm={8} md={4}>

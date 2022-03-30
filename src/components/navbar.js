@@ -7,7 +7,7 @@ export const Navbar = (props) => {
         <>
             <Box className='menu' sx={{ mb: 8 }}>
                 <Link className='menu-button' to='/'>
-                    TUTAJ LOGO
+                    LOGO
                 </Link>
                 <Stack direction='row'>
                     <NavLink className='menu-button' to='/'>
