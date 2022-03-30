@@ -11,36 +11,36 @@ export const SignUp = (props) => {
                         <Grid container alignItems='center' justifyContent='center' spacing={{ xs: 2, md: 3 }}>
                             <GridBreak />
                             <Grid item sm={12} md={4}>
-                                <Typography variant='h5'>Dołącz do Leasera!</Typography>
+                                <Typography variant='h5'>Welcome to Leaser!</Typography>
                             </Grid>
                             <GridBreak />
                             <GridBreak />
                             <Grid item xs={12} md={6}>
-                                <TextField label='E-mail' size='small' fullWidth></TextField>
+                                <TextField label='E-mail adress' size='small' fullWidth></TextField>
                             </Grid>
                             <GridBreak />
                             <GridBreak />
                             <Grid item xs={12} md={6}>
-                                <TextField label='Hasło' type='password' size='small' fullWidth></TextField>
+                                <TextField label='Password' type='password' size='small' fullWidth></TextField>
                             </Grid>
                             <GridBreak />
                             <GridBreak />
                             <Grid item xs={12} md={6}>
-                                <TextField label='Potwierdź hasło' type='password' size='small' fullWidth></TextField>
+                                <TextField label='Confirm password' type='password' size='small' fullWidth></TextField>
                             </Grid>
                             <GridBreak />
                             <GridBreak />
                             <Grid item xs={12} md={6}>
                                 <Stack direction='row' spacing={2}>
-                                    <TextField label='Imię' size='small'></TextField>
-                                    <TextField label='Nazwisko' size='small'></TextField>
+                                    <TextField label='First name' size='small'></TextField>
+                                    <TextField label='Last name' size='small'></TextField>
                                 </Stack>
                             </Grid>
                             <GridBreak />
 
                             <Grid item xs={8} md={4}>
                                 <Button variant='contained' sx={{ width: 1 / 1 }}>
-                                    Zarejestruj
+                                    Join Leaser
                                 </Button>
                             </Grid>
                             <GridBreak />

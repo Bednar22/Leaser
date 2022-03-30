@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Paper, TextField, Grid, Container, Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { GridBreak } from './gridBreak';
 export const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -13,25 +14,32 @@ export const Login = () => {
         <>
             <Container maxWidth='xs'>
                 <Paper sx={{ p: 4 }}>
-                    <Grid container direction='column' justifyContent='center' alignItems='center' spacing={4}>
-                        <Grid item sm={8} md={4}>
-                            <TextField label='Nazwa' onChange={(e) => setUsername(e.target.value)}></TextField>
+                    <Grid container direction='row' justifyContent='center' alignItems='center' spacing={4}>
+                        <GridBreak />
+                        <Grid item sm={10} md={8}>
+                            <TextField label='E-mail adress' onChange={(e) => setUsername(e.target.value)}></TextField>
                         </Grid>
-                        <Grid item sm={8} md={4}>
+                        <GridBreak />
+                        <GridBreak />
+                        <Grid item sm={8} md={8}>
                             <TextField
-                                label='Hasło'
+                                label='Password'
                                 type='password'
                                 onChange={(e) => setPassword(e.target.value)}
                             ></TextField>
                         </Grid>
-                        <Grid item sm={8} md={4}>
+                        <GridBreak />
+
+                        <GridBreak />
+                        <Grid item sm={8} md={10}>
                             <Typography variant='p'>
-                                Nie masz konta? Zarejestruj się <Link to='/rejestracja'>tutaj</Link>
+                                Don't have an account? <Link to='/rejestracja'> Join Leaser!</Link>
                             </Typography>
                         </Grid>
-                        <Grid item sm={8} md={4}>
-                            <Button onClick={handleLogin} variant='contained'>
-                                Zaloguj
+                        <GridBreak />
+                        <Grid item sm={8} md={8}>
+                            <Button onClick={handleLogin} variant='contained' sx={{ width: 1 / 1 }}>
+                                Login
                             </Button>
                         </Grid>
                     </Grid>
