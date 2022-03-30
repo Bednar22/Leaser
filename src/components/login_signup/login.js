@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Paper, TextField, Grid, Container, Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { GridBreak } from './gridBreak';
+import { GridBreak } from '../utilities/gridBreak';
 export const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -33,7 +33,7 @@ export const Login = () => {
                         <GridBreak />
                         <Grid item sm={8} md={10}>
                             <Typography variant='p'>
-                                Don't have an account? <Link to='/rejestracja'> Join Leaser!</Link>
+                                Don't have an account? <Link to='/signup'> Join Leaser!</Link>
                             </Typography>
                         </Grid>
                         <GridBreak />

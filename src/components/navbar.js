@@ -17,7 +17,7 @@ export const Navbar = (props) => {
                     <NavLink className='menu-button' to='login'>
                         Login
                     </NavLink>
-                    <NavLink className='menu-button' to='rejestracja'>
+                    <NavLink className='menu-button' to='signup'>
                         Sign Up
                     </NavLink>
                 </Stack>

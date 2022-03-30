@@ -1,12 +1,13 @@
 import React from 'react';
 import { Paper, TextField, Grid, Container, Button, Typography, Stack, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { GridBreak } from './gridBreak';
+import { GridBreak } from '../utilities/gridBreak';
+import { PhoneNumberConfiramtion } from './phoneNumberConfirmation';
 export const SignUp = (props) => {
     return (
         <>
             <Container maxWidth='md'>
-                <Paper sx={{ p: 3 }}>
+                <Paper sx={{ p: 3, mb: 4 }}>
                     <Box>
                         <Grid container alignItems='center' justifyContent='center' spacing={{ xs: 2, md: 3 }}>
                             <GridBreak />
@@ -47,6 +48,11 @@ export const SignUp = (props) => {
                         </Grid>
                     </Box>
                 </Paper>
+            </Container>
+
+            <h1>TEGO TU PÓŻNIEJ NIE BEDZIE --- to będzie jakiś popup czy coś takiego</h1>
+            <Container maxWidth='sm' sx={{ my: 5 }}>
+                <PhoneNumberConfiramtion></PhoneNumberConfiramtion>
             </Container>
         </>
     );
