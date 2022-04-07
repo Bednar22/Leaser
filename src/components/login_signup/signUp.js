@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Paper, TextField, Grid, Container, Button, Typography, Stack, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { GridBreak } from '../utilities/gridBreak';
 import { PhoneNumberConfiramtion } from './phoneNumberConfirmation';
 import axios from 'axios';
-
-export function sleep(duration) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, duration);
-    });
-}
 
 export const SignUp = (props) => {
     const [email, setEmail] = useState('');
@@ -17,14 +11,28 @@ export const SignUp = (props) => {
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-
+    const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
+    const navigate = useNavigate();
 
     const passwordCheck = () => {
         if (password !== passwordConfirm && passwordConfirm !== '') {
             setPasswordError(true);
         } else {
             setPasswordError(false);
+        }
+    };
+
+    const validateEmail = (email) => {
+        if (email) {
+            const error = String(email)
+                .toLowerCase()
+                .match(
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                );
+            setEmailError(!error);
+        } else {
+            setEmailError(false);
         }
     };
 
@@ -35,10 +43,18 @@ export const SignUp = (props) => {
             firstName: firstName,
             lastName: lastName,
         };
-        console.log(user);
+
+        axios
+            .post('/api/signup', { user })
+            .then((res) => {
+                navigate('/login');
+            })
+            .catch((err) => {
+                console.log('Errors');
+            });
+
         e.preventDefault();
     };
-
 
     return (
         <>
@@ -54,17 +70,23 @@ export const SignUp = (props) => {
                             <GridBreak />
                             <Grid item xs={12} md={6}>
                                 <TextField
+                                    error={emailError}
+                                    required
                                     label='E-mail adress'
                                     size='small'
+                                    type='email'
                                     fullWidth
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
+                                    onBlur={(e) => validateEmail(e.target.value)}
+                                    {...(emailError ? { helperText: "It's not valid e-mail adress" } : {})}
                                 ></TextField>
                             </Grid>
                             <GridBreak />
                             <GridBreak />
                             <Grid item xs={12} md={6}>
                                 <TextField
+                                    required
                                     label='Password'
                                     type='password'
                                     size='small'
@@ -77,6 +99,7 @@ export const SignUp = (props) => {
                             <GridBreak />
                             <Grid item xs={12} md={6}>
                                 <TextField
+                                    required
                                     label='Confirm password'
                                     type='password'
                                     size='small'
@@ -93,12 +116,14 @@ export const SignUp = (props) => {
                             <Grid item xs={12} md={6}>
                                 <Stack direction='row' spacing={2}>
                                     <TextField
+                                        required
                                         label='First name'
                                         size='small'
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
                                     ></TextField>
                                     <TextField
+                                        required
                                         label='Last name'
                                         size='small'
                                         value={lastName}
