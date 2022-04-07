@@ -20,7 +20,7 @@ export const Login = () => {
         console.log(data);
 
         axios
-            .post('/api/login', { data })
+            .post('/api/login', data)
             .then((res) => {
                 navigate('/');
             })

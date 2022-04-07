@@ -3,144 +3,138 @@ import { Paper, TextField, Grid, Container, Button, Typography, Stack, Box } fro
 import { useNavigate } from 'react-router-dom';
 import { GridBreak } from '../utilities/gridBreak';
 import { PhoneNumberConfiramtion } from './phoneNumberConfirmation';
+import { useForm, Controller } from 'react-hook-form';
 import axios from 'axios';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+const validationSchema = yup.object().shape({
+    email: yup.string().required('Email is required').email('Email is invalid'),
+    password: yup
+        .string()
+        .required('Password is required')
+        .min(6, 'Password must be at least 6 characters')
+        .max(40, 'Password must not exceed 40 characters'),
+    confirmPassword: yup
+        .string()
+        .required('Confirm password is required')
+        .oneOf([yup.ref('password'), null], 'Passwords does not match'),
+    firstName: yup.string().required('First name is required'),
+    lastName: yup.string().required('Last name is required'),
+    // acceptTerms: yup.bool().oneOf([true], 'Accept Terms is required'),
+});
 
 export const SignUp = (props) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordConfirm, setPasswordConfirm] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [emailError, setEmailError] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
+    const [error, setError] = useState('');
     const navigate = useNavigate();
+    const {
+        register,
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(validationSchema),
+    });
 
-    const passwordCheck = () => {
-        if (password !== passwordConfirm && passwordConfirm !== '') {
-            setPasswordError(true);
-        } else {
-            setPasswordError(false);
-        }
-    };
-
-    const validateEmail = (email) => {
-        if (email) {
-            const error = String(email)
-                .toLowerCase()
-                .match(
-                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                );
-            setEmailError(!error);
-        } else {
-            setEmailError(false);
-        }
-    };
-
-    const onSubmit = (e) => {
-        const user = {
-            email: email,
-            password: password,
-            firstName: firstName,
-            lastName: lastName,
-        };
-
+    const onSubmit = (data) => {
+        console.log(data);
         axios
-            .post('/api/signup', { user })
+            .post('/api/signup', data)
             .then((res) => {
                 navigate('/login');
             })
             .catch((err) => {
+                setError('Something went wrong, try again');
                 console.log('Errors');
             });
-
-        e.preventDefault();
     };
 
     return (
         <>
             <Container maxWidth='md'>
                 <Paper sx={{ p: 3, mb: 4 }}>
-                    <Box>
-                        <Grid container alignItems='center' justifyContent='center' spacing={{ xs: 2, md: 3 }}>
-                            <GridBreak />
-                            <Grid item sm={12} md={4}>
-                                <Typography variant='h5'>Welcome to Leaser!</Typography>
-                            </Grid>
-                            <GridBreak />
-                            <GridBreak />
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    error={emailError}
-                                    required
-                                    label='E-mail adress'
-                                    size='small'
-                                    type='email'
-                                    fullWidth
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    onBlur={(e) => validateEmail(e.target.value)}
-                                    {...(emailError ? { helperText: "It's not valid e-mail adress" } : {})}
-                                ></TextField>
-                            </Grid>
-                            <GridBreak />
-                            <GridBreak />
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    required
-                                    label='Password'
-                                    type='password'
-                                    size='small'
-                                    fullWidth
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                ></TextField>
-                            </Grid>
-                            <GridBreak />
-                            <GridBreak />
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    required
-                                    label='Confirm password'
-                                    type='password'
-                                    size='small'
-                                    fullWidth
-                                    value={passwordConfirm}
-                                    onChange={(e) => setPasswordConfirm(e.target.value)}
-                                    error={passwordError}
-                                    onBlur={passwordCheck}
-                                    {...(passwordError ? { helperText: "Passwords don't match" } : {})}
-                                ></TextField>
-                            </Grid>
-                            <GridBreak />
-                            <GridBreak />
-                            <Grid item xs={12} md={6}>
-                                <Stack direction='row' spacing={2}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <Box>
+                            <Grid container alignItems='center' justifyContent='center' spacing={{ xs: 2, md: 3 }}>
+                                <GridBreak />
+                                <Grid item sm={12} md={4}>
+                                    <Typography variant='h5'>Welcome to Leaser!</Typography>
+                                </Grid>
+                                <GridBreak />
+                                <GridBreak />
+                                <Grid item xs={12} md={6}>
                                     <TextField
                                         required
-                                        label='First name'
+                                        label='E-mail adress'
                                         size='small'
-                                        value={firstName}
-                                        onChange={(e) => setFirstName(e.target.value)}
+                                        type='email'
+                                        fullWidth
+                                        {...register('email')}
+                                        error={errors.email ? true : false}
+                                        helperText={errors.email ? errors.email.message : null}
                                     ></TextField>
+                                </Grid>
+                                <GridBreak />
+                                <GridBreak />
+                                <Grid item xs={12} md={6}>
                                     <TextField
                                         required
-                                        label='Last name'
+                                        label='Password'
+                                        type='password'
                                         size='small'
-                                        value={lastName}
-                                        onChange={(e) => setLastName(e.target.value)}
+                                        fullWidth
+                                        {...register('password')}
+                                        error={errors.password ? true : false}
+                                        helperText={errors.password ? errors.password.message : null}
                                     ></TextField>
-                                </Stack>
-                            </Grid>
-                            <GridBreak />
+                                </Grid>
+                                <GridBreak />
+                                <GridBreak />
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        required
+                                        label='Confirm password'
+                                        type='password'
+                                        size='small'
+                                        fullWidth
+                                        {...register('confirmPassword')}
+                                        error={errors.confirmPassword ? true : false}
+                                        helperText={errors.confirmPassword?.message}
+                                    ></TextField>
+                                </Grid>
+                                <GridBreak />
+                                <GridBreak />
+                                <Grid item xs={12} md={6}>
+                                    <Stack direction='row' spacing={2}>
+                                        <TextField
+                                            required
+                                            label='First name'
+                                            size='small'
+                                            {...register('firstName')}
+                                            error={errors.firstName ? true : false}
+                                            helperText={errors.firstName ? errors.firstName.message : null}
+                                        ></TextField>
+                                        <TextField
+                                            required
+                                            label='Last name'
+                                            size='small'
+                                            {...register('lastName')}
+                                            error={errors.lastName ? true : false}
+                                            helperText={errors.lastName ? errors.lastName.message : null}
+                                        ></TextField>
+                                    </Stack>
+                                </Grid>
+                                <GridBreak />
 
-                            <Grid item xs={8} md={4}>
-                                <Button variant='contained' sx={{ width: 1 / 1 }} onClick={(e) => onSubmit(e)}>
-                                    Join Leaser
-                                </Button>
+                                <Grid item xs={8} md={4}>
+                                    <Button variant='contained' sx={{ width: 1 / 1 }} type='submit'>
+                                        Join Leaser
+                                    </Button>
+                                </Grid>
+                                <GridBreak />
                             </Grid>
-                            <GridBreak />
-                        </Grid>
-                    </Box>
+                        </Box>
+                    </form>
                 </Paper>
             </Container>
 
