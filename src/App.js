@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import { Container } from '@mui/material';
 //components
 import { Login } from './components/login_signup/login';
 import { Navbar } from './components/navbar';
@@ -12,14 +11,14 @@ import { SignUp } from './components/login_signup/signUp';
 function App() {
     return (
         <>
-            <Navbar></Navbar>
-            <Container>
+            <div className='main-content-div'>
+                <Navbar></Navbar>
                 <Routes>
                     <Route path='/' element={<Homepage />} />
                     <Route path='login' element={<Login />} />
                     <Route path='signup' element={<SignUp />} />
                 </Routes>
-            </Container>
+            </div>
         </>
     );
 }
