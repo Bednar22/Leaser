@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
 export const Login = () => {
-    const [error, setError] = useState(false);
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const {
@@ -20,12 +20,13 @@ export const Login = () => {
         console.log(data);
 
         axios
-            .post('/api/login', data)
+            .post('/api/Accounts/Authenticate', data)
             .then((res) => {
                 navigate('/');
+                console.log(res);
             })
             .catch((err) => {
-                setError(true);
+                setError(err.response.data);
             });
     };
 
@@ -69,28 +70,25 @@ export const Login = () => {
                             </Grid>
                             <GridBreak />
 
-                            <Grid item xs={8} md={8} sx={{ mt: -3, mb: -1 }}>
-                                <Typography variant='subtitle2' color='error' align='center'>
-                                    {error ? 'Wrong e-mail or password' : null}
-                                </Typography>
-                            </Grid>
+                            {error ? (
+                                <Grid item xs={12} md={10}>
+                                    <Typography color='error' variant='subtitle2' align='center'>
+                                        {error}
+                                    </Typography>
+                                </Grid>
+                            ) : null}
 
                             <GridBreak />
                             {
-                                <Grid item sm={8} md={10}>
-                                    <Typography variant='p'>
+                                <Grid item xs={10} md={10}>
+                                    <Typography variant='p' align='center'>
                                         Don't have an account? <Link to='/signup'> Join Leaser!</Link>
                                     </Typography>
                                 </Grid>
                             }
                             <GridBreak />
                             <Grid item sm={8} md={8}>
-                                <Button
-                                    // onClick={handleSubmit(handleLogin)}
-                                    variant='contained'
-                                    sx={{ width: 1 / 1 }}
-                                    type='submit'
-                                >
+                                <Button variant='contained' sx={{ width: 1 / 1 }} type='submit'>
                                     Login
                                 </Button>
                             </Grid>
