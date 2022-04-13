@@ -23,16 +23,16 @@ const validationSchema = yup.object().shape({
         .string()
         .required('Confirm password is required')
         .oneOf([yup.ref('password'), null], 'Passwords do not match'),
-    firstName: yup.string().required('First name is required'),
+    name: yup.string().required('First name is required'),
     surname: yup.string().required('Last name is required'),
-    username: yup.string().required('Username is required'),
+    nickName: yup.string().required('Username is required'),
     phoneNumber: yup.string().required('Phone number is required'),
-    address: yup.object().shape({
+    requestAddressDto: yup.object().shape({
         country: yup.string().required('Country is required'),
         city: yup.string().required('City is required'),
         street: yup.string().required('Street is required'),
-        postal_code: yup.string().required('Postal code is required'),
-        building_no: yup.string().required('Building is required'),
+        postalCode: yup.string().required('Postal code is required'),
+        buildingNo: yup.string().required('Building number is required'),
     }),
 });
 
@@ -48,26 +48,36 @@ export const SignUp = (props) => {
     });
 
     const onSubmit = (data) => {
+        console.log(data);
+
         const test = {
-            nickName: 'pies',
-            name: 'pies',
-            surname: 'pies',
-            email: 'user2222@gmail.com',
+            name: 'Pies',
+            surname: 'Pies',
+            email: 'pies11222@gmail.com',
             password: 'Qwer1234!',
-            phoneNumber: '123456789',
+            nickName: 'Qwer',
+            phoneNumber: '233233233',
+            confirmPassword: 'pies',
+            requestAddressDto: {
+                country: 'Poland',
+                city: 'Sasa',
+                street: 'Pies',
+                buildingNo: 'pies',
+                apartmentNo: '2',
+                postalCode: '59-940',
+            },
         };
 
-        console.log(data);
-        // axios
-        //     .post('/api/Accounts/Register', test)
-        //     .then((res) => {
-        //         console.log(res.data);
-        //         // navigate('/login');
-        //     })
-        //     .catch((err) => {
-        //         setError(err.response.data);
-        //         console.log(err.response.data);
-        //     });
+        axios
+            .post('/api/Accounts/Register', data)
+            .then((res) => {
+                console.log(res.data);
+                // navigate('/login');
+            })
+            .catch((err) => {
+                setError(err.response.data);
+                console.log(err.response.data);
+            });
     };
 
     return (
@@ -133,9 +143,9 @@ export const SignUp = (props) => {
                                             required
                                             label='First name'
                                             size='small'
-                                            {...register('firstName')}
-                                            error={errors.firstName ? true : false}
-                                            helperText={errors.firstName ? errors.firstName.message : null}
+                                            {...register('name')}
+                                            error={errors.name ? true : false}
+                                            helperText={errors.name ? errors.name.message : null}
                                         ></TextField>
                                         <TextField
                                             required
@@ -153,12 +163,12 @@ export const SignUp = (props) => {
                                 <Grid item xs={12} md={6}>
                                     <TextField
                                         required
-                                        label='Username'
+                                        label='Nickname'
                                         size='small'
                                         fullWidth
-                                        {...register('username')}
-                                        error={errors.username ? true : false}
-                                        helperText={errors.username ? errors.username.message : null}
+                                        {...register('nickName')}
+                                        error={errors.nickName ? true : false}
+                                        helperText={errors.nickName ? errors.nickName.message : null}
                                     ></TextField>
                                 </Grid>
                                 <GridBreak />
@@ -183,11 +193,15 @@ export const SignUp = (props) => {
                                             required
                                             label='Country'
                                             size='small'
-                                            {...register('address.country')}
-                                            error={errors.address && errors.address.country ? true : false}
+                                            {...register('requestAddressDto.country')}
+                                            error={
+                                                errors.requestAddressDto && errors.requestAddressDto.country
+                                                    ? true
+                                                    : false
+                                            }
                                             helperText={
-                                                errors.address && errors.address.country
-                                                    ? errors.address.country.message
+                                                errors.requestAddressDto && errors.requestAddressDto.country
+                                                    ? errors.requestAddressDto.country.message
                                                     : null
                                             }
                                         ></TextField>
@@ -195,11 +209,15 @@ export const SignUp = (props) => {
                                             required
                                             label='Postal code'
                                             size='small'
-                                            {...register('address.postal_code')}
-                                            error={errors.address && errors.address.postal_code ? true : false}
+                                            {...register('requestAddressDto.postalCode')}
+                                            error={
+                                                errors.requestAddressDto && errors.requestAddressDto.postalCode
+                                                    ? true
+                                                    : false
+                                            }
                                             helperText={
-                                                errors.address && errors.address.postal_code
-                                                    ? errors.address.postal_code.message
+                                                errors.requestAddressDto && errors.requestAddressDto.postalCode
+                                                    ? errors.requestAddressDto.postalCode.message
                                                     : null
                                             }
                                         ></TextField>
@@ -213,11 +231,13 @@ export const SignUp = (props) => {
                                             required
                                             label='City'
                                             size='small'
-                                            {...register('address.city')}
-                                            error={errors.address && errors.address.city ? true : false}
+                                            {...register('requestAddressDto.city')}
+                                            error={
+                                                errors.requestAddressDto && errors.requestAddressDto.city ? true : false
+                                            }
                                             helperText={
-                                                errors.address && errors.address.city
-                                                    ? errors.address.city.message
+                                                errors.requestAddressDto && errors.requestAddressDto.city
+                                                    ? errors.requestAddressDto.city.message
                                                     : null
                                             }
                                         ></TextField>
@@ -225,11 +245,15 @@ export const SignUp = (props) => {
                                             required
                                             label='Street'
                                             size='small'
-                                            {...register('address.street')}
-                                            error={errors.address && errors.address.street ? true : false}
+                                            {...register('requestAddressDto.street')}
+                                            error={
+                                                errors.requestAddressDto && errors.requestAddressDto.street
+                                                    ? true
+                                                    : false
+                                            }
                                             helperText={
-                                                errors.address && errors.adreess.street
-                                                    ? errors.address.street.message
+                                                errors.requestAddressDto && errors.requestAddressDto.street
+                                                    ? errors.requestAddressDto.street.message
                                                     : null
                                             }
                                         ></TextField>
@@ -243,18 +267,22 @@ export const SignUp = (props) => {
                                             required
                                             label='Building number'
                                             size='small'
-                                            {...register('address.building_no')}
-                                            error={errors.address && errors.address.building_no ? true : false}
+                                            {...register('requestAddressDto.buildingNo')}
+                                            error={
+                                                errors.requestAddressDto && errors.requestAddressDto.buildingNo
+                                                    ? true
+                                                    : false
+                                            }
                                             helperText={
-                                                errors.address && errors.address.building_no
-                                                    ? errors.address.building_no.message
+                                                errors.requestAddressDto && errors.requestAddressDto.buildingNo
+                                                    ? errors.requestAddressDto.buildingNo.message
                                                     : null
                                             }
                                         ></TextField>
                                         <TextField
                                             label='Apartment number'
                                             size='small'
-                                            {...register('address.apartment_no')}
+                                            {...register('requestAddressDto.apartmentNo')}
                                         ></TextField>
                                     </Stack>
                                 </Grid>

@@ -22,8 +22,9 @@ export const Login = () => {
         axios
             .post('/api/Accounts/Authenticate', data)
             .then((res) => {
-                navigate('/');
-                console.log(res);
+                // navigate('/');
+                console.log(res.data);
+                window.localStorage.setItem('leaserToken', res.data);
             })
             .catch((err) => {
                 setError(err.response.data);
