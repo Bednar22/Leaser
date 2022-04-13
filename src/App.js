@@ -7,6 +7,9 @@ import { Login } from './components/login_signup/login';
 import { Navbar } from './components/navbar';
 import { Homepage } from './components/homepage';
 import { SignUp } from './components/login_signup/signUp';
+import {OfferTile} from './components/offerTile';
+
+import SampleImagePath from './sample-image.jpg'
 
 /*podstawowy component, w ktorym beda sciezki  */
 function App() {
@@ -14,11 +17,19 @@ function App() {
         <>
             <Navbar></Navbar>
             <Container>
-                <Routes>
+                <OfferTile 
+                    renterName='Jan Kowalski' 
+                    renterNickname='jkowalski' 
+                    offerTitle='Camera' 
+                    renterScore='4.5' 
+                    pricePerDay='10'
+                    titleImage={SampleImagePath}
+                ></OfferTile>
+                {/* <Routes>
                     <Route path='/' element={<Homepage />} />
                     <Route path='login' element={<Login />} />
                     <Route path='signup' element={<SignUp />} />
-                </Routes>
+                </Routes> */}
             </Container>
         </>
     );

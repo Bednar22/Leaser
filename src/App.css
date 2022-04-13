@@ -2,7 +2,7 @@
 
 /* NAVBAR CLASSES */
 .menu-button {
-    color: white;
+    color: #FAF7F0;
     margin-left: 10px;
     margin-right: 10px;
     padding: 10px 10px 10px 10px;
@@ -25,7 +25,7 @@
     height: 2px;
     left: 50%;
     position: absolute;
-    background: white;
+    background: #FAF7F0;
     transition: width 0.2s ease 0s, left 0.2s ease 0s;
     width: 0;
 }
@@ -34,7 +34,7 @@
     padding: 2vh 1vw 2vh 1vw;
     display: flex;
     justify-content: space-between;
-    background-color: #00239cff;
+    background-color: #7EC3A6;
 }
 
 .active::after {
@@ -45,7 +45,33 @@
     height: 2px;
     left: 0;
     position: absolute;
-    background: white;
+    background: #FAF7F0;
     transition: width 0.2s ease 0s, left 0.2s ease 0s;
     width: 100%;
+}
+
+.offer-tile:hover {
+    animation-name: tile-background-color-change;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-in;
+    animation-play-state: running;
+    background-color: #FFA89A;
+}
+
+.offer-tile:hover .offer-tile-text{
+    animation-name: tile-text-color-change;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-in;
+    animation-play-state: running;
+    color: white;
+}
+
+@keyframes tile-background-color-change {
+    0% {background-color: initial;}
+    100% {background-color: #FFA89A;}
+}
+
+@keyframes tile-text-color-change {
+    0% {color: initial;}
+    100% {color: white;}
 }
