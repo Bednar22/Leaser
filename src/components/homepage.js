@@ -50,7 +50,9 @@ export const Homepage = (props) => {
                     </Typography>
                     <NavLink to='/signup' style={{ 'text-decoration': 'none', 'margin': '32px'}}>
                         <Button variant='contained' style={{'background-color': '#FFA89A'}}>
-                            Start using Leaser
+                            <Typography variant='h5'>
+                                Start using Leaser
+                            </Typography>
                         </Button>
                     </NavLink>
                 </Stack>
