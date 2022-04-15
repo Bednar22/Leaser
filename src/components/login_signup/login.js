@@ -2,47 +2,99 @@ import React, { useState } from 'react';
 import { Paper, TextField, Grid, Container, Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { GridBreak } from '../utilities/gridBreak';
-export const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
 
-    const handleLogin = () => {
-        console.log('Test button click');
+export const Login = () => {
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+
+    const handleLogin = (data) => {
+        console.log(data);
+
+        axios
+            .post('/api/Accounts/Authenticate', data)
+            .then((res) => {
+                // navigate('/');
+                console.log(res.data);
+                window.localStorage.setItem('leaserToken', res.data);
+            })
+            .catch((err) => {
+                setError(err.response.data);
+            });
     };
 
     return (
         <>
             <Container maxWidth='xs'>
                 <Paper sx={{ p: 4 }}>
-                    <Grid container direction='row' justifyContent='center' alignItems='center' spacing={4}>
-                        <GridBreak />
-                        <Grid item sm={10} md={8}>
-                            <TextField label='E-mail adress' onChange={(e) => setUsername(e.target.value)}></TextField>
-                        </Grid>
-                        <GridBreak />
-                        <GridBreak />
-                        <Grid item sm={8} md={8}>
-                            <TextField
-                                label='Password'
-                                type='password'
-                                onChange={(e) => setPassword(e.target.value)}
-                            ></TextField>
-                        </Grid>
-                        <GridBreak />
+                    <form onSubmit={handleSubmit(handleLogin)}>
+                        <Grid container direction='row' justifyContent='center' spacing={4}>
+                            <GridBreak />
+                            <Grid item xs={10} md={10}>
+                                <TextField
+                                    fullWidth
+                                    label='E-mail adress'
+                                    type='email'
+                                    {...register('email', {
+                                        required: 'Email required',
+                                        pattern: {
+                                            value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                            message: 'Invalid email adress',
+                                        },
+                                    })}
+                                    error={errors.email ? true : false}
+                                    helperText={errors.email ? errors.email.message : null}
+                                    onFocus={() => setError(false)}
+                                ></TextField>
+                            </Grid>
+                            <GridBreak />
+                            <GridBreak />
+                            <Grid item xs={10} md={10}>
+                                <TextField
+                                    fullWidth
+                                    label='Password'
+                                    type='password'
+                                    onFocus={() => setError(false)}
+                                    {...register('password', {
+                                        required: 'Password required',
+                                    })}
+                                    error={errors.password ? true : false}
+                                ></TextField>
+                            </Grid>
+                            <GridBreak />
 
-                        <GridBreak />
-                        <Grid item sm={8} md={10}>
-                            <Typography variant='p'>
-                                Don't have an account? <Link to='/signup'> Join Leaser!</Link>
-                            </Typography>
+                            {error ? (
+                                <Grid item xs={12} md={10}>
+                                    <Typography color='error' variant='subtitle2' align='center'>
+                                        {error}
+                                    </Typography>
+                                </Grid>
+                            ) : null}
+
+                            <GridBreak />
+                            {
+                                <Grid item xs={10} md={10}>
+                                    <Typography variant='p' align='center'>
+                                        Don't have an account? <Link to='/signup'> Join Leaser!</Link>
+                                    </Typography>
+                                </Grid>
+                            }
+                            <GridBreak />
+                            <Grid item sm={8} md={8}>
+                                <Button variant='contained' sx={{ width: 1 / 1 }} type='submit'>
+                                    Login
+                                </Button>
+                            </Grid>
                         </Grid>
-                        <GridBreak />
-                        <Grid item sm={8} md={8}>
-                            <Button onClick={handleLogin} variant='contained' sx={{ width: 1 / 1 }}>
-                                Login
-                            </Button>
-                        </Grid>
-                    </Grid>
+                    </form>
                 </Paper>
             </Container>
         </>
