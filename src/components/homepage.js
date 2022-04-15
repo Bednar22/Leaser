@@ -1,29 +1,62 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { Button } from '@mui/material';
-export const Homepage = (props) => {
-    const [testMessage, setTestMessage] = useState();
+import { NavLink } from 'react-router-dom';
+import { Button, Typography, Stack, Box } from '@mui/material';
 
-    const handleClick = () => {
-        axios
-            .get('/api/Accounts')
-            .then((res) => {
-                setTestMessage(res.data);
-                console.log('UDALO SIE');
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
+import BackgroundImagePath from '../assets/hero_background_img.svg';
+import BackgroundImageMobilePath from '../assets/hero_background_img_mobile.svg';
+
+
+export const Homepage = (props) => {
+
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    React.useEffect(() => {
+        const handleWindowResize = () => {
+            setWindowWidth(window.innerWidth);
+        }
+        window.addEventListener('resize', handleWindowResize);
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        }
+    }, []);
+
+    const background_img_change_breakpoint = 850;
+    let appropriateBackgroundImage;
+    if (windowWidth > background_img_change_breakpoint) {
+        appropriateBackgroundImage = BackgroundImagePath;
+    }
+    else {
+        appropriateBackgroundImage = BackgroundImageMobilePath;
+    }
 
     return (
         <>
-            <h1>Homepage</h1>
-            <h3>Przycisk prowadzi do /api/Accounts --- sprawdz wynik w konsoli(ctrl+shift+i)</h3>
-            <Button variant='outlined' onClick={handleClick}>
-                Testowy przycisk do sprawdzenia polaczenia back front
-            </Button>
+            <Box
+                style={{
+                        'background-image': `url(${appropriateBackgroundImage})`,
+                        'background-position': 'center',
+                        'background-size': 'cover'
+                    }}
+                display='flex'
+                justifyContent='center'
+                alignItems='center'
+                height='100%'
+            >
+                <Stack alignItems='center' direction='column'>
+                    <Typography variant='h4' align='center' fontWeight='bold' color='#FAF7F0'>
+                        Tired of buying new things you will use only once?
+                    </Typography>
+                    <Typography variant='h5' align='center' color='#FAF7F0'>
+                        Why not just rent them instead?
+                    </Typography>
+                    <NavLink to='/signup' style={{ 'text-decoration': 'none', 'margin': '32px'}}>
+                        <Button variant='contained' style={{'background-color': '#FFA89A'}}>
+                            <Typography variant='h5'>
+                                Start using Leaser
+                            </Typography>
+                        </Button>
+                    </NavLink>
+                </Stack>
+            </Box>
         </>
     );
 };
