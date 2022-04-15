@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Button } from '@mui/material';
+
 export const Homepage = (props) => {
     const [testMessage, setTestMessage] = useState();
 
     const handleClick = () => {
+        const token = window.localStorage.getItem('leaserToken');
         axios
-            .get('/api/Accounts')
+            .get('/api/Accounts/User', {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+            })
             .then((res) => {
                 setTestMessage(res.data);
-                console.log('UDALO SIE');
-                console.log(res);
+                console.log(res.data);
             })
             .catch((err) => {
-                console.log(err);
+                console.log(err.response.data);
             });
     };
 
