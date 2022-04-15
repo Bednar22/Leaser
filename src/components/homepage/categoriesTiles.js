@@ -1,6 +1,7 @@
 import { ImageList, ImageListItem, ImageListItemBar, Button, Grid } from '@mui/material';
-
-const itemData = [
+import '../../App.css';
+import { useNavigate } from 'react-router-dom';
+const categories = [
     {
         img: 'https://images.unsplash.com/photo-1542060748-10c28b62716f',
         title: 'Clothes',
@@ -52,13 +53,23 @@ const itemData = [
 ];
 
 export const CategoriesTiles = (props) => {
+    const navigate = useNavigate();
+
+    const cateogoryClick = (category) => {
+        navigate(`/offers/${category}`);
+    };
+
     return (
         <>
             <Grid container justifyContent='center'>
                 <Grid item xs={12} md={8}>
                     <ImageList cols={4}>
-                        {itemData.map((item) => (
-                            <ImageListItem key={item.img} onClick={() => console.log('Pies')}>
+                        {categories.map((item) => (
+                            <ImageListItem
+                                key={item.img}
+                                onClick={() => cateogoryClick(item.title)}
+                                className='category-tile'
+                            >
                                 <img
                                     src={`${item.img}?w=244&h=244&fit=crop&auto=format`}
                                     srcSet={`${item.img}?w=244&h=244&fit=crop&auto=format&dpr=2 2x`}
