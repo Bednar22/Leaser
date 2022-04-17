@@ -4,9 +4,10 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 //components
 import { Login } from './components/login_signup/login';
 import { Navbar } from './components/navbar';
-import { Homepage } from './components/homepage';
+import { Startpage } from './components/homepage/startpage';
 import { SignUp } from './components/login_signup/signUp';
 import { MainOffersPage } from './components/offers/mainOffersPage';
+import { Homepage } from './components/homepage/homepage';
 import { NoMatch } from './components/noMatch';
 import { Profile } from './components/user_profile/profile';
 import { UserSettings } from './components/user_profile/userSettings';
@@ -17,7 +18,8 @@ function App() {
         <>
             {location.pathname === '/' ? null : <Navbar></Navbar>}
             <Routes>
-                <Route path='/' element={<Homepage />} />
+                <Route path='/' element={<Startpage />} />
+                <Route path='home' element={<Homepage />} />
                 <Route path='login' element={<Login />} />
                 <Route path='signup' element={<SignUp />} />
                 <Route path='offers' element={<MainOffersPage />} />

@@ -54,3 +54,9 @@
 .link-text {
     text-decoration: none;
 }
+/* Homepage classes */
+
+.category-tile:hover {
+    opacity: 0.85;
+    cursor: pointer;
+}
