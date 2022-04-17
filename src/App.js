@@ -4,8 +4,9 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 //components
 import { Login } from './components/login_signup/login';
 import { Navbar } from './components/navbar';
-import { Homepage } from './components/homepage';
+import { Startpage } from './components/homepage/startpage';
 import { SignUp } from './components/login_signup/signUp';
+import { Homepage } from './components/homepage/homepage';
 import { NoMatch } from './components/noMatch';
 
 /*podstawowy component, w ktorym beda sciezki  */
@@ -15,7 +16,8 @@ function App() {
         <>
             {location.pathname === '/' ? null : <Navbar></Navbar>}
             <Routes>
-                <Route path='/' element={<Homepage />} />
+                <Route path='/' element={<Startpage />} />
+                <Route path='home' element={<Homepage />} />
                 <Route path='login' element={<Login />} />
                 <Route path='signup' element={<SignUp />} />
             </Routes>

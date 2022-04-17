@@ -11,7 +11,7 @@ export const Navbar = (props) => {
                     LOGO
                 </Link>
                 <Stack direction='row'>
-                    <NavLink className='menu-button' to='/'>
+                    <NavLink className='menu-button' to='home'>
                         Home
                     </NavLink>
                     <NavLink className='menu-button' to='login'>
