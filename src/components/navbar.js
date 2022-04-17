@@ -1,7 +1,9 @@
 import React from 'react';
-import { Stack, Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import { Link, NavLink } from 'react-router-dom';
 import './../App.css';
+import Box from '@mui/material/Box';
+import { LoggedProfile } from './loggedProfile';
 
 export const Navbar = (props) => {
     return (
@@ -20,6 +22,7 @@ export const Navbar = (props) => {
                     <NavLink className='menu-button' to='signup'>
                         Sign Up
                     </NavLink>
+                    <LoggedProfile />
                 </Stack>
             </Box>
         </>
