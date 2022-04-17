@@ -1,15 +1,19 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Avatar from '@mui/material/Avatar';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Person from '@mui/icons-material/Person';
 import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
-import { Typography, Avatar, Menu, MenuItem, Divider, Box } from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
+import Box from '@mui/material/Box';
+import { Link } from 'react-router-dom';
 import '../App.css';
-import { useNavigate } from 'react-router-dom';
-
-export const LoggedProfile = (props) => {
+import { Typography } from '@mui/material';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+export const NotLoggedProfile = (props) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -17,12 +21,6 @@ export const LoggedProfile = (props) => {
     };
     const handleClose = () => {
         setAnchorEl(null);
-    };
-    const navigate = useNavigate();
-
-    const logout = () => {
-        window.localStorage.removeItem('leaserToken');
-        navigate('/');
     };
 
     return (
@@ -75,29 +73,26 @@ export const LoggedProfile = (props) => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <Link to='/user/profile' className='link-text'>
+                <Link className='link-text' to='/login'>
                     <MenuItem>
                         <ListItemIcon>
-                            <Person fontSize='small' />
+                            <LoginIcon fontSize='small' />
                         </ListItemIcon>
-                        <Typography color='MenuText'>Profile</Typography>
-                    </MenuItem>
-                </Link>
-                <Link to='/user/settings' className='link-text'>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <Settings fontSize='small' />
-                        </ListItemIcon>
-                        <Typography color='MenuText'>Settings</Typography>
+                        <Link className='link-text' to='/login'>
+                            <Typography color='MenuText'>Login</Typography>
+                        </Link>
                     </MenuItem>
                 </Link>
                 <Divider />
-                <MenuItem onClick={() => logout()}>
-                    <ListItemIcon>
-                        <Logout fontSize='small' />
-                    </ListItemIcon>
-                    Logout
-                </MenuItem>
+                <Link className='link-text' to='/signup'>
+                    <MenuItem>
+                        <ListItemIcon>
+                            <PersonAddIcon fontSize='small' />
+                        </ListItemIcon>
+
+                        <Typography color='MenuText'>Sign up</Typography>
+                    </MenuItem>
+                </Link>
             </Menu>
         </>
     );
