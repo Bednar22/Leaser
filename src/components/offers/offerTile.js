@@ -24,7 +24,7 @@ export const OfferTile = (props) => {
                             <img src={titleImage} alt={offerTitle} style={{ 'border-radius': '8px', 'margin-bottom': '8px', 'width': '100%', 'height': '100%', 'object-fit': 'cover'}}></img>
                             <Stack className='typography-stack' direction='row' alignItems='center' justifyContent='space-between' style={{'border-radius': '8px', 'padding': '8px'}}>
                                 <Stack>
-                                    <Typography fontWeight='bold' variant='h5'>
+                                    <Typography fontWeight='bold'>
                                         {offerTitle}
                                     </Typography>
                                     <Typography>
@@ -35,7 +35,7 @@ export const OfferTile = (props) => {
                                     </Typography>
                                 </Stack>
                                 <Stack alignItems='center'>
-                                    <Typography fontWeight='bold' variant='h5'>
+                                    <Typography fontWeight='bold'>
                                         {pricePerDay} PLN/day
                                     </Typography>
                                     <Typography>
