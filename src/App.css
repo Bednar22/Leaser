@@ -35,7 +35,6 @@
     display: flex;
     justify-content: space-between;
     background-color: #7ec3a6;
-    flex: 0 1 auto;
 }
 
 .active::after {
@@ -49,6 +48,19 @@
     background: #faf7f0;
     transition: width 0.2s ease 0s, left 0.2s ease 0s;
     width: 100%;
+}
+
+.offer-tile:hover .typography-stack{
+    animation-name: tile-text-background-color-change;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-in;
+    animation-play-state: running;
+    background-color: #FAF7F0;
+}
+
+@keyframes tile-text-background-color-change {
+    0% {background-color: initial}
+    100% {background-color: #FAF7F0}
 }
 
 .link-text {
