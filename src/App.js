@@ -24,6 +24,7 @@ function App() {
                     renterScore='4.5' 
                     pricePerDay='10'
                     titleImage={SampleImagePath}
+                    offerCity='Wrocław'
                 ></OfferTile>
                 {/* <Routes>
                     <Route path='/' element={<Homepage />} />
