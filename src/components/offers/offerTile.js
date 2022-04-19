@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, Typography, Box, Stack, Grid } from '@mui/material';
+import { Paper, Typography, Box, Stack, Rating } from '@mui/material';
 
 import { Link } from 'react-router-dom';
 
@@ -30,9 +30,7 @@ export const OfferTile = (props) => {
                                     <Typography>
                                         {renterNickname} ({renterName})
                                     </Typography>
-                                    <Typography>
-                                        ({renterScore})
-                                    </Typography>
+                                    <Rating readOnly precision={0.1} value={renterScore}/>
                                 </Stack>
                                 <Stack alignItems='center'>
                                     <Typography fontWeight='bold'>
