@@ -4,6 +4,10 @@ import { SearchComponent } from './searchComponent';
 import { GridBreak } from '../utilities/gridBreak';
 import { FilterOffers } from './filterOffers';
 import { SortOffers } from './sortOffers';
+import { OfferTile } from './offerTile';
+
+import SampleImagePath from '../../sample-image.jpg'
+
 export const MainOffersPage = (props) => {
     const testItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -28,9 +32,17 @@ export const MainOffersPage = (props) => {
                 <Grid container spacing={4} sx={{ my: 2 }}>
                     {testItems.map((item) => {
                         return (
-                            <Grid item xs={4} md={3}>
-                                {/* Replace skeleton with offer tile */}
-                                <Skeleton sx={{ height: 300 }} variant='rectangular' />
+                            <Grid item xs={8} sm={8} md={6} lg={4} xl={3}>
+                                <OfferTile
+                                    renterName='Jan Kowalski'
+                                    renterNickname='jkowalski'
+                                    renterScore={4.5}
+                                    offerTitle='Used digital camera'
+                                    pricePerDay={10}
+                                    titleImage={SampleImagePath}
+                                    offerCity='Wrocław'
+                                >
+                                </OfferTile>
                             </Grid>
                         );
                     })}

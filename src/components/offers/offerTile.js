@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, Typography, Box, Stack, Grid } from '@mui/material';
+import { Paper, Typography, Box, Stack, Rating } from '@mui/material';
 
 import { Link } from 'react-router-dom';
 
@@ -24,18 +24,16 @@ export const OfferTile = (props) => {
                             <img src={titleImage} alt={offerTitle} style={{ 'border-radius': '8px', 'margin-bottom': '8px', 'width': '100%', 'height': '100%', 'object-fit': 'cover'}}></img>
                             <Stack className='typography-stack' direction='row' alignItems='center' justifyContent='space-between' style={{'border-radius': '8px', 'padding': '8px'}}>
                                 <Stack>
-                                    <Typography fontWeight='bold' variant='h5'>
+                                    <Typography fontWeight='bold'>
                                         {offerTitle}
                                     </Typography>
                                     <Typography>
                                         {renterNickname} ({renterName})
                                     </Typography>
-                                    <Typography>
-                                        ({renterScore})
-                                    </Typography>
+                                    <Rating readOnly precision={0.1} value={renterScore}/>
                                 </Stack>
                                 <Stack alignItems='center'>
-                                    <Typography fontWeight='bold' variant='h5'>
+                                    <Typography fontWeight='bold'>
                                         {pricePerDay} PLN/day
                                     </Typography>
                                     <Typography>
