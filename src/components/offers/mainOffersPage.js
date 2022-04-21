@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Grid, Container, Skeleton, Stack } from '@mui/material';
+import { Grid, Container, Skeleton } from '@mui/material';
 import { SearchComponent } from './searchComponent';
 import { GridBreak } from '../utilities/gridBreak';
 import { FilterOffers } from './filterOffers';
 import { SortOffers } from './sortOffers';
 import { OfferTile } from './offerTile';
 
-import SampleImagePath from '../../sample-image.jpg';
+import SampleImagePath from '../../assets/sample-image.jpg';
 
 export const MainOffersPage = (props) => {
     const testItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];

@@ -1,4 +1,4 @@
-import { ImageList, ImageListItem, ImageListItemBar, Button, Grid } from '@mui/material';
+import { ImageList, ImageListItem, ImageListItemBar, Grid } from '@mui/material';
 import '../../App.css';
 import { useNavigate } from 'react-router-dom';
 const categories = [
@@ -59,6 +59,8 @@ export const CategoriesTiles = (props) => {
         navigate(`/offers/${category}`);
     };
 
+    const tile_size = 244;
+
     return (
         <>
             <Grid container justifyContent='center'>
@@ -71,8 +73,8 @@ export const CategoriesTiles = (props) => {
                                 className='category-tile'
                             >
                                 <img
-                                    src={`${item.img}?w=244&h=244&fit=crop&auto=format`}
-                                    srcSet={`${item.img}?w=244&h=244&fit=crop&auto=format&dpr=2 2x`}
+                                    src={`${item.img}?w=${tile_size}&h=${tile_size}&fit=crop&auto=format`}
+                                    srcSet={`${item.img}?w=${tile_size}&h=${tile_size}&fit=crop&auto=format&dpr=2 2x`}
                                     alt={item.title}
                                     loading='lazy'
                                 />

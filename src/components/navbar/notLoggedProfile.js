@@ -6,11 +6,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Person from '@mui/icons-material/Person';
-import Settings from '@mui/icons-material/Settings';
 import LoginIcon from '@mui/icons-material/Login';
 import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom';
-import '../App.css';
+import '../../App.css';
 import { Typography } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 export const NotLoggedProfile = (props) => {

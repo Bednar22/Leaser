@@ -23,6 +23,8 @@ export const SortOffers = (props) => {
         <>
             <Button
                 id='sortby-button'
+                variant='contained'
+                color='secondary'
                 aria-controls={openSort ? 'sortby-menu' : undefined}
                 aria-haspopup='true'
                 aria-expanded={openSort ? 'true' : undefined}

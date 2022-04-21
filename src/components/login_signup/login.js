@@ -22,8 +22,8 @@ export const Login = () => {
         axios
             .post('/api/Accounts/Authenticate', data)
             .then((res) => {
-                // navigate('/');
-                console.log(res.data);
+                navigate('/home');
+                //console.log(res.data);
                 window.localStorage.setItem('leaserToken', res.data);
             })
             .catch((err) => {
@@ -82,13 +82,13 @@ export const Login = () => {
                             <GridBreak />
                             {
                                 <Grid item xs={10} md={10}>
-                                    <Typography variant='p' align='center'>
-                                        Don't have an account? <Link to='/signup'> Join Leaser!</Link>
+                                    <Typography align='center'>
+                                        Don't have an account? <Link to='/signup' style={{ color: '#ffa89a'}}> Join Leaser!</Link>
                                     </Typography>
                                 </Grid>
                             }
                             <GridBreak />
-                            <Grid item sm={8} md={8}>
+                            <Grid item xs={8} md={8}>
                                 <Button variant='contained' sx={{ width: 1 / 1 }} type='submit'>
                                     Login
                                 </Button>
