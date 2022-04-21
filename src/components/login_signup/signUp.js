@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Paper, TextField, Grid, Container, Button, Typography, Stack, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { GridBreak } from '../utilities/gridBreak';
-import { PhoneNumberConfiramtion } from './phoneNumberConfirmation';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -48,48 +47,26 @@ export const SignUp = (props) => {
     });
 
     const onSubmit = (data) => {
-        console.log(data);
-
-        const test = {
-            name: 'Pies',
-            surname: 'Pies',
-            email: 'pies11222@gmail.com',
-            password: 'Qwer1234!',
-            nickName: 'Qwer',
-            phoneNumber: '233233233',
-            confirmPassword: 'pies',
-            requestAddressDto: {
-                country: 'Poland',
-                city: 'Sasa',
-                street: 'Pies',
-                buildingNo: 'pies',
-                apartmentNo: '2',
-                postalCode: '59-940',
-            },
-        };
 
         axios
             .post('/api/Accounts/Register', data)
             .then((res) => {
-                console.log(res.data);
-                // navigate('/login');
+                navigate('/login');
             })
             .catch((err) => {
                 setError(err.response.data);
-                console.log(err.response.data);
             });
     };
 
     return (
         <>
-            {console.log(errors)}
             <Container maxWidth='md'>
                 <Paper sx={{ p: 3, mb: 4 }}>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Box>
                             <Grid container alignItems='center' justifyContent='center' spacing={{ xs: 2, md: 3 }}>
                                 <GridBreak />
-                                <Grid item sm={12} md={4}>
+                                <Grid item xs={12} md={4}>
                                     <Typography variant='h5'>Welcome to Leaser!</Typography>
                                 </Grid>
                                 <GridBreak />

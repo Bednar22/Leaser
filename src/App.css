@@ -2,7 +2,7 @@
 
 /* NAVBAR CLASSES */
 .menu-button {
-    color: #FAF7F0;
+    color: #faf7f0;
     margin-left: 10px;
     margin-right: 10px;
     padding: 10px 10px 10px 10px;
@@ -25,7 +25,7 @@
     height: 2px;
     left: 50%;
     position: absolute;
-    background: #FAF7F0;
+    background: #faf7f0;
     transition: width 0.2s ease 0s, left 0.2s ease 0s;
     width: 0;
 }
@@ -34,8 +34,7 @@
     padding: 2vh 1vw 2vh 1vw;
     display: flex;
     justify-content: space-between;
-    background-color: #7EC3A6;
-    flex: 0 1 auto;
+    background-color: #7ec3a6;
 }
 
 .active::after {
@@ -46,7 +45,45 @@
     height: 2px;
     left: 0;
     position: absolute;
-    background: #FAF7F0;
+    background: #faf7f0;
     transition: width 0.2s ease 0s, left 0.2s ease 0s;
     width: 100%;
+}
+
+.offer-tile:hover .typography-stack {
+    animation-name: tile-text-background-color-change;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-in;
+    animation-play-state: running;
+    background-color: #faf7f0;
+}
+
+@keyframes tile-text-background-color-change {
+    0% {
+        background-color: initial;
+    }
+    100% {
+        background-color: #faf7f0;
+    }
+}
+
+.link-text {
+    text-decoration: none;
+}
+/* Homepage classes */
+
+.category-tile:hover {
+    opacity: 0.85;
+    cursor: pointer;
+}
+
+/* Add offer classes */
+.offer-image {
+    object-fit: contain;
+    width: 100%;
+    height: 250px;
+}
+
+.offer-image:hover {
+    background-color: #faf7f0;
 }
