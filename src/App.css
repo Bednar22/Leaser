@@ -50,17 +50,21 @@
     width: 100%;
 }
 
-.offer-tile:hover .typography-stack{
+.offer-tile:hover .typography-stack {
     animation-name: tile-text-background-color-change;
     animation-duration: 0.2s;
     animation-timing-function: ease-in;
     animation-play-state: running;
-    background-color: #FAF7F0;
+    background-color: #faf7f0;
 }
 
 @keyframes tile-text-background-color-change {
-    0% {background-color: initial}
-    100% {background-color: #FAF7F0}
+    0% {
+        background-color: initial;
+    }
+    100% {
+        background-color: #faf7f0;
+    }
 }
 
 .link-text {
@@ -71,4 +75,15 @@
 .category-tile:hover {
     opacity: 0.85;
     cursor: pointer;
+}
+
+/* Add offer classes */
+.offer-image {
+    object-fit: contain;
+    width: 100%;
+    height: 250px;
+}
+
+.offer-image:hover {
+    background-color: #faf7f0;
 }
