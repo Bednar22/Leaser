@@ -8,6 +8,7 @@ import axios from 'axios';
 import '../../App.css';
 import { InputLabel } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const Input = styled('input')({
     display: 'none',
@@ -19,13 +20,19 @@ const validationSchema = yup.object().shape({
 
 export const AddOffer = (props) => {
     const [selectedImage, setSelectedImage] = useState(null);
-
+    const smallSize = useMediaQuery('(max-width:900px)');
     return (
         <>
             <Container maxWidth='lg'>
                 <Paper sx={{ p: 2, mb: 6 }}>
                     <form onSubmit={() => alert('Submit')}>
-                        <Box sx={{ width: 12 / 25, mb: 2, p: 1, display: 'inline-block' }}>
+                        <Box
+                            sx={
+                                smallSize
+                                    ? { width: 1 / 1, mb: 2, p: 1 }
+                                    : { width: 12 / 25, mb: 2, p: 1, display: 'inline-block' }
+                            }
+                        >
                             <Grid container spacing={{ xs: 2, md: 3 }} direction='row' alignItems='flex-start'>
                                 <Grid item xs={12} md={12}>
                                     <TextField required label='Item' size='small' type='text' fullWidth></TextField>
@@ -43,7 +50,7 @@ export const AddOffer = (props) => {
                                 </Grid>
 
                                 <GridBreak />
-                                <Grid item xs={4} md={6}>
+                                <Grid item xs={6} md={6}>
                                     <TextField
                                         required
                                         label='Price per day'
@@ -53,7 +60,7 @@ export const AddOffer = (props) => {
                                     ></TextField>
                                 </Grid>
 
-                                <Grid item xs={4} md={6}>
+                                <Grid item xs={6} md={6}>
                                     <TextField
                                         required
                                         label='Price per week'
@@ -63,7 +70,7 @@ export const AddOffer = (props) => {
                                     ></TextField>
                                 </Grid>
 
-                                <Grid item xs={4} md={6}>
+                                <Grid item xs={6} md={6}>
                                     <TextField
                                         required
                                         label='Price per month'
@@ -73,7 +80,7 @@ export const AddOffer = (props) => {
                                     ></TextField>
                                 </Grid>
 
-                                <Grid item xs={12} md={6}>
+                                <Grid item xs={6} md={6}>
                                     <TextField
                                         // required
                                         label='Deposit'
@@ -84,9 +91,15 @@ export const AddOffer = (props) => {
                                 </Grid>
                             </Grid>
                         </Box>
-                        <Box sx={{ width: 12 / 25, ml: 1, mb: 2, display: 'inline-block' }}>
+                        <Box
+                            sx={
+                                smallSize
+                                    ? { width: 1 / 1, mb: 2, p: 1 }
+                                    : { width: 12 / 25, mb: 2, p: 1, display: 'inline-block' }
+                            }
+                        >
                             <Grid container spacing={2} direction='row' justifyContent='center' alignItems='flex-start'>
-                                <Grid item xs={4}>
+                                <Grid item xs={8}>
                                     <Typography align='center' variant='subtitle1'>
                                         UPLOAD AN IMAGE
                                     </Typography>
@@ -104,14 +117,13 @@ export const AddOffer = (props) => {
                                         <Paper sx={{ height: 250, mb: 0 }}></Paper>
                                     )}
                                 </Grid>
-                                <Grid item xs={10}>
+                                <Grid item xs={12} md={10}>
                                     <Stack direction='row' spacing={3} justifyContent='space-between'>
                                         <Button
                                             sx={{ width: 1 / 3 }}
                                             variant='contained'
                                             component='label'
                                             onChange={(event) => {
-                                                console.log(event.target.files[0]);
                                                 setSelectedImage(event.target.files[0]);
                                             }}
                                         >
