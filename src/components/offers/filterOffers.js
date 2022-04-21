@@ -23,6 +23,8 @@ export const FilterOffers = (props) => {
         <>
             <Button
                 id='filter-button'
+                variant='contained'
+                color='secondary'
                 aria-controls={openFilter ? 'filter-menu' : undefined}
                 aria-haspopup='true'
                 aria-expanded={openFilter ? 'true' : undefined}

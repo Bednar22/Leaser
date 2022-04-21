@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
 import { Link, NavLink } from 'react-router-dom';
-import './../App.css';
+import './../../App.css';
 import Box from '@mui/material/Box';
 import { LoggedProfile } from './loggedProfile';
 import { NotLoggedProfile } from './notLoggedProfile';
@@ -36,7 +36,7 @@ export const Navbar = (props) => {
                     <NavLink className='menu-button' to='signup'>
                         Sign Up
                     </NavLink> */}
-                    {logged == true ? <LoggedProfile /> : <NotLoggedProfile />}
+                    {logged ? <LoggedProfile /> : <NotLoggedProfile />}
                 </Stack>
             </Box>
         </>

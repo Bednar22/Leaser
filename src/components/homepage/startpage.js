@@ -1,42 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button, Typography, Stack, Box } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import BackgroundImagePath from '../../assets/hero_background_img.svg';
 import BackgroundImageMobilePath from '../../assets/hero_background_img_mobile.svg';
 
 export const Startpage = (props) => {
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-    React.useEffect(() => {
-        const handleWindowResize = () => {
-            setWindowWidth(window.innerWidth);
-        };
-        window.addEventListener('resize', handleWindowResize);
-        return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        };
-    }, []);
 
-    const background_img_change_breakpoint = 850;
+    const smallSize = useMediaQuery('(max-width:850px)');
     let appropriateBackgroundImage;
-    if (windowWidth > background_img_change_breakpoint) {
-        appropriateBackgroundImage = BackgroundImagePath;
-    } else {
+    if (smallSize) {
         appropriateBackgroundImage = BackgroundImageMobilePath;
+    } else {
+        appropriateBackgroundImage = BackgroundImagePath;
     }
 
     return (
         <>
             <Box
                 style={{
-                    'background-image': `url(${appropriateBackgroundImage})`,
-                    'background-position': 'center',
-                    'background-size': 'cover',
+                    backgroundImage: `url(${appropriateBackgroundImage})`,
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
                 }}
                 display='flex'
                 justifyContent='center'
                 alignItems='center'
-                height='100%'
+                height='100vh'
             >
                 <Stack alignItems='center' direction='column'>
                     <Typography variant='h4' align='center' fontWeight='bold' color='#FAF7F0'>
@@ -45,8 +36,8 @@ export const Startpage = (props) => {
                     <Typography variant='h5' align='center' color='#FAF7F0'>
                         Why not just rent them instead?
                     </Typography>
-                    <NavLink to='/signup' style={{ 'text-decoration': 'none', margin: '32px' }}>
-                        <Button variant='contained' style={{ 'background-color': '#FFA89A' }}>
+                    <NavLink to='/signup' style={{ textDecoration: 'none', margin: '32px' }}>
+                        <Button variant='contained' style={{ backgroundColor: '#FFA89A' }}>
                             <Typography variant='h5'>Start using Leaser</Typography>
                         </Button>
                     </NavLink>

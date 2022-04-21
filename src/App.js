@@ -3,7 +3,7 @@ import './App.css';
 import { Routes, Route, useLocation } from 'react-router-dom';
 //components
 import { Login } from './components/login_signup/login';
-import { Navbar } from './components/navbar';
+import { Navbar } from './components/navbar/navbar';
 import { Startpage } from './components/homepage/startpage';
 import { SignUp } from './components/login_signup/signUp';
 import { MainOffersPage } from './components/offers/mainOffersPage';
@@ -43,6 +43,7 @@ function App() {
                     <Route path='addOffer' element={<AddOffer />} />
                     <Route path='user/settings' element={<UserSettings />} />
                     <Route path='user/profile' element={<Profile />} />
+                    <Route path='*' element={<NoMatch />} />
                 </Routes>
             </ThemeProvider>
         </>

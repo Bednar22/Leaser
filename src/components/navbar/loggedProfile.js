@@ -6,7 +6,7 @@ import Person from '@mui/icons-material/Person';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { Typography, Avatar, Menu, MenuItem, Divider, Box } from '@mui/material';
-import '../App.css';
+import '../../App.css';
 import { useNavigate } from 'react-router-dom';
 
 export const LoggedProfile = (props) => {
