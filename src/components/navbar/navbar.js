@@ -30,6 +30,10 @@ export const Navbar = (props) => {
                     <NavLink className='menu-button' to='/offers'>
                         Offers
                     </NavLink>
+                    <NavLink className='menu-button' to='/addoffer'>
+                        Add offer
+                    </NavLink>
+
                     {/* <NavLink className='menu-button' to='login'>
                         Login
                     </NavLink>
