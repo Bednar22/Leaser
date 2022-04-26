@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Paper, TextField, Grid, Container, Button, Typography, Stack, Box } from '@mui/material';
 import { GridBreak } from '../utilities/gridBreak';
 import axios from 'axios';
 import '../../App.css';
-import { InputLabel } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useNavigate } from 'react-router-dom';
 
 const Input = styled('input')({
     display: 'none',
@@ -24,7 +24,9 @@ export const AddOffer = (props) => {
     const [availableFrom, setAvailableFrom] = useState('');
     const [availableTo, setAvailableTo] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
+    const [error, setError] = useState('');
     const smallSize = useMediaQuery('(max-width:900px)');
+    const navigate = useNavigate();
 
     const addOffer = (e) => {
         let formData = new FormData();
@@ -50,9 +52,13 @@ export const AddOffer = (props) => {
             .post(`/api/Posts/${categoryId}`, formData, config)
             .then((res) => {
                 console.log(res);
+                props.handleClickSnackbar();
+                navigate('/user/profile');
             })
             .catch((error) => {
                 console.log(error.response);
+                setError('Something went wrong! Check form and try again!');
+                // setError(error.response.data.title);
             });
 
         e.preventDefault();
@@ -153,20 +159,21 @@ export const AddOffer = (props) => {
                                             onChange={(newValue) => {
                                                 setAvailableFrom(newValue);
                                             }}
-                                            renderInput={(params) => <TextField {...params} />}
+                                            renderInput={(params) => <TextField {...params} size='small' />}
                                             minDate={Date.now()}
                                         />
                                     </Grid>
                                     <Grid item xs={6}>
                                         <DatePicker
                                             // inputFormat='dd.mm.yyyy'
+
                                             label='Available to'
                                             value={availableTo}
                                             onChange={(newValue) => {
                                                 setAvailableTo(newValue);
                                             }}
                                             minDate={availableFrom}
-                                            renderInput={(params) => <TextField {...params} />}
+                                            renderInput={(params) => <TextField {...params} size='small' />}
                                         />
                                     </Grid>
                                 </LocalizationProvider>
@@ -195,7 +202,7 @@ export const AddOffer = (props) => {
                                             />
                                         </Box>
                                     ) : (
-                                        <Paper sx={{ height: 250, mb: 0 }}></Paper>
+                                        <Paper sx={{ height: 300, mb: 0 }}></Paper>
                                     )}
                                 </Grid>
                                 <Grid item xs={12} md={10}>
@@ -224,7 +231,11 @@ export const AddOffer = (props) => {
                                 </Grid>
                             </Grid>
                         </Box>
-
+                        <Box sx={{ minHeight: 5 }}>
+                            <Typography align='center' color='error'>
+                                {error}
+                            </Typography>
+                        </Box>
                         <Box sx={{ width: 1 / 3, mx: 'auto', mt: 4 }}>
                             <Button variant='contained' type='submit' fullWidth>
                                 Add new item
