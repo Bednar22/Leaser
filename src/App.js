@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AddOffer } from './components/offers/addOffer';
 import { AuthProvider, useAuth } from './components/utilities/auth';
 import { RequireAuth } from './components/utilities/requireAuth';
+import { NoAuthPath } from './components/utilities/noAuthPath';
 //mui imports
 import { Snackbar, Alert } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -69,8 +70,22 @@ function App() {
                     {location.pathname === '/' ? null : <Navbar></Navbar>}
                     <Routes>
                         <Route path='/' element={<Startpage />} />
-                        <Route path='login' element={<Login />} />
-                        <Route path='signup' element={<SignUp />} />
+                        <Route
+                            path='login'
+                            element={
+                                <NoAuthPath>
+                                    <Login />
+                                </NoAuthPath>
+                            }
+                        />
+                        <Route
+                            path='signup'
+                            element={
+                                <NoAuthPath>
+                                    <SignUp />
+                                </NoAuthPath>
+                            }
+                        />
                         <Route path='offers' element={<MainOffersPage />} />
                         <Route
                             path='home'
