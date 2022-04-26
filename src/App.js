@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Routes, Route, useLocation } from 'react-router-dom';
 //components
@@ -13,6 +13,9 @@ import { Profile } from './components/user_profile/profile';
 import { UserSettings } from './components/user_profile/userSettings';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AddOffer } from './components/offers/addOffer';
+import { AuthProvider, useAuth } from './components/utilities/auth';
+import { RequireAuth } from './components/utilities/requireAuth';
+import { NoAuthPath } from './components/utilities/noAuthPath';
 //mui imports
 import { Snackbar, Alert } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -34,6 +37,7 @@ const theme = createTheme({
 /*podstawowy component, w ktorym beda sciezki  */
 function App() {
     const [open, setOpen] = useState(false);
+    const auth = useAuth();
 
     const handleClickSnackbar = () => {
         setOpen(true);
@@ -54,37 +58,85 @@ function App() {
         </React.Fragment>
     );
 
+    // useEffect(() => {
+    //     auth.checkUser();
+    // }, []);
+
     const location = useLocation();
     return (
         <>
-            <ThemeProvider theme={theme}>
-                {location.pathname === '/' ? null : <Navbar></Navbar>}
-                <Routes>
-                    <Route path='/' element={<Startpage />} />
-                    <Route path='home' element={<Homepage />} />
-                    <Route path='login' element={<Login />} />
-                    <Route path='signup' element={<SignUp />} />
-                    <Route path='offers' element={<MainOffersPage />} />
-                    <Route path='addOffer' element={<AddOffer handleClickSnackbar={handleClickSnackbar} />} />
-                    <Route path='user/settings' element={<UserSettings />} />
-                    <Route path='user/profile' element={<Profile />} />
-                    <Route path='*' element={<NoMatch />} />
-                </Routes>
-                <Snackbar
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                    // sx={{ width: 1 / 3 }}
-                    open={open}
-                    autoHideDuration={5000}
-                    onClose={handleCloseSnackbar}
-                    // message='Post added correctly'
-                    action={action}
-                    key={'bottomright'}
-                >
-                    <Alert onClose={handleCloseSnackbar} severity='success' sx={{ width: '100%' }}>
-                        Post added!
-                    </Alert>
-                </Snackbar>
-            </ThemeProvider>
+            <AuthProvider>
+                <ThemeProvider theme={theme}>
+                    {location.pathname === '/' ? null : <Navbar></Navbar>}
+                    <Routes>
+                        <Route path='/' element={<Startpage />} />
+                        <Route
+                            path='login'
+                            element={
+                                <NoAuthPath>
+                                    <Login />
+                                </NoAuthPath>
+                            }
+                        />
+                        <Route
+                            path='signup'
+                            element={
+                                <NoAuthPath>
+                                    <SignUp />
+                                </NoAuthPath>
+                            }
+                        />
+                        <Route path='offers' element={<MainOffersPage />} />
+                        <Route
+                            path='home'
+                            element={
+                                <RequireAuth>
+                                    <Homepage />
+                                </RequireAuth>
+                            }
+                        />
+                        <Route
+                            path='addOffer'
+                            element={
+                                <RequireAuth>
+                                    <AddOffer handleClickSnackbar={handleClickSnackbar} />
+                                </RequireAuth>
+                            }
+                        />
+                        <Route
+                            path='user/settings'
+                            element={
+                                <RequireAuth>
+                                    <UserSettings />
+                                </RequireAuth>
+                            }
+                        />
+                        <Route
+                            path='user/profile'
+                            element={
+                                <RequireAuth>
+                                    <Profile />
+                                </RequireAuth>
+                            }
+                        />
+                        <Route path='*' element={<NoMatch />} />
+                    </Routes>
+                    <Snackbar
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                        // sx={{ width: 1 / 3 }}
+                        open={open}
+                        autoHideDuration={5000}
+                        onClose={handleCloseSnackbar}
+                        // message='Post added correctly'
+                        action={action}
+                        key={'bottomright'}
+                    >
+                        <Alert onClose={handleCloseSnackbar} severity='success' sx={{ width: '100%' }}>
+                            Post added!
+                        </Alert>
+                    </Snackbar>
+                </ThemeProvider>
+            </AuthProvider>
         </>
     );
 }
