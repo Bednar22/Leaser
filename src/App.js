@@ -14,6 +14,9 @@ import { UserSettings } from './components/user_profile/userSettings';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AddOffer } from './components/offers/addOffer';
 
+import { OfferDetails } from './components/offers/offerDetails';
+import SampleImage from './assets/sample-image.jpg'
+
 const theme = createTheme({
     palette: {
         primary: {
@@ -43,6 +46,19 @@ function App() {
                     <Route path='addOffer' element={<AddOffer />} />
                     <Route path='user/settings' element={<UserSettings />} />
                     <Route path='user/profile' element={<Profile />} />
+                    <Route path='offerDetails' element={<OfferDetails 
+                        offerTitle='Digital camera'
+                        offerDescription='Lorem ipsum dolor sit amet, consectetur adipiscing elit. In at consectetur purus. Sed sit amet ligula mattis, posuere nulla vitae, dapibus lorem. Vestibulum quis nunc et est interdum facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam enim odio, porttitor id pretium non, rutrum at nisl. Pellentesque faucibus risus quis orci dapibus, eget rutrum sem congue. Donec ullamcorper ut nibh a vulputate. Integer neque lacus, congue sed ex in, pharetra dapibus lorem.'
+                        pricePerDay={10}
+                        pricePerWeek={8}
+                        pricePerMonth={5}
+                        deposit={100}
+                        offerImage={SampleImage}
+                        renterName='Jan Kowalski'
+                        renterNickname='jkowalski'
+                        renterScore={4.5}
+                        offerCity='Wrocław'
+                    />} />
                     <Route path='*' element={<NoMatch />} />
                 </Routes>
             </ThemeProvider>
