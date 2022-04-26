@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Paper, TextField, Grid, Container, Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { GridBreak } from '../utilities/gridBreak';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useAuth } from '../utilities/auth';
@@ -11,7 +11,8 @@ export const Login = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const auth = useAuth();
-
+    const location = useLocation();
+    const redirectPath = location.state?.path || '/home';
     const {
         register,
         handleSubmit,
@@ -26,7 +27,7 @@ export const Login = () => {
             .then((res) => {
                 window.localStorage.setItem('leaserToken', res.data);
                 auth.login(res.data);
-                navigate('/home');
+                navigate(redirectPath, { replace: true });
                 //console.log(res.data);
             })
             .catch((err) => {
