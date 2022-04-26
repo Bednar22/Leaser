@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Paper, TextField, Grid, Container, Button, Typography, Stack, Box } from '@mui/material';
 import { GridBreak } from '../utilities/gridBreak';
 import axios from 'axios';
 import '../../App.css';
-import { styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate } from 'react-router-dom';
-
-const Input = styled('input')({
-    display: 'none',
-});
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 export const AddOffer = (props) => {
     const [title, setTitle] = useState();
@@ -26,6 +25,8 @@ export const AddOffer = (props) => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [error, setError] = useState('');
     const smallSize = useMediaQuery('(max-width:900px)');
+    const [categories, setCategories] = useState([{}]);
+    const [categoryId, setCategoryId] = useState();
     const navigate = useNavigate();
 
     const addOffer = (e) => {
@@ -46,22 +47,39 @@ export const AddOffer = (props) => {
                 Authorization: `Bearer ${window.localStorage.getItem('leaserToken')}`,
             },
         };
-        const categoryId = 1;
 
         axios
             .post(`/api/Posts/${categoryId}`, formData, config)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 props.handleClickSnackbar();
                 navigate('/user/profile');
             })
             .catch((error) => {
-                console.log(error.response);
+                // console.log(error.response);
                 setError('Something went wrong! Check form and try again!');
                 // setError(error.response.data.title);
             });
 
         e.preventDefault();
+    };
+
+    useEffect(() => {
+        axios
+            .get('api/Categories', {
+                headers: {
+                    Authorization: `Bearer ${window.localStorage.getItem('leaserToken')}`,
+                },
+            })
+            .then((res) => {
+                // console.log(res.data);
+                setCategories(res.data);
+            })
+            .catch((err) => {});
+    }, []);
+
+    const handleCategoryChange = (event) => {
+        setCategoryId(event.target.value);
     };
 
     return (
@@ -91,7 +109,7 @@ export const AddOffer = (props) => {
                                 <Grid item xs={12} md={12}>
                                     <TextField
                                         multiline
-                                        rows={6}
+                                        rows={5}
                                         required
                                         label='Description'
                                         type='text'
@@ -102,6 +120,28 @@ export const AddOffer = (props) => {
                                     ></TextField>
                                 </Grid>
 
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth size='small'>
+                                        <InputLabel id='demo-simple-select-label'>Category</InputLabel>
+                                        <Select
+                                            // placeholder='Category'
+                                            fullWidth
+                                            labelId='demo-simple-select-label'
+                                            id='demo-simple-select'
+                                            // value={Category}
+                                            label='Category'
+                                            onChange={handleCategoryChange}
+                                        >
+                                            {categories.map((item) => {
+                                                return (
+                                                    <MenuItem key={item.id} value={item.id}>
+                                                        {item.categoryName}
+                                                    </MenuItem>
+                                                );
+                                            })}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
                                 <GridBreak />
                                 <Grid item xs={6} md={6}>
                                     <TextField
