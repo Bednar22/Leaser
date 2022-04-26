@@ -28,6 +28,7 @@ export const LoggedProfile = (props) => {
     return (
         <>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                
                 <IconButton
                     onClick={handleClick}
                     sx={{ ml: 2 }}
