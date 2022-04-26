@@ -13,6 +13,7 @@ import { Profile } from './components/user_profile/profile';
 import { UserSettings } from './components/user_profile/userSettings';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AddOffer } from './components/offers/addOffer';
+import { AuthProvider } from './components/utilities/auth';
 //mui imports
 import { Snackbar, Alert } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -57,34 +58,36 @@ function App() {
     const location = useLocation();
     return (
         <>
-            <ThemeProvider theme={theme}>
-                {location.pathname === '/' ? null : <Navbar></Navbar>}
-                <Routes>
-                    <Route path='/' element={<Startpage />} />
-                    <Route path='home' element={<Homepage />} />
-                    <Route path='login' element={<Login />} />
-                    <Route path='signup' element={<SignUp />} />
-                    <Route path='offers' element={<MainOffersPage />} />
-                    <Route path='addOffer' element={<AddOffer handleClickSnackbar={handleClickSnackbar} />} />
-                    <Route path='user/settings' element={<UserSettings />} />
-                    <Route path='user/profile' element={<Profile />} />
-                    <Route path='*' element={<NoMatch />} />
-                </Routes>
-                <Snackbar
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                    // sx={{ width: 1 / 3 }}
-                    open={open}
-                    autoHideDuration={5000}
-                    onClose={handleCloseSnackbar}
-                    // message='Post added correctly'
-                    action={action}
-                    key={'bottomright'}
-                >
-                    <Alert onClose={handleCloseSnackbar} severity='success' sx={{ width: '100%' }}>
-                        Post added!
-                    </Alert>
-                </Snackbar>
-            </ThemeProvider>
+            <AuthProvider>
+                <ThemeProvider theme={theme}>
+                    {location.pathname === '/' ? null : <Navbar></Navbar>}
+                    <Routes>
+                        <Route path='/' element={<Startpage />} />
+                        <Route path='home' element={<Homepage />} />
+                        <Route path='login' element={<Login />} />
+                        <Route path='signup' element={<SignUp />} />
+                        <Route path='offers' element={<MainOffersPage />} />
+                        <Route path='addOffer' element={<AddOffer handleClickSnackbar={handleClickSnackbar} />} />
+                        <Route path='user/settings' element={<UserSettings />} />
+                        <Route path='user/profile' element={<Profile />} />
+                        <Route path='*' element={<NoMatch />} />
+                    </Routes>
+                    <Snackbar
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                        // sx={{ width: 1 / 3 }}
+                        open={open}
+                        autoHideDuration={5000}
+                        onClose={handleCloseSnackbar}
+                        // message='Post added correctly'
+                        action={action}
+                        key={'bottomright'}
+                    >
+                        <Alert onClose={handleCloseSnackbar} severity='success' sx={{ width: '100%' }}>
+                            Post added!
+                        </Alert>
+                    </Snackbar>
+                </ThemeProvider>
+            </AuthProvider>
         </>
     );
 }
