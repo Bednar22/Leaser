@@ -1,4 +1,4 @@
-import { Grid, Container, Paper, Typography, Stack, Button, Rating } from '@mui/material';
+import { Grid, Container, Paper, Typography, Stack, Button, Rating, Box } from '@mui/material';
 import { GridBreak } from '../utilities/gridBreak';
 
 import { CalendarPicker } from '@mui/x-date-pickers';
@@ -17,15 +17,24 @@ export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, priceP
         }
     }
 
-    const depositText = () => {
-        let return_text;
+    const DepositComponent = () => {
+        let text;
         if (deposit != null) {
-            return_text = `Deposit ${deposit}PLN`
+            text = `${deposit}PLN`
         }
         else {
-            return_text = 'Deposit not required'
+            text = 'not required'
         }
-        return return_text;
+        return (
+            <Stack justifyContent='center' alignItems='center'>
+                <Typography variant='h6' color='secondary' fontWeight='bold'>
+                    Deposit
+                </Typography>
+                <Typography>
+                    {text}
+                </Typography>
+            </Stack>
+        )
     }
     
     return (
@@ -37,7 +46,7 @@ export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, priceP
                     </Grid>
                     <Grid item xs={9} md={5} lg={4} height='350px'>
                         <Stack spacing={1} height='100%'>
-                            <Paper style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                            <Paper style={{ flex: '0.5', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                 <Stack p={1} alignItems='center'>
                                     <Typography variant='h6'>
                                         {renterNickname}
@@ -50,24 +59,35 @@ export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, priceP
                             </Button>
                             <Stack spacing={1} style={{ flex: '1' }}>
                                 <Paper style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                    <Typography p={1}>
-                                        Day {pricePerDay}PLN/day
-                                    </Typography>
+                                    <Stack direction='row' spacing={7} justifyContent='center' alignContent='center'>
+                                        <Stack justifyContent='center' alignItems='center'>
+                                            <Typography color='secondary' fontWeight='bold' variant='h6'>
+                                                Day+
+                                            </Typography>
+                                            <Typography>
+                                                {pricePerDay}PLN/day
+                                            </Typography>
+                                        </Stack>
+                                        <Stack justifyContent='center' alignItems='center'>
+                                            <Typography color='secondary' fontWeight='bold' variant='h6'>
+                                                Week+
+                                            </Typography>
+                                            <Typography>
+                                                {pricePerWeek}PLN/day
+                                            </Typography>
+                                        </Stack>
+                                        <Stack justifyContent='center' alignItems='center'>
+                                            <Typography color='secondary' fontWeight='bold' variant='h6'>
+                                                Month+
+                                            </Typography>
+                                            <Typography>
+                                                {pricePerMonth}PLN/day
+                                            </Typography>
+                                        </Stack>
+                                    </Stack>
                                 </Paper>
                                 <Paper style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                    <Typography p={1}>
-                                        Week {pricePerWeek}PLN/day
-                                    </Typography>
-                                </Paper>
-                                <Paper style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                    <Typography p={1}>
-                                        Month {pricePerMonth}PLN/day
-                                    </Typography>
-                                </Paper>
-                                <Paper style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                    <Typography p={1}>
-                                        {depositText()}
-                                    </Typography>
+                                    <DepositComponent/>
                                 </Paper>
                             </Stack>
                         </Stack>
@@ -91,11 +111,11 @@ export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, priceP
                     <Grid item xs={9} md={5} lg={4}>
                         <Paper style={{ dispaly: 'flex', alignItems: 'center' }}>
                             <Stack p={1} alignItems='center'>
-                                <Typography variant='h6' >
-                                    Item availability
+                                <Typography variant='h6'>
+                                    Availability
                                 </Typography>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <CalendarPicker shouldDisableDate={dateDisableFunction} minDate={Date.now()} maxDate={availableTo} onChange={function dummy() {}} />
+                                    <CalendarPicker shouldDisableDate={dateDisableFunction} minDate={Date.now()} maxDate={availableTo} onChange={function dummy() {}} sx={{minHeight: '100px'}}/>
                             </LocalizationProvider> 
                             </Stack>
                         </Paper>
