@@ -59,7 +59,7 @@ function App() {
                         renterScore={4.5}
                         offerCity='Wrocław'
                         availableFrom={new Date(2022, 3, 20)}
-                        availableTo={new Date(2022, 3, 26)}
+                        availableTo={new Date(2022, 5, 26)}
                     />} />
                     <Route path='*' element={<NoMatch />} />
                 </Routes>
