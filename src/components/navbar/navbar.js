@@ -5,17 +5,11 @@ import './../../App.css';
 import Box from '@mui/material/Box';
 import { LoggedProfile } from './loggedProfile';
 import { NotLoggedProfile } from './notLoggedProfile';
+import { useAuth } from '../utilities/auth';
 
 export const Navbar = (props) => {
-    const [logged, setLogged] = useState();
-
-    useEffect(() => {
-        if (window.localStorage.getItem('leaserToken')) {
-            setLogged(true);
-        } else {
-            setLogged(false);
-        }
-    }, []);
+    // const [logged, setLogged] = useState();
+    const auth = useAuth();
 
     return (
         <>
@@ -30,13 +24,17 @@ export const Navbar = (props) => {
                     <NavLink className='menu-button' to='/offers'>
                         Offers
                     </NavLink>
+                    <NavLink className='menu-button' to='/addoffer'>
+                        Add offer
+                    </NavLink>
+
                     {/* <NavLink className='menu-button' to='login'>
                         Login
                     </NavLink>
                     <NavLink className='menu-button' to='signup'>
                         Sign Up
                     </NavLink> */}
-                    {logged ? <LoggedProfile /> : <NotLoggedProfile />}
+                    {auth.user ? <LoggedProfile /> : <NotLoggedProfile />}
                 </Stack>
             </Box>
         </>

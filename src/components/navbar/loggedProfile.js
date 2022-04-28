@@ -8,10 +8,12 @@ import Logout from '@mui/icons-material/Logout';
 import { Typography, Avatar, Menu, MenuItem, Divider, Box } from '@mui/material';
 import '../../App.css';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../utilities/auth';
 
 export const LoggedProfile = (props) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const auth = useAuth();
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -21,7 +23,7 @@ export const LoggedProfile = (props) => {
     const navigate = useNavigate();
 
     const logout = () => {
-        window.localStorage.removeItem('leaserToken');
+        auth.logout();
         navigate('/');
     };
 
