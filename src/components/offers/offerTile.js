@@ -18,7 +18,7 @@ export const OfferTile = ({ renterName, renterNickname, renterScore, offerTitle,
                                         {offerTitle}
                                     </Typography>
                                     <Typography>
-                                        {renterNickname} ({renterName})
+                                        {renterNickname}
                                     </Typography>
                                     <Rating readOnly precision={0.1} value={renterScore}/>
                                 </Stack>
