@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Paper, Typography, Stack, Button, Box, Container } from '@mui/material';
+import { Stack, Button, Box, Container } from '@mui/material';
 import { Review } from './review';
 
 
@@ -11,7 +11,7 @@ export const ReviewList = ( {reviews} ) => {
 
     const reviewList = []
     for (let i = 0; i < 13; i++) {
-        reviewList.push({reviewAuthor: 'reviewAuthor', reviewContents: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In at consectetur purus. Sed sit amet ligula mattis, posuere nulla vitae, dapibus lorem.', reviewScore: 4.5})
+        reviewList.push({author: 'reviewAuthor', comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In at consectetur purus. Sed sit amet ligula mattis, posuere nulla vitae, dapibus lorem.', score: 4.5})
     }
 
     const [displayedReviewsCount, setDisplayedReviewsCount] = useState(maxReviewsAtOnce);
@@ -43,9 +43,9 @@ export const ReviewList = ( {reviews} ) => {
                     return (
                         <Box sx={{m: 1}}>
                             <Review
-                                reviewAuthor={item.reviewAuthor}
-                                reviewContents={item.reviewContents}
-                                reviewScore={item.reviewScore}
+                                author={item.author}
+                                comment={item.comment}
+                                score={item.score}
                             ></Review>
                         </Box>
                     )

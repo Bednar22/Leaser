@@ -1,17 +1,17 @@
 import { Paper, Typography, Stack, Rating } from '@mui/material';
 
 
-export const Review = ( {reviewAuthor, reviewContents, reviewScore} ) => {
+export const Review = ( {author, comment, score} ) => {
     return (
         <>
         <Paper>
             <Stack sx={{p: 1}}>
                 <Typography fontWeight='bold' variant='h6'>
-                    {reviewAuthor}
+                    {author}
                 </Typography>
-                <Rating readOnly precision={0.1} value={reviewScore}/>
+                <Rating readOnly precision={0.1} value={score}/>
                 <Typography sx={{pt: 1}}>
-                    {reviewContents}
+                    {comment}
                 </Typography>
             </Stack>
         </Paper>
