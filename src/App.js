@@ -23,6 +23,7 @@ import IconButton from '@mui/material/IconButton';
 
 import { OfferDetails } from './components/offers/offerDetails';
 import SampleImage from './assets/sample-image.jpg'
+import { ReviewList } from './components/reviews/reviewList';
 
 const theme = createTheme({
     palette: {
@@ -138,6 +139,7 @@ function App() {
                             availableFrom={new Date(2022, 3, 20)}
                             availableTo={new Date(2022, 5, 26)}
                     />} />
+                        <Route path='reviewList' element={<ReviewList/>} />
                     </Routes>
                     <Snackbar
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
