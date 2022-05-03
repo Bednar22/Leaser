@@ -140,8 +140,15 @@ function App() {
                             availableFrom={new Date(2022, 3, 20)}
                             availableTo={new Date(2022, 5, 26)}
                         />} />
+                        <Route
+                            path='addReview'
+                            element={
+                                <RequireAuth>
+                                    <AddReview reviewedUserNickname='jkowalski' reviewedUserId='53C3E28D-D310-4DAA-F76E-08DA2B9E9D15'/>
+                                </RequireAuth>
+                            }
+                        />
                         <Route path='reviewList' element={<ReviewList/>} />
-                        <Route path='addReview' element={<AddReview/>} />
                     </Routes>
                     <Snackbar
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
