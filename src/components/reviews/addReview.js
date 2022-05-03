@@ -3,19 +3,12 @@ import { Paper, Typography, Stack, Rating, TextField, Container, Button } from '
 import { useNavigate } from 'react-router-dom';
 import { useForm, Controller, FormProvider } from 'react-hook-form';
 import axios from 'axios';
+import { getValue } from '@testing-library/user-event/dist/utils';
 
 export const AddReview = ( {reviewedUserNickname, reviewedUserId} ) => {
 
     const [error, setError] = useState('');
     const [score, setScore] = useState(0);
-    const [score2, setScore2] = useState(0);
-    const [comment, setComment] = useState(null);
-    // const {
-    //     register,
-    //     handleSubmit,
-    //     formState: { errors },
-    //     control
-    // } = useForm();
     const methods = useForm();
     const navigate = useNavigate();
 
@@ -39,12 +32,9 @@ export const AddReview = ( {reviewedUserNickname, reviewedUserId} ) => {
                 //navigate('/home');
             })
             .catch((error) => {
-                // console.log(error.response);
-                setError('Something went wrong! Check form and try again!');
-                // setError(error.response.data.title);
+                setError(error.response.data);
             });
-
-        console.log(error);
+            
     }
 
     return (
@@ -60,19 +50,22 @@ export const AddReview = ( {reviewedUserNickname, reviewedUserId} ) => {
                             How would you rate this user?
                         </Typography>
                         <FormProvider {...methods}>
-                            <Controller
+                            <Controller   
                                 name='rate'
+                                defaultValue={null}
                                 rules={{ required: true }}
                                 render={
-                                    ({ field: {onChange} }) => (
-                                        <Rating precision={1} onChange={onChange} />
+                                    ({ field: {onChange, name, value, ref} }) => (
+                                        <Rating precision={1} onChange={onChange} name={name} value={Number(value)} ref={ref} />
                                     )
                                 }
-                                
                             >
                             </Controller>
                         </FormProvider>
-                        <TextField label='Optional comment' {...methods.register('comment')} onChange={(e) => setComment(e.target.value)} multiline fullWidth rows={2} sx={{mt: 1}}/>
+                        <TextField label='Optional comment' {...methods.register('comment')} multiline fullWidth rows={2} sx={{mt: 1}}/>
+                        <Typography color='error' variant='subtitle2' align='center'>
+                            {error}
+                        </Typography>
                         <Stack direction='row' justifyContent='flex-end' spacing={1} sx={{mt: 1}}>
                             <Button variant='outlined' color='secondary'>
                                 Cancel
