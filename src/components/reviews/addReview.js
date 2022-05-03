@@ -61,14 +61,14 @@ export const AddReview = ( {reviewedUserNickname, reviewedUserId} ) => {
                         </Typography>
                         <FormProvider {...methods}>
                             <Controller
+                                name='rate'
+                                rules={{ required: true }}
                                 render={
                                     ({ field: {onChange} }) => (
-                                        <Rating precision={1} onChange={onChange}
-                                        >
-                                        </Rating>
+                                        <Rating precision={1} onChange={onChange} />
                                     )
                                 }
-                                name='rate'
+                                
                             >
                             </Controller>
                         </FormProvider>
