@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import { Paper, TextField, Grid, Container, Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { GridBreak } from '../utilities/gridBreak';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { useAuth } from '../utilities/auth';
 
 export const Login = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
-
+    const auth = useAuth();
+    const location = useLocation();
+    const redirectPath = location.state?.path || '/home';
     const {
         register,
         handleSubmit,
@@ -17,14 +20,15 @@ export const Login = () => {
     } = useForm();
 
     const handleLogin = (data) => {
-        console.log(data);
+        // console.log(data);
 
         axios
             .post('/api/Accounts/Authenticate', data)
             .then((res) => {
-                navigate('/home');
-                //console.log(res.data);
                 window.localStorage.setItem('leaserToken', res.data);
+                auth.login(res.data);
+                navigate(redirectPath, { replace: true });
+                //console.log(res.data);
             })
             .catch((err) => {
                 setError(err.response.data);
@@ -83,7 +87,11 @@ export const Login = () => {
                             {
                                 <Grid item xs={10} md={10}>
                                     <Typography align='center'>
-                                        Don't have an account? <Link to='/signup' style={{ color: '#ffa89a'}}> Join Leaser!</Link>
+                                        Don't have an account?{' '}
+                                        <Link to='/signup' style={{ color: '#ffa89a' }}>
+                                            {' '}
+                                            Join Leaser!
+                                        </Link>
                                     </Typography>
                                 </Grid>
                             }
