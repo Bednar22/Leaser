@@ -148,7 +148,7 @@ function App() {
                                 </RequireAuth>
                             }
                         />
-                        <Route path='reviewList' element={<ReviewList/>} />
+                        <Route path='reviewList' element={<ReviewList />} />
                     </Routes>
                     <Snackbar
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
