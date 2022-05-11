@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
 
     const checkUser = () => {
         // console.log('CheckUSer function');
+        
         if (window.localStorage.getItem('leaserToken')) {
             const token = window.localStorage.getItem('leaserToken');
             axios

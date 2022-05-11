@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
-export const UserSettings = (props) => {
+export const UserOffers = (props) => {
     return (
         <>
-            <h1>Component for useer settings</h1>
+            <h1>User offers component</h1>
         </>
     );
 };
