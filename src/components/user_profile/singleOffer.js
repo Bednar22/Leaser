@@ -4,55 +4,24 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { grey } from '@mui/material/colors';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
-export default function AlertDialog() {
-    const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    return (
-        <div>
-            <Button variant='outlined' onClick={handleClickOpen}>
-                Open alert dialog
-            </Button>
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby='alert-dialog-title'
-                aria-describedby='alert-dialog-description'
-            >
-                <DialogTitle id='alert-dialog-title'>{"Use Google's location service?"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id='alert-dialog-description'>
-                        Let Google help apps determine location. This means sending anonymous location data to Google,
-                        even when no apps are running.
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Disagree</Button>
-                    <Button onClick={handleClose} autoFocus>
-                        Agree
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
-}
-
-export const SingleOffer = ({ id, title, description }) => {
+export const SingleOffer = ({
+    id,
+    index,
+    title,
+    description,
+    handleClick,
+    removeOffer,
+    price,
+    pricePerWeek,
+    pricePerMonth,
+    availableTo,
+}) => {
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -66,13 +35,14 @@ export const SingleOffer = ({ id, title, description }) => {
     const deletePost = () => {
         const token = window.localStorage.getItem('leaserToken');
         axios
-            .delete(`/api/Posts/${16}`, {
+            .delete(`/api/Posts/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
             .then((res) => {
-                console.log(res);
+                removeOffer(index);
+                handleClick();
             })
             .catch((err) => {
                 console.log(err);
@@ -105,6 +75,10 @@ export const SingleOffer = ({ id, title, description }) => {
                 ></CardHeader>
                 <CardContent>
                     <Typography>{description}</Typography>
+                    <Typography>Price per day: {price}</Typography>
+                    <Typography>Price per day: {pricePerWeek}</Typography>
+                    <Typography>Price per day: {pricePerMonth}</Typography>
+                    <Typography>Available to: {availableTo}</Typography>
                 </CardContent>
             </Card>
 
