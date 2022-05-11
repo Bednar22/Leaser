@@ -23,11 +23,7 @@ function TabPanel(props) {
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
+            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
         </div>
     );
 }
@@ -86,7 +82,7 @@ export const Profile = () => {
                             <>
                                 <Box style={{ display: 'flex', alignItems: 'center' }}>
                                     <SettingsIcon sx={{ mr: 1 }} />
-                                    <Typography> Settings</Typography>
+                                    <Typography> User data</Typography>
                                 </Box>
                             </>
                         }

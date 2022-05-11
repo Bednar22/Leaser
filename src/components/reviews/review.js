@@ -7,20 +7,21 @@ export const Review = ({ author, comment, score }) => {
     const [rater, setRater] = useState('');
     useEffect(() => {
         const token = window.localStorage.getItem('leaserToken');
-        axios
-            .get(`/api/Accounts/${author}/User`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then((res) => {
-                setRater(res.data.nickName);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        console.log(score);
-    }, author);
+        if (author) {
+            axios
+                .get(`/api/Accounts/${author}/User`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((res) => {
+                    setRater(res.data.nickName);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, [author]);
 
     return (
         <>
@@ -35,7 +36,6 @@ export const Review = ({ author, comment, score }) => {
                     </Stack>
                 </Paper>
             ) : (
-                
                 <Skeleton variant='rectangular' height={100}></Skeleton>
             )}
         </>

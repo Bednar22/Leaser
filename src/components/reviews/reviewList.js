@@ -30,7 +30,12 @@ export const ReviewList = ({ reviews }) => {
                     {reviews.slice(0, displayedReviewsCount).map((item) => {
                         return (
                             <Box sx={{ m: 1 }}>
-                                <Review author={item.raterUserId} comment={item.comment} score={item.rate}></Review>
+                                <Review
+                                    key={item.id}
+                                    author={item.raterUserId}
+                                    comment={item.comment}
+                                    score={item.rate}
+                                ></Review>
                             </Box>
                         );
                     })}
