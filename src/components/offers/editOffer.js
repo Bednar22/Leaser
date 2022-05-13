@@ -27,7 +27,6 @@ export const EditOffer = (props) => {
     const smallSize = useMediaQuery('(max-width:900px)');
     const [categories, setCategories] = useState([{}]);
     const [categoryId, setCategoryId] = useState();
-    const [catName, setCatName] = useState('');
     const navigate = useNavigate();
     const params = useParams();
 
@@ -50,10 +49,7 @@ export const EditOffer = (props) => {
                 Authorization: `Bearer ${token}`,
             },
         };
-        console.log(formData);
-        setTimeout(10000, () => {
-            console.log('pies');
-        });
+
         axios
             .put(`/api/Posts/${params.offerId}/${categoryId}`, formData, config)
             .then((res) => {
@@ -63,11 +59,9 @@ export const EditOffer = (props) => {
             .catch((error) => {
                 console.log(error.response);
                 setError('Something went wrong! Check form and try again!');
-                // setError(error.response.data.title);
             });
 
         // e.preventDefault();
-        console.log(`Test`);
     };
 
     useEffect(() => {
@@ -104,23 +98,19 @@ export const EditOffer = (props) => {
 
         axios
             .get(`/api/Posts/${params.offerId}/Image`, {
+                responseType: 'blob',
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
             .then((res) => {
-                console.log(res);
-                // setSelectedImage(res.data);
+                console.log(res.data);
+                setSelectedImage(res.data);
             })
-            .catch((err) => {});
+            .catch((err) => {
+                console.log(err);
+            });
     }, []);
-
-    useEffect(() => {
-        let result = categories.find((obj) => {
-            return obj.id == categoryId;
-        });
-        setCatName(result.categoryName);
-    }, [categoryId]);
 
     const handleCategoryChange = (event) => {
         setCategoryId(event.target.value);
@@ -163,29 +153,30 @@ export const EditOffer = (props) => {
                                     onChange={(e) => setDescription(e.target.value)}
                                 ></TextField>
                             </Grid>
-
-                            <Grid item xs={6}>
-                                <FormControl fullWidth size='small'>
-                                    <InputLabel id='demo-simple-select-label'>Category</InputLabel>
-                                    <Select
-                                        // placeholder='Category'
-                                        fullWidth
-                                        labelId='demo-simple-select-label'
-                                        id='demo-simple-select'
-                                        // value={catName}
-                                        label='Category'
-                                        onChange={handleCategoryChange}
-                                    >
-                                        {categories.map((item) => {
-                                            return (
-                                                <MenuItem key={item.id} value={item.id}>
-                                                    {item.categoryName}
-                                                </MenuItem>
-                                            );
-                                        })}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
+                            {categoryId && (
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth size='small'>
+                                        <InputLabel id='demo-simple-select-label'>Category</InputLabel>
+                                        <Select
+                                            // placeholder='Category'
+                                            fullWidth
+                                            labelId='demo-simple-select-label'
+                                            id='demo-simple-select'
+                                            label='Category'
+                                            value={categoryId}
+                                            onChange={handleCategoryChange}
+                                        >
+                                            {categories.map((item) => {
+                                                return (
+                                                    <MenuItem key={item.id} value={item.id}>
+                                                        {item.categoryName}
+                                                    </MenuItem>
+                                                );
+                                            })}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            )}
                             <GridBreak />
                             <Grid item xs={6} md={6}>
                                 <TextField
@@ -280,7 +271,7 @@ export const EditOffer = (props) => {
                                 {selectedImage ? (
                                     <Box>
                                         <img
-                                            alt='not fount'
+                                            alt='not found'
                                             className='offer-image'
                                             src={URL.createObjectURL(selectedImage)}
                                         />
