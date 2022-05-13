@@ -15,7 +15,7 @@ export const UserOffers = (props) => {
     const removeOffer = (index) => {
         let tempArr = offers;
         tempArr.splice(index, index);
-        setOffers(tempArr);
+        setOffers((prevOffer) => tempArr);
     };
 
     const handleClick = () => {

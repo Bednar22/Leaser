@@ -10,6 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { Link } from 'react-router-dom';
 export const SingleOffer = ({
     id,
     index,
@@ -58,11 +59,11 @@ export const SingleOffer = ({
                     action={
                         <>
                             <Tooltip title='Edit offer' disableInteractive sx={{ mr: 2 }}>
-                                {/* <Link href={herokuLink}> */}
-                                <IconButton>
-                                    <EditIcon sx={{ color: grey[900] }} />
-                                </IconButton>
-                                {/* </Link> */}
+                                <Link to={`/offer/editOffer/${id}`}>
+                                    <IconButton>
+                                        <EditIcon sx={{ color: grey[900] }} />
+                                    </IconButton>
+                                </Link>
                             </Tooltip>
 
                             <Tooltip title='Delete offer' disableInteractive>

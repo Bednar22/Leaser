@@ -25,6 +25,7 @@ import { OfferDetails } from './components/offers/offerDetails';
 import SampleImage from './assets/sample-image.jpg';
 import { ReviewList } from './components/reviews/reviewList';
 import { AddReview } from './components/reviews/addReview';
+import { EditOffer } from './components/offers/editOffer';
 
 const theme = createTheme({
     palette: {
@@ -101,6 +102,14 @@ function App() {
                             element={
                                 <RequireAuth>
                                     <AddOffer handleClickSnackbar={handleClickSnackbar} />
+                                </RequireAuth>
+                            }
+                        />
+                        <Route
+                            path='offer/editOffer/:offerId'
+                            element={
+                                <RequireAuth>
+                                    <EditOffer />
                                 </RequireAuth>
                             }
                         />
