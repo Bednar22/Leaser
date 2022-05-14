@@ -5,18 +5,35 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [address, setAddress] = useState(null);
 
-    const login = (user) => {
-        setUser(user);
+    const login = () => {
+        checkUser();
     };
     const logout = () => {
         setUser(null);
+        setAddress(null);
         window.localStorage.removeItem('leaserToken');
     };
 
+    const getAddress = () => {
+        const token = window.localStorage.getItem('leaserToken');
+        axios
+            .get('/api/Addresses', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                console.log(res.data);
+                setAddress(res.data);
+            })
+            .catch((err) => {
+                setAddress(null);
+            });
+    };
+
     const checkUser = () => {
-        // console.log('CheckUSer function');
-        
         if (window.localStorage.getItem('leaserToken')) {
             const token = window.localStorage.getItem('leaserToken');
             axios
@@ -27,6 +44,7 @@ export const AuthProvider = ({ children }) => {
                 })
                 .then((res) => {
                     setUser(res.data);
+                    getAddress();
                 })
                 .catch((err) => {
                     setUser(null);
@@ -41,7 +59,7 @@ export const AuthProvider = ({ children }) => {
         checkUser();
     }, []);
 
-    return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ user, address, login, logout }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
