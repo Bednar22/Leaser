@@ -27,6 +27,7 @@ export const AddOffer = (props) => {
     const smallSize = useMediaQuery('(max-width:900px)');
     const [categories, setCategories] = useState([{}]);
     const [categoryId, setCategoryId] = useState();
+
     const navigate = useNavigate();
 
     const addOffer = (e) => {

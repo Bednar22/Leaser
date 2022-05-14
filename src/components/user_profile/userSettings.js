@@ -15,14 +15,39 @@ export const UserSettings = (props) => {
     const [name, setName] = useState(auth.user.name);
     const [surname, setSurname] = useState(auth.user.surname);
     const [phoneNumber, setPhoneNumber] = useState(auth.user.phoneNumber);
-    const [buildingNo, setBuildingNo] = useState(auth.address.buildingNo);
-    const [apartmentNo, setApartmentNo] = useState(auth.address.apartmentNo);
-    const [city, setCity] = useState(auth.address.city);
-    const [country, setCountry] = useState(auth.address.country);
-    const [street, setStreet] = useState(auth.address.street);
-    const [postalCode, setPostalCode] = useState(auth.address.postalCode);
+    const [buildingNo, setBuildingNo] = useState('');
+    const [apartmentNo, setApartmentNo] = useState('');
+    const [city, setCity] = useState('');
+    const [country, setCountry] = useState('');
+    const [street, setStreet] = useState('');
+    const [postalCode, setPostalCode] = useState('');
     const [password, setPassword] = useState('');
+    const [addressId, setAddressId] = useState('');
+
+    const getAddressData = () => {
+        const token = window.localStorage.getItem('leaserToken');
+        axios
+            .get('/api/Addresses', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                setCity(res.data.city);
+                setCountry(res.data.country);
+                setStreet(res.data.street);
+                setBuildingNo(res.data.buildingNo);
+                setApartmentNo(res.data.apartmentNo);
+                setPostalCode(res.data.postalCode);
+                setAddressId(res.data.id);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     const onSubmit = (e) => {
+        setEditPhase(false);
         const userData = {
             email,
             surname,
@@ -60,7 +85,7 @@ export const UserSettings = (props) => {
         //     });
 
         axios
-            .put(`/api/Addresses/${auth.address.id}`, addressData, config)
+            .put(`/api/Addresses/${addressId}`, addressData, config)
             .then((res) => {
                 console.log('Bez problemów');
                 console.log(res);
@@ -69,8 +94,13 @@ export const UserSettings = (props) => {
                 console.log(err);
                 setError(err.response.data);
             });
+        // getAddressData();
         e.preventDefault();
     };
+
+    useEffect(() => {
+        getAddressData();
+    }, []);
 
     return (
         <>
@@ -152,6 +182,12 @@ export const UserSettings = (props) => {
                             </Grid>
                             <GridBreak />
 
+                            <Grid item xs={10} md={10}>
+                                <Typography align='center' variant='h6'>
+                                    Address:
+                                </Typography>
+                            </Grid>
+
                             <GridBreak />
                             <Grid item xs={12} md={6}>
                                 <Stack direction='row' spacing={2}>
@@ -229,6 +265,7 @@ export const UserSettings = (props) => {
                                 </Stack>
                             </Grid>
                             <GridBreak />
+                            {/* Later it will be a dialog */}
                             <GridBreak />
                             <Grid item xs={12} md={6}>
                                 <TextField
