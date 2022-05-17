@@ -10,7 +10,7 @@ import { MainOffersPage } from './components/offers/mainOffersPage';
 import { Homepage } from './components/homepage/homepage';
 import { NoMatch } from './components/noMatch';
 import { Profile } from './components/user_profile/profile';
-import { UserSettings } from './components/user_profile/userSettings';
+import { Wallet } from './components/user_profile/wallet';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AddOffer } from './components/offers/addOffer';
 import { AuthProvider, useAuth } from './components/utilities/auth';
@@ -114,10 +114,10 @@ function App() {
                             }
                         />
                         <Route
-                            path='user/settings'
+                            path='user/wallet'
                             element={
                                 <RequireAuth>
-                                    <UserSettings />
+                                    <Wallet />
                                 </RequireAuth>
                             }
                         />

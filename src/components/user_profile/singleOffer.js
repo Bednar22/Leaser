@@ -1,16 +1,28 @@
-import { Card, CardHeader, CardContent, Typography, IconButton, Tooltip, Stack } from '@mui/material';
+import { useState, useEffect } from 'react';
+import {
+    Card,
+    CardHeader,
+    CardContent,
+    CardMedia,
+    Typography,
+    IconButton,
+    Tooltip,
+    Stack,
+    Box,
+    Grid,
+    Divider,
+    Skeleton,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogTitle,
+} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { grey } from '@mui/material/colors';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import { Link } from 'react-router-dom';
+
 export const SingleOffer = ({
     id,
     index,
@@ -25,6 +37,7 @@ export const SingleOffer = ({
     currentUser,
 }) => {
     const [open, setOpen] = useState(false);
+    const [postImage, setPostImage] = useState();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -52,11 +65,34 @@ export const SingleOffer = ({
         setOpen(false);
     };
 
+    useEffect(() => {
+        const token = window.localStorage.getItem('leaserToken');
+        axios
+            .get(`/api/Posts/${id}/Image`, {
+                responseType: 'blob',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                console.log(res.data);
+                setPostImage(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
     return (
         <>
-            <Card sx={{ mb: 2, p: 2 }}>
+            <Card sx={{ mb: 3, p: 2 }}>
                 <CardHeader
-                    title={title}
+                    title={
+                        // zdodac id oferty do linku
+                        <Link to={`/offerDetails`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                            {title}
+                        </Link>
+                    }
                     action={
                         <>
                             {currentUser && (
@@ -79,13 +115,58 @@ export const SingleOffer = ({
                         </>
                     }
                 ></CardHeader>
-                <CardContent>
-                    <Typography>{description}</Typography>
-                    <Typography>Price per day: {price}</Typography>
-                    <Typography>Price per day: {pricePerWeek}</Typography>
-                    <Typography>Price per day: {pricePerMonth}</Typography>
-                    <Typography>Available to: {availableTo}</Typography>
-                </CardContent>
+                <Divider sx={{ mb: 2 }}></Divider>
+                <Grid container direction='row'>
+                    <Grid item xs={4}>
+                        {postImage ? (
+                            <CardMedia
+                                component='img'
+                                image={URL.createObjectURL(postImage)}
+                                alt='offer image'
+                            ></CardMedia>
+                        ) : (
+                            <Skeleton variant='rectangular' sx={{ height: 150 }}></Skeleton>
+                        )}
+                    </Grid>
+                    <Grid item xs={6}>
+                        <CardContent>
+                            <Box sx={{ ml: 4 }}>
+                                <Typography variant='h6' sx={{ mb: 1 }}>
+                                    Pricing:{' '}
+                                </Typography>
+                                <Stack direction='row'>
+                                    <Box sx={{ mr: 3 }}>
+                                        <Typography fontSize='large' align='center' color='secondary'>
+                                            Day+{' '}
+                                        </Typography>
+                                        <Typography fontSize='large' align='center'>
+                                            {price}
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ ml: 3, mr: 3 }}>
+                                        <Typography fontSize='large' align='center' color='secondary'>
+                                            Week+{' '}
+                                        </Typography>
+                                        <Typography fontSize='large' align='center'>
+                                            {pricePerWeek}
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ ml: 3 }}>
+                                        <Typography fontSize='large' align='center' color='secondary'>
+                                            Month+{' '}
+                                        </Typography>
+                                        <Typography fontSize='large' align='center'>
+                                            {pricePerMonth}
+                                        </Typography>
+                                    </Box>
+                                </Stack>
+                                <Typography sx={{ mt: 1 }} fontSize='large'>
+                                    Available to: {availableTo.slice(0, 10)}
+                                </Typography>
+                            </Box>
+                        </CardContent>
+                    </Grid>
+                </Grid>
             </Card>
 
             <Dialog

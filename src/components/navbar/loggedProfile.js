@@ -85,7 +85,7 @@ export const LoggedProfile = (props) => {
                         <Typography color='MenuText'>Profile</Typography>
                     </MenuItem>
                 </Link>
-                <Link to='/user/settings' className='link-text'>
+                <Link to='/user/wallet' className='link-text'>
                     <MenuItem>
                         <ListItemIcon>
                             <AccountBalanceWalletIcon fontSize='small' />

@@ -109,6 +109,12 @@ export const UserSettings = (props) => {
                     {/* <form onSubmit={() => onSubmit()}> */}
                     <Box>
                         <Grid container alignItems='center' justifyContent='center' spacing={{ xs: 2, md: 3 }}>
+                            <Grid item xs={10} md={10}>
+                                <Typography align='center' variant='h6'>
+                                    Data
+                                </Typography>
+                            </Grid>
+
                             <GridBreak />
                             <Grid item xs={12} md={6}>
                                 <TextField
@@ -184,7 +190,7 @@ export const UserSettings = (props) => {
 
                             <Grid item xs={10} md={10}>
                                 <Typography align='center' variant='h6'>
-                                    Address:
+                                    Address
                                 </Typography>
                             </Grid>
 
@@ -265,7 +271,7 @@ export const UserSettings = (props) => {
                                 </Stack>
                             </Grid>
                             <GridBreak />
-                            {/* Later it will be a dialog */}
+                            {/* Later it will be a dialog ?? */}
                             <GridBreak />
                             <Grid item xs={12} md={6}>
                                 <TextField

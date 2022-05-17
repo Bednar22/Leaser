@@ -4,12 +4,11 @@ import { useAuth } from '../utilities/auth';
 import { Box, Grid } from '@mui/material';
 import { SingleOffer } from './singleOffer';
 import { Snackbar, Alert, Button, Typography } from '@mui/material';
-// import CloseIcon from '@mui/icons-material/Close';
-// import IconButton from '@mui/material/IconButton';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 export const UserOffers = ({ currentUser }) => {
     const auth = useAuth();
+    const params = useParams();
     const [offers, setOffers] = useState([]);
     const [open, setOpen] = useState(false);
 
@@ -35,7 +34,7 @@ export const UserOffers = ({ currentUser }) => {
     useEffect(() => {
         const token = window.localStorage.getItem('leaserToken');
         axios
-            .get(`/api/Posts/${auth.user.id}/User`, {
+            .get(`/api/Posts/${params.id}/User`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -47,7 +46,7 @@ export const UserOffers = ({ currentUser }) => {
             .catch((err) => {
                 console.log(err);
             });
-    }, []);
+    }, [params]);
 
     return (
         <>
