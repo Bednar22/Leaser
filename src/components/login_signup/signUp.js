@@ -7,7 +7,7 @@ import axios from 'axios';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-const validationSchema = yup.object().shape({
+export const validationSchema = yup.object().shape({
     email: yup.string().required('Email is required').email('Email is invalid'),
     password: yup
         .string()
@@ -47,7 +47,6 @@ export const SignUp = (props) => {
     });
 
     const onSubmit = (data) => {
-
         axios
             .post('/api/Accounts/Register', data)
             .then((res) => {

@@ -27,6 +27,7 @@ export const AddOffer = (props) => {
     const smallSize = useMediaQuery('(max-width:900px)');
     const [categories, setCategories] = useState([{}]);
     const [categoryId, setCategoryId] = useState();
+
     const navigate = useNavigate();
 
     const addOffer = (e) => {
@@ -53,7 +54,7 @@ export const AddOffer = (props) => {
             .then((res) => {
                 // console.log(res);
                 props.handleClickSnackbar();
-                navigate('/user/profile');
+                navigate('/home');
             })
             .catch((error) => {
                 // console.log(error.response);
@@ -72,7 +73,6 @@ export const AddOffer = (props) => {
                 },
             })
             .then((res) => {
-                // console.log(res.data);
                 setCategories(res.data);
             })
             .catch((err) => {});
@@ -193,7 +193,6 @@ export const AddOffer = (props) => {
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <Grid item xs={6}>
                                         <DatePicker
-                                            // inputFormat='dd.mm.yyyy'
                                             label='Available from'
                                             value={availableFrom}
                                             onChange={(newValue) => {
@@ -205,8 +204,6 @@ export const AddOffer = (props) => {
                                     </Grid>
                                     <Grid item xs={6}>
                                         <DatePicker
-                                            // inputFormat='dd.mm.yyyy'
-
                                             label='Available to'
                                             value={availableTo}
                                             onChange={(newValue) => {
