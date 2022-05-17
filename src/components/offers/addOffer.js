@@ -54,7 +54,7 @@ export const AddOffer = (props) => {
             .then((res) => {
                 // console.log(res);
                 props.handleClickSnackbar();
-                navigate('/user/home');
+                navigate('/home');
             })
             .catch((error) => {
                 // console.log(error.response);
