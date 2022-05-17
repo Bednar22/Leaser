@@ -22,6 +22,7 @@ export const SingleOffer = ({
     pricePerWeek,
     pricePerMonth,
     availableTo,
+    currentUser,
 }) => {
     const [open, setOpen] = useState(false);
 
@@ -58,19 +59,23 @@ export const SingleOffer = ({
                     title={title}
                     action={
                         <>
-                            <Tooltip title='Edit offer' disableInteractive sx={{ mr: 2 }}>
-                                <Link to={`/offer/editOffer/${id}`}>
-                                    <IconButton>
-                                        <EditIcon sx={{ color: grey[900] }} />
-                                    </IconButton>
-                                </Link>
-                            </Tooltip>
+                            {currentUser && (
+                                <>
+                                    <Tooltip title='Edit offer' disableInteractive sx={{ mr: 2 }}>
+                                        <Link to={`/offer/editOffer/${id}`}>
+                                            <IconButton>
+                                                <EditIcon sx={{ color: grey[900] }} />
+                                            </IconButton>
+                                        </Link>
+                                    </Tooltip>
 
-                            <Tooltip title='Delete offer' disableInteractive>
-                                <IconButton onClick={handleClickOpen}>
-                                    <DeleteIcon sx={{ color: grey[900] }} />
-                                </IconButton>
-                            </Tooltip>
+                                    <Tooltip title='Delete offer' disableInteractive>
+                                        <IconButton onClick={handleClickOpen}>
+                                            <DeleteIcon sx={{ color: grey[900] }} />
+                                        </IconButton>
+                                    </Tooltip>
+                                </>
+                            )}
                         </>
                     }
                 ></CardHeader>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import IconButton from '@mui/material/IconButton';
 import Person from '@mui/icons-material/Person';
-import Settings from '@mui/icons-material/Settings';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import Logout from '@mui/icons-material/Logout';
 import { Typography, Avatar, Menu, MenuItem, Divider, Box } from '@mui/material';
 import '../../App.css';
@@ -77,7 +77,7 @@ export const LoggedProfile = (props) => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <Link to='/user/profile' className='link-text'>
+                <Link to={`/user/profile/${auth.user.id}`} className='link-text'>
                     <MenuItem>
                         <ListItemIcon>
                             <Person fontSize='small' />
@@ -88,9 +88,9 @@ export const LoggedProfile = (props) => {
                 <Link to='/user/settings' className='link-text'>
                     <MenuItem>
                         <ListItemIcon>
-                            <Settings fontSize='small' />
+                            <AccountBalanceWalletIcon fontSize='small' />
                         </ListItemIcon>
-                        <Typography color='MenuText'>Settings</Typography>
+                        <Typography color='MenuText'>Wallet</Typography>
                     </MenuItem>
                 </Link>
                 <Divider />

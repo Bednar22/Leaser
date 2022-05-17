@@ -3,11 +3,12 @@ import axios from 'axios';
 import { useAuth } from '../utilities/auth';
 import { Box, Grid } from '@mui/material';
 import { SingleOffer } from './singleOffer';
-import { Snackbar, Alert, Button } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
+import { Snackbar, Alert, Button, Typography } from '@mui/material';
+// import CloseIcon from '@mui/icons-material/Close';
+// import IconButton from '@mui/material/IconButton';
+// import { useParams } from 'react-router-dom';
 
-export const UserOffers = (props) => {
+export const UserOffers = ({ currentUser }) => {
     const auth = useAuth();
     const [offers, setOffers] = useState([]);
     const [open, setOpen] = useState(false);
@@ -15,7 +16,8 @@ export const UserOffers = (props) => {
     const removeOffer = (index) => {
         let tempArr = offers;
         tempArr.splice(index, index);
-        setOffers((prevOffer) => tempArr);
+        // setOffers((prevOffer) => tempArr);
+        setOffers(tempArr);
     };
 
     const handleClick = () => {
@@ -51,10 +53,11 @@ export const UserOffers = (props) => {
         <>
             <Grid container justifyContent='center'>
                 <Grid item xs={10} md={8}>
-                    {offers ? (
+                    {offers.length != 0 ? (
                         offers.map((item, index) => {
                             return (
                                 <SingleOffer
+                                    currentUser={currentUser}
                                     removeOffer={removeOffer}
                                     index={index}
                                     key={item.id}
@@ -70,7 +73,9 @@ export const UserOffers = (props) => {
                             );
                         })
                     ) : (
-                        <h1> No offers yet </h1>
+                        <Typography sx={{ mt: 5 }} align='center' fontSize='large'>
+                            No offers yet
+                        </Typography>
                     )}
                 </Grid>
             </Grid>

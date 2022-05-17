@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -11,7 +11,9 @@ import { Container } from '@mui/material';
 import { UserSettings } from './userSettings';
 import { UserRatings } from './userRatings';
 import { UserOffers } from './userOffers';
-
+import { useParams } from 'react-router-dom';
+import { useAuth } from '../utilities/auth';
+import '../../App.css';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -43,32 +45,44 @@ function a11yProps(index) {
 
 export const Profile = () => {
     const [value, setValue] = useState(0);
-
+    const [currentUser, setCurrentUser] = useState(false);
+    const params = useParams();
+    const auth = useAuth();
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
+    useEffect(() => {
+        if (params.id == auth.user.id) {
+            setCurrentUser(true);
+        }
+    }, [params]);
+
     return (
         <Box sx={{ width: 1 / 1 }}>
             <Container sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs sx={{ width: 1 / 1 }} value={value} onChange={handleChange} aria-label='basic tabs example'>
+                <Tabs
+                    centered
+                    value={value}
+                    onChange={handleChange}
+                    aria-label='basic tabs example'
+                    variant='fullWidth'
+                >
                     <Tab
-                        sx={{ width: 1 / 3 }}
                         label={
                             <>
-                                <Box style={{ display: 'flex', alignItems: 'center' }}>
+                                <Box className='tab'>
                                     <LocalOfferIcon sx={{ mr: 1 }} />
-                                    <Typography> My offers</Typography>
+                                    <Typography> Offers</Typography>
                                 </Box>
                             </>
                         }
                         {...a11yProps(0)}
                     />
                     <Tab
-                        sx={{ width: 1 / 3 }}
                         label={
                             <>
-                                <Box style={{ display: 'flex', alignItems: 'center' }}>
+                                <Box className='tab'>
                                     <StarIcon sx={{ mr: 1 }} />
                                     <Typography> Reviews</Typography>
                                 </Box>
@@ -76,29 +90,33 @@ export const Profile = () => {
                         }
                         {...a11yProps(1)}
                     />
-                    <Tab
-                        sx={{ width: 1 / 3 }}
-                        label={
-                            <>
-                                <Box style={{ display: 'flex', alignItems: 'center' }}>
-                                    <SettingsIcon sx={{ mr: 1 }} />
-                                    <Typography> User data</Typography>
-                                </Box>
-                            </>
-                        }
-                        {...a11yProps(2)}
-                    />
+
+                    {currentUser && (
+                        <Tab
+                            label={
+                                <>
+                                    <Box className='tab'>
+                                        <SettingsIcon sx={{ mr: 1 }} />
+                                        <Typography> User data</Typography>
+                                    </Box>
+                                </>
+                            }
+                            {...a11yProps(2)}
+                        />
+                    )}
                 </Tabs>
             </Container>
             <TabPanel value={value} index={0}>
-                <UserOffers />
+                <UserOffers currentUser={currentUser} />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <UserRatings />
             </TabPanel>
-            <TabPanel value={value} index={2}>
-                <UserSettings />
-            </TabPanel>
+            {currentUser && (
+                <TabPanel value={value} index={2}>
+                    <UserSettings />
+                </TabPanel>
+            )}
         </Box>
     );
 };

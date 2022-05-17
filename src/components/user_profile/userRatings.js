@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ReviewList } from '../reviews/reviewList';
 import axios from 'axios';
 import { useAuth } from '../utilities/auth';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Grid } from '@mui/material';
 
 export const UserRatings = (props) => {
@@ -30,7 +30,11 @@ export const UserRatings = (props) => {
             <Box sx={{ width: 1 / 1 }}>
                 <Grid container justifyContent='center'>
                     <Grid item xs={12} md={8}>
-                        <ReviewList reviews={reviews}></ReviewList>
+                        {reviews ? (
+                            <ReviewList reviews={reviews}></ReviewList>
+                        ) : (
+                            <Typography> No reviews yet</Typography>
+                        )}
                     </Grid>
                 </Grid>
             </Box>
