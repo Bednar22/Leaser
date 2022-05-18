@@ -25,6 +25,8 @@ import { OfferDetails } from './components/offers/offerDetails';
 import SampleImage from './assets/sample-image.jpg'
 import { ReviewList } from './components/reviews/reviewList';
 import { AddReview } from './components/reviews/addReview';
+import { Booking } from './components/offers/booking'
+
 
 const theme = createTheme({
     palette: {
@@ -138,8 +140,9 @@ function App() {
                             renterScore={4.5}
                             offerCity='Wrocław'
                             availableFrom={new Date(2022, 3, 20)}
-                            availableTo={new Date(2022, 5, 26)}
+                            availableTo={new Date(2022, 7, 26)}
                         />} />
+                        <Route path='offerDetails/booking' element={<Booking />} />
                         <Route
                             path='addReview'
                             element={

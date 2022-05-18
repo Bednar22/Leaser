@@ -7,8 +7,8 @@ import { Link } from 'react-router-dom';
 export const OfferTile = ({ renterName, renterNickname, renterScore, offerTitle, pricePerDay, titleImage, offerCity, OfferUrl }) => {    
     return (
         <>
-            <Box className='offer-tile' sx={{borderRadius: '8px', 'background-color': 'white'}}>
-                <Link to='/' style={{ textDecoration: 'none', width: '100%', height: '100%', color: 'black'}}>
+            <Box className='offer-tile' sx={{borderRadius: '8px', backgroundColor: 'white'}}>
+                <Link to='/offerDetails' style={{ textDecoration: 'none', width: '100%', height: '100%', color: 'black'}}>
                     <Paper className='offer-tile'>
                         <Stack sx={{p: 1}}>
                             <img src={titleImage} alt={offerTitle} style={{ borderRadius: '8px', marginBottom: '8px', width: '100%', height: '200px', objectFit: 'cover'}}></img>
@@ -24,7 +24,7 @@ export const OfferTile = ({ renterName, renterNickname, renterScore, offerTitle,
                                 </Stack>
                                 <Stack alignItems='center'>
                                     <Typography fontWeight='bold'>
-                                        {pricePerDay} PLN/day
+                                        {pricePerDay} points/day
                                     </Typography>
                                     <Typography>
                                         In {offerCity}
