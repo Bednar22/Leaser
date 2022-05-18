@@ -1,9 +1,14 @@
 import { useState } from 'react';
-import { TextField, Typography, Button, Stack, Dialog } from '@mui/material';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import {
+    TextField,
+    Button,
+    Stack,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+} from '@mui/material';
 import '../../App.css';
 
 export const PhoneNumberConfiramtion = ({ open, handleClose, confirmClick }) => {

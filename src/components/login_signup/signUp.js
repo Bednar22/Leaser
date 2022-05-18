@@ -37,7 +37,6 @@ export const validationSchema = yup.object().shape({
 
 export const SignUp = (props) => {
     const [error, setError] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState(false);
     const navigate = useNavigate();
     const {
         register,
@@ -285,23 +284,15 @@ export const SignUp = (props) => {
                                     </Grid>
                                 ) : null}
                                 <GridBreak />
-                                {phoneNumber ? (
-                                    <Grid item xs={8} md={4}>
-                                        <Button variant='contained' sx={{ width: 1 / 1 }} type='submit'>
-                                            Join leaser
-                                        </Button>
-                                    </Grid>
-                                ) : (
-                                    <Grid item xs={8} md={4}>
-                                        <Button
-                                            variant='contained'
-                                            sx={{ width: 1 / 1 }}
-                                            onClick={handleSubmit(handleClickOpen)}
-                                        >
-                                            Join Leaser
-                                        </Button>
-                                    </Grid>
-                                )}
+                                <Grid item xs={8} md={4}>
+                                    <Button
+                                        variant='contained'
+                                        sx={{ width: 1 / 1 }}
+                                        onClick={handleSubmit(handleClickOpen)}
+                                    >
+                                        Join Leaser
+                                    </Button>
+                                </Grid>
 
                                 <GridBreak />
                             </Grid>
