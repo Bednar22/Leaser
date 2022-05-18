@@ -31,6 +31,10 @@ export const Booking = () => {
 
         let price = null;
 
+        if (rentFrom == null || rentTo == null) {
+            return;
+        }
+
         if (fromError != null || toError != null) {
             return;
         }
@@ -58,7 +62,6 @@ export const Booking = () => {
             setTotal(null);
         }
         
-
     }, [rentFrom, rentTo, pricePerDay, pricePerMonth, pricePerWeek, deposit, fromError, toError])
 
     const getNextYearFromDate = (date) => {
