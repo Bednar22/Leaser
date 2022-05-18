@@ -1,30 +1,54 @@
-import { Grid, Paper, TextField, Typography, Button } from '@mui/material';
+import { useState } from 'react';
+import { TextField, Typography, Button, Stack, Dialog } from '@mui/material';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import '../../App.css';
 
-export const PhoneNumberConfiramtion = (props) => {
+export const PhoneNumberConfiramtion = ({ open, handleClose, confirmClick }) => {
+    const [code, setCode] = useState('');
+    const [codeError, setCodeError] = useState(false);
+    const handleConfirm = () => {
+        if (code) {
+            confirmClick();
+        } else {
+            setCodeError(true);
+        }
+    };
+
     return (
         <>
-            <Paper sx={{ p: 4 }}>
-                <Grid container justifyContent='center' justifyItems='center' spacing={{ xs: 2, sm: 2, md: 3 }}>
-                    <Grid item sm={10} md={8}>
-                        <Typography align='center' variant='h5'>
-                            What is your phone number?
-                        </Typography>
-                    </Grid>
-                    <Grid item sm={10} md={8}>
-                        <Typography align='center'>
-                            In order to secure your new Leaser account we need to verify your phone number
-                        </Typography>
-                    </Grid>
-                    <Grid item sm={10} md={8}>
-                        <TextField fullWidth label='' type='tel' size='small'></TextField>
-                    </Grid>
-                    <Grid item sm={10} md={8}>
-                        <Button variant='contained' sx={{ width: 1 / 1 }}>
-                            Send verification code
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Phone number confirmation</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        We store phone number to make transactions safer. Enter code that was sent to you below
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin='dense'
+                        id='code'
+                        label='Code'
+                        type='number'
+                        fullWidth
+                        variant='standard'
+                        error={codeError ? true : false}
+                        helperText={codeError ? 'Enter the code that was sent to your phone number' : null}
+                        onBlur={(e) => setCode(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Stack direction='row' justifyContent='space-between' sx={{ width: 1 / 1 }}>
+                        <Button color='secondary' onClick={handleClose} autoFocus sx={{ ml: 2 }}>
+                            Cancel
                         </Button>
-                    </Grid>
-                </Grid>
-            </Paper>
+                        <Button onClick={handleConfirm} sx={{ mr: 2 }}>
+                            Confirm
+                        </Button>
+                    </Stack>
+                </DialogActions>
+            </Dialog>
         </>
     );
 };
