@@ -23,16 +23,20 @@ export const Booking = () => {
     ])
     const [rentingPrice, setRentingPrice] = useState(null);
     const [total, setTotal] = useState(null);
-    const [error, setError] = useState(null);
+    const [fromError, setFromError] = useState(null);
+    const [toError, setToError] = useState(null);
 
 
     useEffect(() => {
 
         let price = null;
 
+        if (fromError != null || toError != null) {
+            return;
+        }
+
         const rentingTimeMs = rentTo - rentFrom;
         const rentingDays = Math.round(rentingTimeMs / (1000 * 60 * 60 * 24));
-        console.log(rentingDays);
         if (rentingDays >= 30) {
             price = Math.round(rentingDays * pricePerMonth);
         }
@@ -55,7 +59,7 @@ export const Booking = () => {
         }
         
 
-    }, [rentFrom, rentTo, pricePerDay, pricePerMonth, pricePerWeek, deposit])
+    }, [rentFrom, rentTo, pricePerDay, pricePerMonth, pricePerWeek, deposit, fromError, toError])
 
     const getNextYearFromDate = (date) => {
         let returnDate = new Date(date);
@@ -99,15 +103,14 @@ export const Booking = () => {
                                             value={rentFrom}
                                             onChange={(newValue) => {
                                                 setRentFrom(newValue);
-                                                console.log(rentFrom)
                                             }}
                                             renderInput={(params) => <TextField {...params} size='small'/>}
                                             minDate={new Date()}
                                             maxDate={ rentTo != null ? getPreviousDayFromDate(rentTo) : getNextYearFromDate(new Date())}
                                             shouldDisableDate={dateDisableFunction}
                                             clearable={true}
-                                            onError={()=>{console.log("error")}}
-                                            
+                                            onError={(error)=>{setFromError(error)}}
+                                            onAccept={() => { setFromError(null) }}
                                         />
                                         <DatePicker
                                             label='Rent to'
@@ -120,6 +123,8 @@ export const Booking = () => {
                                             shouldDisableDate={dateDisableFunction}
                                             renderInput={(params) => <TextField {...params} size='small'/>}
                                             clearable={true}
+                                            onError={(error)=>{setToError(error)}}
+                                            onAccept={() => { setToError(null) }}
                                         />
                                     </Stack>  
                                 </LocalizationProvider>
