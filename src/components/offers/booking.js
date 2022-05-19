@@ -96,7 +96,7 @@ export const Booking = () => {
         <Container maxWidth='sm'>
             <Paper>
                 <form>
-                    <Box p={1}>
+                    <Box p={3}>
                         <Grid container justifyContent='center' alignContent='center' spacing={{ xs: 1, sm: 3 }}>
                             <Grid item xs={12} sm={6}>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
