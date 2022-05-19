@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-
+import { PhoneNumberConfiramtion } from './phoneNumberConfirmation';
 export const validationSchema = yup.object().shape({
     email: yup.string().required('Email is required').email('Email is invalid'),
     password: yup
@@ -40,13 +40,26 @@ export const SignUp = (props) => {
     const navigate = useNavigate();
     const {
         register,
+        getValues,
         handleSubmit,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
 
-    const onSubmit = (data) => {
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const onSubmit = () => {
+        const data = getValues();
+        console.log(data);
         axios
             .post('/api/Accounts/Register', data)
             .then((res) => {
@@ -272,13 +285,24 @@ export const SignUp = (props) => {
                                 ) : null}
                                 <GridBreak />
                                 <Grid item xs={8} md={4}>
-                                    <Button variant='contained' sx={{ width: 1 / 1 }} type='submit'>
+                                    <Button
+                                        variant='contained'
+                                        sx={{ width: 1 / 1 }}
+                                        onClick={handleSubmit(handleClickOpen)}
+                                    >
                                         Join Leaser
                                     </Button>
                                 </Grid>
+
                                 <GridBreak />
                             </Grid>
                         </Box>
+
+                        <PhoneNumberConfiramtion
+                            open={open}
+                            handleClose={handleClose}
+                            confirmClick={onSubmit}
+                        ></PhoneNumberConfiramtion>
                     </form>
                 </Paper>
             </Container>
