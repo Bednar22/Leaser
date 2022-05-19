@@ -26,9 +26,8 @@ export const Login = () => {
             .post('/api/Accounts/Authenticate', data)
             .then((res) => {
                 window.localStorage.setItem('leaserToken', res.data);
-                auth.login(res.data);
+                auth.login();
                 navigate(redirectPath, { replace: true });
-                //console.log(res.data);
             })
             .catch((err) => {
                 setError(err.response.data);

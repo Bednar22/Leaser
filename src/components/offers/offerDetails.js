@@ -126,4 +126,4 @@ export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, priceP
             </Container>
         </>
     );
-}
+}   

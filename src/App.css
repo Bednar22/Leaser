@@ -87,3 +87,16 @@
 .offer-image:hover {
     background-color: #faf7f0;
 }
+
+/* User profile */
+.tab {
+    display: flex;
+    align-items: center;
+}
+
+/* Phone number */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
