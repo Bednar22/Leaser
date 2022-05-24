@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export const CategoriesTiles = (props) => {
-    const [categories, setCategories] = useState([{}]);
+    const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
 
     const cateogoryClick = (category) => {
@@ -16,7 +16,7 @@ export const CategoriesTiles = (props) => {
 
     useEffect(() => {
         axios
-            .get('api/Categories', {
+            .get('/api/Categories', {
                 headers: {
                     Authorization: `Bearer ${window.localStorage.getItem('leaserToken')}`,
                 },
@@ -27,8 +27,6 @@ export const CategoriesTiles = (props) => {
             })
             .catch((err) => {});
     }, []);
-
-    console.log(categories);
 
     return (
         <>
@@ -43,7 +41,7 @@ export const CategoriesTiles = (props) => {
                             >
                                 <img
                                     src={`${item.imageURL}?w=${tile_size}&h=${tile_size}&fit=crop&auto=format`}
-                                    srcSet={`${item.imageURL}?w=${tile_size}&h=${tile_size}&fit=crop&auto=format&dpr=2 2x`}
+                                    // srcSet={`${item.imageURL}?w=${tile_size}&h=${tile_size}&fit=crop&auto=format&dpr=2 2x`}
                                     alt={item.categoryName}
                                     loading='lazy'
                                 />

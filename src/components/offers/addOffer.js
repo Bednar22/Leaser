@@ -34,7 +34,7 @@ export const AddOffer = (props) => {
         let formData = new FormData();
         formData.append('title', title);
         formData.append('description', description);
-        formData.append('pricePerDay', pricePerDay);
+        formData.append('price', pricePerDay);
         formData.append('pricePerWeek', pricePerWeek);
         formData.append('pricePerMonth', pricePerMonth);
         formData.append('depositId', '');
@@ -42,6 +42,7 @@ export const AddOffer = (props) => {
         formData.append('availableTo', availableTo.toISOString());
         formData.append('postImage', selectedImage);
 
+        console.log(addOffer);
         const config = {
             headers: {
                 'content-type': 'multipart/form-data',
@@ -52,12 +53,12 @@ export const AddOffer = (props) => {
         axios
             .post(`/api/Posts/${categoryId}`, formData, config)
             .then((res) => {
-                // console.log(res);
+                console.log(res);
                 props.handleClickSnackbar();
                 navigate('/home');
             })
             .catch((error) => {
-                // console.log(error.response);
+                console.log(error);
                 setError('Something went wrong! Check form and try again!');
                 // setError(error.response.data.title);
             });
@@ -73,6 +74,7 @@ export const AddOffer = (props) => {
                 },
             })
             .then((res) => {
+                console.log(res.data);
                 setCategories(res.data);
             })
             .catch((err) => {});
