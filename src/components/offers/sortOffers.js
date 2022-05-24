@@ -30,10 +30,10 @@ export const SortOffers = ({ sortByMain, changeSortByMain }) => {
                     label='Sort by'
                     onChange={handleSort}
                 >
-                    <MenuItem value='price_asc'>Price ascending</MenuItem>
-                    <MenuItem value='price_dsc'>Price descending</MenuItem>
-                    <MenuItem value='rating_asc'>Rating ascending</MenuItem>
-                    <MenuItem value='rating_dsc'>Rating descending</MenuItem>
+                    <MenuItem value='priceAsc'>Price ascending</MenuItem>
+                    <MenuItem value='priceDsc'>Price descending</MenuItem>
+                    <MenuItem value='ratingAsc'>Rating ascending</MenuItem>
+                    <MenuItem value='ratingDsc'>Rating descending</MenuItem>
                 </Select>
             </FormControl>
         </>

@@ -29,7 +29,7 @@ export const OfferTile = ({
             .catch((err) => {
                 console.log(err);
             });
-    }, []);
+    }, [postId]);
 
     return (
         <>

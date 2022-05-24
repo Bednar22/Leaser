@@ -10,16 +10,75 @@ import SampleImagePath from '../../assets/sample-image.jpg';
 
 export const MainOffersPage = (props) => {
     const testItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    const [sortBy, setSortBy] = useState('');
-    const [categoryId, setCategoryId] = useState('');
+    const [sortBy, setSortBy] = useState(null);
+    const [categoryId, setCategoryId] = useState(null);
     const [offers, setOffers] = useState([]);
 
+    const priceAscSort = (a, b) => {
+        return b.price - a.price;
+    };
+
+    const priceDscSort = (a, b) => {
+        return a.price - b.price;
+    };
+
+    const ratingAscSort = (a, b) => {
+        return b.rating - a.rating;
+    };
+
+    const ratingDscSort = (a, b) => {
+        return a.rating - b.rating;
+    };
+
+    const getOffersByCategory = () => {
+        const token = window.localStorage.getItem('leaserToken');
+        axios
+            .get(`/api/Posts/${categoryId}/Category/Detail`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                setOffers(res.data);
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    const getSortedOffers = () => {
+        let arrCopy = offers;
+        switch (sortBy) {
+            case 'priceAsc':
+                arrCopy.sort(priceAscSort);
+                setOffers(arrCopy);
+                break;
+            case 'priceDsc':
+                arrCopy.sort(priceDscSort);
+                setOffers(arrCopy);
+                break;
+            case 'ratingAsc':
+                arrCopy.sort(ratingAscSort);
+                setOffers(arrCopy);
+                break;
+            case 'ratingDsc':
+                arrCopy.sort(ratingDscSort);
+                setOffers(arrCopy);
+                break;
+            default:
+                break;
+        }
+    };
+
+    // useEffects
     useEffect(() => {
-        console.log(`sorting By: ${sortBy}`);
+        getSortedOffers();
     }, [sortBy]);
 
     useEffect(() => {
         console.log(`category: ${categoryId}`);
+        getOffersByCategory();
     }, [categoryId]);
 
     useEffect(() => {
