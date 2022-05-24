@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Menu, MenuItem } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -36,7 +36,7 @@ export const FilterOffers = ({ categoryIdMain, changeCategoryIdMain }) => {
 
     return (
         <>
-            <FormControl fullWidth size='small'>
+            <FormControl color='secondary' fullWidth size='small'>
                 <InputLabel id='demo-simple-select-label'>Category</InputLabel>
                 <Select
                     MenuProps={MenuProps}

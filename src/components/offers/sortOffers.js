@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { MenuItem } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -19,7 +18,7 @@ export const SortOffers = ({ sortByMain, changeSortByMain }) => {
 
     return (
         <>
-            <FormControl fullWidth size='small'>
+            <FormControl color='secondary' fullWidth size='small'>
                 <InputLabel id='demo-simple-select-label'>Sort by</InputLabel>
                 <Select
                     MenuProps={MenuProps}

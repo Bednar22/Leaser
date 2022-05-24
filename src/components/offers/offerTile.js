@@ -2,16 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Paper, Typography, Box, Stack, Rating, Skeleton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-export const OfferTile = ({
-    postId,
-    renterNickname,
-    renterScore,
-    offerTitle,
-    pricePerDay,
-    titleImage,
-    offerCity,
-    OfferUrl,
-}) => {
+
+export const OfferTile = ({ postId, renterNickname, renterScore, offerTitle, pricePerDay, offerCity }) => {
     const [offerImage, setOfferImage] = useState('');
 
     useEffect(() => {
@@ -69,7 +61,7 @@ export const OfferTile = ({
                                 </Stack>
                                 <Stack alignItems='center'>
                                     <Typography fontWeight='bold'>{pricePerDay} points/day</Typography>
-                                    <Typography>In {offerCity}</Typography>
+                                    <Typography> {offerCity}</Typography>
                                 </Stack>
                             </Stack>
                         </Stack>
