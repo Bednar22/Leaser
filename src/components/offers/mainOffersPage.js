@@ -12,6 +12,7 @@ export const MainOffersPage = (props) => {
     const testItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     const [sortBy, setSortBy] = useState('');
     const [categoryId, setCategoryId] = useState('');
+    const [offers, setOffers] = useState([]);
 
     useEffect(() => {
         console.log(`sorting By: ${sortBy}`);
@@ -31,16 +32,8 @@ export const MainOffersPage = (props) => {
                 },
             })
             .then((res) => {
+                setOffers(res.data);
                 console.log(res.data);
-                // setTitle(res.data.title);
-                // setDescription(res.data.description);
-                // setPricePerDay(res.data.price);
-                // setPricePerWeek(res.data.pricePerWeek);
-                // setPricePerMonth(res.data.pricePerMonth);
-                // setAvailableFrom(new Date(res.data.availableFrom));
-                // setAvailableTo(new Date(res.data.availableTo));
-                // setCategoryId(res.data.categoryId);
-                // setUserId(res.data.userId);
             })
             .catch((err) => {
                 console.log(err);
@@ -65,22 +58,23 @@ export const MainOffersPage = (props) => {
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={4} sx={{ my: 2 }} justifyContent='center'>
-                    {testItems.map((item) => {
-                        return (
-                            <Grid item xs={10} sm={8} md={6} lg={4} xl={3}>
-                                <OfferTile
-                                    renterName='Jan Kowalski'
-                                    renterNickname='jkowalski'
-                                    renterScore={4.5}
-                                    offerTitle='Used digital camera'
-                                    pricePerDay={10}
-                                    titleImage={SampleImagePath}
-                                    offerCity='Wrocław'
-                                ></OfferTile>
-                            </Grid>
-                        );
-                    })}
+                <Grid container spacing={4} sx={{ my: 2 }}>
+                    {offers &&
+                        offers.map((item) => {
+                            return (
+                                <Grid item xs={10} sm={8} md={6} lg={4} xl={3}>
+                                    <OfferTile
+                                        postId={item.id}
+                                        renterNickname={item.userNickName}
+                                        renterScore={item.rating}
+                                        offerTitle={item.title}
+                                        pricePerDay={item.price}
+                                        titleImage={SampleImagePath}
+                                        offerCity={item.city}
+                                    ></OfferTile>
+                                </Grid>
+                            );
+                        })}
                 </Grid>
             </Container>
         </>
