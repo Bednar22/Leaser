@@ -27,6 +27,7 @@ export const EditOffer = (props) => {
     const smallSize = useMediaQuery('(max-width:900px)');
     const [categories, setCategories] = useState([{}]);
     const [categoryId, setCategoryId] = useState();
+    const [userId, setUserId] = useState('');
     const navigate = useNavigate();
     const params = useParams();
 
@@ -54,7 +55,7 @@ export const EditOffer = (props) => {
             .put(`/api/Posts/${params.offerId}/${categoryId}`, formData, config)
             .then((res) => {
                 console.log(res);
-                navigate('/user/profile');
+                navigate(`/user/profile/${userId}`);
             })
             .catch((error) => {
                 console.log(error.response);
@@ -93,6 +94,7 @@ export const EditOffer = (props) => {
                 setAvailableFrom(new Date(res.data.availableFrom));
                 setAvailableTo(new Date(res.data.availableTo));
                 setCategoryId(res.data.categoryId);
+                setUserId(res.data.userId);
             })
             .catch((err) => {});
 

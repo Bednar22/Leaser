@@ -1,52 +1,41 @@
 import { useState } from 'react';
 import { Button, Menu, MenuItem } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
-export const SortOffers = (props) => {
-    const [anchorSort, setAnchorSort] = useState(null);
-    const [sortBy, setSortBy] = useState('new');
-    const openSort = Boolean(anchorSort);
-
-    const handleClickSort = (event) => {
-        setAnchorSort(event.currentTarget);
+export const SortOffers = ({ sortByMain, changeSortByMain }) => {
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: 250,
+            },
+        },
     };
 
-    const handleCloseSort = () => {
-        setAnchorSort(null);
-    };
-
-    const handleSort = (sort) => {
-        setSortBy(sort);
-        setAnchorSort(null);
+    const handleSort = (event) => {
+        changeSortByMain(event.target.value);
     };
 
     return (
         <>
-            <Button
-                id='sortby-button'
-                variant='contained'
-                color='secondary'
-                aria-controls={openSort ? 'sortby-menu' : undefined}
-                aria-haspopup='true'
-                aria-expanded={openSort ? 'true' : undefined}
-                onClick={handleClickSort}
-            >
-                Sort by {sortBy}
-            </Button>
-            <Menu
-                id='sortby-menu'
-                anchorEl={anchorSort}
-                open={openSort}
-                onClose={handleCloseSort}
-                MenuListProps={{
-                    'aria-labelledby': 'sortby-button',
-                }}
-            >
-                <MenuItem onClick={() => handleSort('date')}>Date</MenuItem>
-                <MenuItem onClick={() => handleSort('Price asc')}>Price asc</MenuItem>
-                <MenuItem onClick={() => handleSort('Price dsc')}>Price dsc</MenuItem>
-                <MenuItem onClick={() => handleSort('Best rating')}>Best rating</MenuItem>
-                {/* <MenuItem onClick={() => handleSort('rating_desc')}>Worst rating</MenuItem> */}
-            </Menu>
+            <FormControl fullWidth size='small'>
+                <InputLabel id='demo-simple-select-label'>Sort by</InputLabel>
+                <Select
+                    MenuProps={MenuProps}
+                    color='secondary'
+                    fullWidth
+                    labelId='demo-simple-select-label'
+                    id='demo-simple-select'
+                    label='Sort by'
+                    onChange={handleSort}
+                >
+                    <MenuItem value='price_asc'>Price ascending</MenuItem>
+                    <MenuItem value='price_dsc'>Price descending</MenuItem>
+                    <MenuItem value='rating_asc'>Rating ascending</MenuItem>
+                    <MenuItem value='rating_dsc'>Rating descending</MenuItem>
+                </Select>
+            </FormControl>
         </>
     );
 };
