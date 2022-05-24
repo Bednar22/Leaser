@@ -8,7 +8,6 @@ import { NotLoggedProfile } from './notLoggedProfile';
 import { useAuth } from '../utilities/auth';
 
 export const Navbar = (props) => {
-    // const [logged, setLogged] = useState();
     const auth = useAuth();
 
     return (
@@ -28,12 +27,6 @@ export const Navbar = (props) => {
                         Add offer
                     </NavLink>
 
-                    {/* <NavLink className='menu-button' to='login'>
-                        Login
-                    </NavLink>
-                    <NavLink className='menu-button' to='signup'>
-                        Sign Up
-                    </NavLink> */}
                     {auth.user ? <LoggedProfile /> : <NotLoggedProfile />}
                 </Stack>
             </Box>

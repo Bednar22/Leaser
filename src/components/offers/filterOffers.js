@@ -1,48 +1,61 @@
-import { useState } from 'react';
-import { Button, Menu, MenuItem } from '@mui/material';
+import { useState, useEffect } from 'react';
+import MenuItem from '@mui/material/MenuItem';
+import axios from 'axios';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
-export const FilterOffers = (props) => {
-    const [anchorFilter, setAnchorFilter] = useState(null);
-    const [filterBy, setFilterBy] = useState('location');
-    const openFilter = Boolean(anchorFilter);
+export const FilterOffers = ({ categoryIdMain, changeCategoryIdMain }) => {
+    const [categories, setCategories] = useState([]);
 
-    const handleClickFilter = (event) => {
-        setAnchorFilter(event.currentTarget);
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: 250,
+            },
+        },
     };
 
-    const handleCloseFilter = () => {
-        setAnchorFilter(null);
-    };
+    useEffect(() => {
+        axios
+            .get('api/Categories', {
+                headers: {
+                    Authorization: `Bearer ${window.localStorage.getItem('leaserToken')}`,
+                },
+            })
+            .then((res) => {
+                console.log(res.data);
+                setCategories(res.data);
+            })
+            .catch((err) => {});
+    }, []);
 
-    const handleFilter = (filter) => {
-        setFilterBy(filter);
-        setAnchorFilter(null);
+    const handleCategoryChange = (event) => {
+        changeCategoryIdMain(event.target.value);
     };
 
     return (
         <>
-            <Button
-                id='filter-button'
-                variant='contained'
-                color='secondary'
-                aria-controls={openFilter ? 'filter-menu' : undefined}
-                aria-haspopup='true'
-                aria-expanded={openFilter ? 'true' : undefined}
-                onClick={handleClickFilter}
-            >
-                Filter {filterBy}
-            </Button>
-            <Menu
-                id='filter-menu'
-                anchorEl={anchorFilter}
-                open={openFilter}
-                onClose={handleCloseFilter}
-                MenuListProps={{
-                    'aria-labelledby': 'filter-button',
-                }}
-            >
-                <MenuItem onClick={() => handleFilter('date')}>Date</MenuItem>
-            </Menu>
+            <FormControl color='secondary' fullWidth size='small'>
+                <InputLabel id='demo-simple-select-label'>Category</InputLabel>
+                <Select
+                    MenuProps={MenuProps}
+                    color='secondary'
+                    fullWidth
+                    labelId='demo-simple-select-label'
+                    id='demo-simple-select'
+                    label='Category'
+                    onChange={handleCategoryChange}
+                >
+                    {categories.map((item) => {
+                        return (
+                            <MenuItem key={item.id} value={item.id}>
+                                {item.categoryName}
+                            </MenuItem>
+                        );
+                    })}
+                </Select>
+            </FormControl>
         </>
     );
 };

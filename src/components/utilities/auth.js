@@ -6,8 +6,8 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
-    const login = (user) => {
-        setUser(user);
+    const login = () => {
+        checkUser();
     };
     const logout = () => {
         setUser(null);
@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
     };
 
     const checkUser = () => {
-        // console.log('CheckUSer function');
         if (window.localStorage.getItem('leaserToken')) {
             const token = window.localStorage.getItem('leaserToken');
             axios

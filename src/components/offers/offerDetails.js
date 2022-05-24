@@ -1,10 +1,12 @@
 import { Grid, Container, Paper, Typography, Stack, Button, Rating, Box } from '@mui/material';
 import { GridBreak } from '../utilities/gridBreak';
+import { NavLink } from 'react-router-dom';
 
 import { CalendarPicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 
+import { Booking } from './booking';
 
 export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, pricePerWeek, pricePerMonth, deposit, offerImage, renterName, renterNickname, renterScore, availableFrom, availableTo, offerCity} ) => {
     
@@ -20,7 +22,7 @@ export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, priceP
     const DepositComponent = () => {
         let text;
         if (deposit != null) {
-            text = `${deposit}PLN`
+            text = `${deposit} points`
         }
         else {
             text = 'not required'
@@ -54,18 +56,15 @@ export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, priceP
                                     <Rating readOnly precision={0.1} value={renterScore}/>
                                 </Stack>
                             </Paper>
-                            <Button variant='contained'>
-                                Rent this item
-                            </Button>
                             <Stack spacing={1} style={{ flex: '1' }}>
                                 <Paper style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                    <Stack direction='row' spacing={7} justifyContent='center' alignContent='center'>
+                                    <Stack direction='row' spacing={5} justifyContent='center' alignContent='center'>
                                         <Stack justifyContent='center' alignItems='center'>
                                             <Typography color='secondary' fontWeight='bold' variant='h6'>
                                                 Day+
                                             </Typography>
                                             <Typography>
-                                                {pricePerDay}PLN/day
+                                                {pricePerDay} points/day
                                             </Typography>
                                         </Stack>
                                         <Stack justifyContent='center' alignItems='center'>
@@ -73,7 +72,7 @@ export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, priceP
                                                 Week+
                                             </Typography>
                                             <Typography>
-                                                {pricePerWeek}PLN/day
+                                                {pricePerWeek} points/day
                                             </Typography>
                                         </Stack>
                                         <Stack justifyContent='center' alignItems='center'>
@@ -81,7 +80,7 @@ export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, priceP
                                                 Month+
                                             </Typography>
                                             <Typography>
-                                                {pricePerMonth}PLN/day
+                                                {pricePerMonth} points/day
                                             </Typography>
                                         </Stack>
                                     </Stack>
@@ -89,6 +88,9 @@ export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, priceP
                                 <Paper style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                     <DepositComponent/>
                                 </Paper>
+                                <Button variant='contained' component={NavLink} to='booking'>
+                                    Rent this item
+                                </Button>
                             </Stack>
                         </Stack>
                     </Grid>
@@ -124,4 +126,4 @@ export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, priceP
             </Container>
         </>
     );
-}
+}   
