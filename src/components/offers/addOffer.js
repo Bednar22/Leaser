@@ -27,13 +27,14 @@ export const AddOffer = (props) => {
     const smallSize = useMediaQuery('(max-width:900px)');
     const [categories, setCategories] = useState([{}]);
     const [categoryId, setCategoryId] = useState();
+
     const navigate = useNavigate();
 
     const addOffer = (e) => {
         let formData = new FormData();
         formData.append('title', title);
         formData.append('description', description);
-        formData.append('pricePerDay', pricePerDay);
+        formData.append('price', pricePerDay);
         formData.append('pricePerWeek', pricePerWeek);
         formData.append('pricePerMonth', pricePerMonth);
         formData.append('depositId', '');
@@ -41,6 +42,7 @@ export const AddOffer = (props) => {
         formData.append('availableTo', availableTo.toISOString());
         formData.append('postImage', selectedImage);
 
+        console.log(addOffer);
         const config = {
             headers: {
                 'content-type': 'multipart/form-data',
@@ -51,12 +53,12 @@ export const AddOffer = (props) => {
         axios
             .post(`/api/Posts/${categoryId}`, formData, config)
             .then((res) => {
-                // console.log(res);
+                console.log(res);
                 props.handleClickSnackbar();
-                navigate('/user/profile');
+                navigate('/home');
             })
             .catch((error) => {
-                // console.log(error.response);
+                console.log(error);
                 setError('Something went wrong! Check form and try again!');
                 // setError(error.response.data.title);
             });
@@ -72,7 +74,7 @@ export const AddOffer = (props) => {
                 },
             })
             .then((res) => {
-                // console.log(res.data);
+                console.log(res.data);
                 setCategories(res.data);
             })
             .catch((err) => {});
@@ -193,7 +195,6 @@ export const AddOffer = (props) => {
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <Grid item xs={6}>
                                         <DatePicker
-                                            // inputFormat='dd.mm.yyyy'
                                             label='Available from'
                                             value={availableFrom}
                                             onChange={(newValue) => {
@@ -205,8 +206,6 @@ export const AddOffer = (props) => {
                                     </Grid>
                                     <Grid item xs={6}>
                                         <DatePicker
-                                            // inputFormat='dd.mm.yyyy'
-
                                             label='Available to'
                                             value={availableTo}
                                             onChange={(newValue) => {
