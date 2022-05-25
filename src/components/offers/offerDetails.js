@@ -1,13 +1,100 @@
-import { Grid, Container, Paper, Typography, Stack, Button, Rating, Box } from '@mui/material';
+import { Grid, Container, Paper, Typography, Stack, Button, Rating, Box, Skeleton } from '@mui/material';
 import { GridBreak } from '../utilities/gridBreak';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 import { CalendarPicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 
 
-export const OfferDetails = ( {offerTitle, offerDescription, pricePerDay, pricePerWeek, pricePerMonth, deposit, offerImage, renterName, renterNickname, renterScore, availableFrom, availableTo, offerCity} ) => {
+export const OfferDetails = ( {offerId} ) => {
     
+
+    const [loaded, setLoaded] = useState(false);
+    const [offerData, setOfferData] = useState(null);
+    const [renterData, setRenterData] = useState(null);
+    const [offerImage, setOfferImage] = useState(null);
+
+    const [availableFrom, setAvailableFrom] = useState(null);
+    const [availableTo, setAvailableTo] = useState(null);
+    const [deposit, setDeposit] = useState(null);
+    const [offerTitle, setOfferTitle] = useState(null);
+    const [renterNickname, setRenterNickname] = useState(null);
+    const [renterScore, setRenterScore] = useState(null);
+    const [pricePerDay, setPricePerDay] = useState(null);
+    const [pricePerWeek, setPricePerWeek] = useState(null);
+    const [pricePerMonth, setPricePerMonth] = useState(null);
+    const [offerCity, setOfferCity] = useState(null);
+    const [offerDescription, setofferDescription] = useState(null);
+
+
+
+    const config = {
+        headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${window.localStorage.getItem('leaserToken')}`,
+        },
+    };
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            await axios
+                .get(`/api/Posts/${offerId}`, config)
+                .then( async (res) => {
+                    //console.log(res);
+                    console.log(await res.data)
+                    setOfferData(await res.data);
+                    let data = await res.data
+    
+                    await axios
+                        .get(`/api/Accounts/${data.userId}/User`, config)
+                        .then( async (res) => {
+                            console.log(await res.data);
+                            setRenterData(await res.data);
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        });
+    
+                    await axios
+                        .get(`/api/Posts/${offerId}/Image`, {responseType: 'blob', headers: {Authorization: `Bearer ${window.localStorage.getItem('leaserToken')}`}})
+                        .then( async (res) => {
+                            //console.log(res);
+                            setOfferImage(URL.createObjectURL( await res.data ));
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        
+                    });
+    
+                    if (offerData != null && offerImage != null && renterData != null) {
+                        // setAvailableFrom(offerData.availableFrom);
+                        // setAvailableTo(offerData.availableTo)
+                        // setDeposit(offerData.depositId);
+                        // setOfferTitle(offerData.title);
+                        // setRenterNickname(renterData.name);
+                        // setRenterScore(renterData.rate);
+                        // setPricePerDay(offerData.pricePerDay);
+                        // setPricePerWeek(offerData.pricePerWeek);
+                        // setPricePerMonth(offerData.pricePerMonth);
+                        // setOfferCity(renterData.city);
+                        // setofferDescription();
+                        setLoaded(true);
+                    }
+
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+        }
+
+        fetchData();
+
+    }, [])
+
     const dateDisableFunction = (date) => {
         if ( date < availableFrom || date > availableTo ) {
             return true;
