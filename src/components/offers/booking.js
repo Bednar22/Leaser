@@ -1,6 +1,6 @@
 import { Grid, Container, Paper, Typography, Stack, Button, Box, TextField } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
@@ -9,6 +9,10 @@ import { GridBreak } from '../utilities/gridBreak';
 
 
 export const Booking = () => {
+
+    const params = useParams();
+    const offerId = params.id;
+
     const [rentFrom, setRentFrom] = useState(null);
     const [rentTo, setRentTo] = useState(null);
     const [deposit, setDeposit] = useState(100);
@@ -168,7 +172,7 @@ export const Booking = () => {
                             </Grid>
                             <GridBreak/>
                             <Grid item xs={12} sm={4}>
-                                <Button variant='outlined' color='secondary' component={NavLink} to='/offerDetails' fullWidth>
+                                <Button variant='outlined' color='secondary' component={NavLink} to={`/offers/offerDetails/${offerId}`} fullWidth>
                                     Cancel
                                 </Button>
                             </Grid>

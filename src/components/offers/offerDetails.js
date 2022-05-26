@@ -9,29 +9,29 @@ import { CalendarPicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 
-import { Booking } from './booking';
 
-export const OfferDetails = ( {offerId} ) => {
-    
+export const OfferDetails = () => {
+
+    const params = useParams();
+    const offerId = params.id;
 
     const [loaded, setLoaded] = useState(false);
-    const [offerData, setOfferData] = useState(null);
-    const [renterData, setRenterData] = useState(null);
-    const [offerImage, setOfferImage] = useState(null);
 
+    const [offerTitle, setOfferTitle] = useState(null);
+    const [offerDescription, setOfferDescription] = useState(null);
+    const [offerImage, setOfferImage] = useState(null);
     const [availableFrom, setAvailableFrom] = useState(null);
     const [availableTo, setAvailableTo] = useState(null);
-    const [deposit, setDeposit] = useState(null);
-    const [offerTitle, setOfferTitle] = useState(null);
-    const [renterNickname, setRenterNickname] = useState(null);
-    const [renterScore, setRenterScore] = useState(null);
     const [pricePerDay, setPricePerDay] = useState(null);
     const [pricePerWeek, setPricePerWeek] = useState(null);
     const [pricePerMonth, setPricePerMonth] = useState(null);
+    const [deposit, setDeposit] = useState(null);
+
+    const [renterNickname, setRenterNickname] = useState(null);
     const [offerCity, setOfferCity] = useState(null);
-    const [offerDescription, setofferDescription] = useState(null);
+    const [renterScore, setRenterScore] = useState(null);
 
-
+    const [previousTransactions, setPreviousTransactions] = useState(null);
 
     const config = {
         headers: {
@@ -40,53 +40,52 @@ export const OfferDetails = ( {offerId} ) => {
         },
     };
 
+    const imageConfig = {
+        responseType: 'blob', 
+        headers: {
+            Authorization: `Bearer ${window.localStorage.getItem('leaserToken')}`
+        }
+    };
+
     useEffect(() => {
 
         const fetchData = async () => {
+
+
             await axios
                 .get(`/api/Posts/${offerId}`, config)
-                .then( async (res) => {
-                    //console.log(res);
-                    console.log(await res.data)
-                    setOfferData(await res.data);
-                    let data = await res.data
-    
-                    await axios
-                        .get(`/api/Accounts/${data.userId}/User`, config)
-                        .then( async (res) => {
-                            console.log(await res.data);
-                            setRenterData(await res.data);
-                        })
-                        .catch((error) => {
-                            console.log(error)
-                        });
-    
-                    await axios
-                        .get(`/api/Posts/${offerId}/Image`, {responseType: 'blob', headers: {Authorization: `Bearer ${window.localStorage.getItem('leaserToken')}`}})
-                        .then( async (res) => {
-                            //console.log(res);
-                            setOfferImage(URL.createObjectURL( await res.data ));
-                        })
-                        .catch((error) => {
-                            console.log(error)
-                        
-                    });
-    
-                    if (offerData != null && offerImage != null && renterData != null) {
-                        // setAvailableFrom(offerData.availableFrom);
-                        // setAvailableTo(offerData.availableTo)
-                        // setDeposit(offerData.depositId);
-                        // setOfferTitle(offerData.title);
-                        // setRenterNickname(renterData.name);
-                        // setRenterScore(renterData.rate);
-                        // setPricePerDay(offerData.pricePerDay);
-                        // setPricePerWeek(offerData.pricePerWeek);
-                        // setPricePerMonth(offerData.pricePerMonth);
-                        // setOfferCity(renterData.city);
-                        // setofferDescription();
-                        setLoaded(true);
-                    }
+                .then( (res) => {
+                    console.log(res.data)
+                    setOfferTitle(res.data.title);
+                    setOfferDescription(res.data.description);
+                    setRenterScore(res.data.rating);
+                    setPricePerDay(res.data.price);
+                    setPricePerWeek(res.data.pricePerWeek);
+                    setPricePerMonth(res.data.pricePerMonth);
+                    setDeposit(res.data.depositValue);
+                    setOfferCity(res.data.city);
+                    setAvailableFrom(new Date(res.data.availableFrom));
+                    setAvailableTo(new Date(res.data.setAvailableTo));
+                    setRenterNickname(res.data.userNickName);
+                    
+                })
+                .catch((error) => {
+                    console.log(error)
+            });
 
+            await axios
+                .get(`/api/Posts/${offerId}/Image`, imageConfig)
+                .then( (res) => {
+                    setOfferImage(URL.createObjectURL(res.data))
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+
+            await axios
+                .get(`/api/Transactions/Posts/${offerId}`, config)
+                .then( (res) => {
+                    setPreviousTransactions(res.data);
                 })
                 .catch((error) => {
                     console.log(error)
@@ -94,6 +93,7 @@ export const OfferDetails = ( {offerId} ) => {
         }
 
         fetchData();
+        console.log(offerImage);
 
     }, [])
 
@@ -137,7 +137,7 @@ export const OfferDetails = ( {offerId} ) => {
                         <Stack spacing={1} height='100%'>
                             <Paper style={{ flex: '0.5', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                 <Stack p={1} alignItems='center'>
-                                    <Typography variant='h6'>
+                                    <Typography variant='h6' sx={{wordWrap: 'break-word'}}>
                                         {renterNickname}
                                     </Typography>
                                     <Rating readOnly precision={0.1} value={renterScore}/>
@@ -150,7 +150,7 @@ export const OfferDetails = ( {offerId} ) => {
                                             <Typography color='secondary' fontWeight='bold' variant='h6'>
                                                 Day+
                                             </Typography>
-                                            <Typography>
+                                            <Typography textAlign='center'>
                                                 {pricePerDay} points/day
                                             </Typography>
                                         </Stack>
@@ -158,7 +158,7 @@ export const OfferDetails = ( {offerId} ) => {
                                             <Typography color='secondary' fontWeight='bold' variant='h6'>
                                                 Week+
                                             </Typography>
-                                            <Typography>
+                                            <Typography textAlign='center'>
                                                 {pricePerWeek} points/day
                                             </Typography>
                                         </Stack>
@@ -166,7 +166,7 @@ export const OfferDetails = ( {offerId} ) => {
                                             <Typography color='secondary' fontWeight='bold' variant='h6'>
                                                 Month+
                                             </Typography>
-                                            <Typography>
+                                            <Typography textAlign='center'>
                                                 {pricePerMonth} points/day
                                             </Typography>
                                         </Stack>
@@ -185,13 +185,13 @@ export const OfferDetails = ( {offerId} ) => {
                     <Grid item xs={9} md={6} lg={5}>
                         <Paper>
                             <Stack p={1}>
-                                <Typography variant='h5' fontWeight='bold'>
+                                <Typography variant='h5' fontWeight='bold' sx={{wordWrap: 'break-word'}}>
                                     {offerTitle}
                                 </Typography>
-                                <Typography variant='h6' fontWeight='bold' color='secondary'>
+                                <Typography variant='h6' fontWeight='bold' color='secondary' sx={{wordWrap: 'break-word'}}>
                                     In {offerCity}
                                 </Typography>
-                                <Typography>
+                                <Typography sx={{wordWrap: 'break-word'}}>
                                     {offerDescription}
                                 </Typography>
                             </Stack>
