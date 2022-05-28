@@ -1,6 +1,6 @@
 import { Grid, Container, Paper, Typography, Stack, Button, Rating, Box, Skeleton } from '@mui/material';
 import { GridBreak } from '../utilities/gridBreak';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
@@ -8,14 +8,13 @@ import { NavLink } from 'react-router-dom';
 import { CalendarPicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import { SettingsApplicationsRounded } from '@mui/icons-material';
 
 
 export const OfferDetails = () => {
 
     const params = useParams();
     const offerId = params.id;
-
-    const [loaded, setLoaded] = useState(false);
 
     const [offerTitle, setOfferTitle] = useState(null);
     const [offerDescription, setOfferDescription] = useState(null);
@@ -33,6 +32,9 @@ export const OfferDetails = () => {
 
     const [previousTransactions, setPreviousTransactions] = useState(null);
 
+    const [dateDisableFunction, setDateDisableFunction] = useState(null);
+    const [loaded, setLoaded] = useState(false);
+
     const config = {
         headers: {
             'content-type': 'application/json',
@@ -48,83 +50,73 @@ export const OfferDetails = () => {
     };
 
     useEffect(() => {
+        axios
+            .get(`/api/Posts/${offerId}`, config)
+            .then( (res) => {
+                setOfferTitle(res.data.title);
+                setOfferDescription(res.data.description);
+                setRenterScore(res.data.rating);
+                setPricePerDay(res.data.price);
+                setPricePerWeek(res.data.pricePerWeek);
+                setPricePerMonth(res.data.pricePerMonth);
+                setDeposit(res.data.depositValue);
+                setOfferCity(res.data.city);
+                setAvailableFrom(new Date(res.data.availableFrom));
+                setAvailableTo(new Date(res.data.availableTo));
+                setRenterNickname(res.data.userNickName);
+            })
+            .catch((error) => {
+                console.log(error)
+        });
 
-        const fetchData = async () => {
-
-
-            await axios
-                .get(`/api/Posts/${offerId}`, config)
-                .then( (res) => {
-                    console.log(res.data)
-                    setOfferTitle(res.data.title);
-                    setOfferDescription(res.data.description);
-                    setRenterScore(res.data.rating);
-                    setPricePerDay(res.data.price);
-                    setPricePerWeek(res.data.pricePerWeek);
-                    setPricePerMonth(res.data.pricePerMonth);
-                    setDeposit(res.data.depositValue);
-                    setOfferCity(res.data.city);
-                    setAvailableFrom(new Date(res.data.availableFrom));
-                    setAvailableTo(new Date(res.data.setAvailableTo));
-                    setRenterNickname(res.data.userNickName);
-                    
-                })
-                .catch((error) => {
-                    console.log(error)
+        axios
+            .get(`/api/Posts/${offerId}/Image`, imageConfig)
+            .then( (res) => {
+                setOfferImage(URL.createObjectURL(res.data))
+            })
+            .catch((error) => {
+                console.log(error)
             });
 
-            await axios
-                .get(`/api/Posts/${offerId}/Image`, imageConfig)
-                .then( (res) => {
-                    setOfferImage(URL.createObjectURL(res.data))
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
+        axios
+            .get(`/api/Transactions/${offerId}/Post`, config)
+            .then( (res) => {
+                setPreviousTransactions(res.data);
+            })
+            .catch((error) => {
+                console.log(error)
+            });
 
-            await axios
-                .get(`/api/Transactions/Posts/${offerId}`, config)
-                .then( (res) => {
-                    setPreviousTransactions(res.data);
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
-        }
-
-        fetchData();
-        console.log(offerImage);
+        setLoaded(true);
 
     }, [])
 
-    const dateDisableFunction = (date) => {
-        if ( date < availableFrom || date > availableTo ) {
-            return true;
+    useEffect( () => {
+        if (availableFrom != null && availableTo != null && previousTransactions != null) {
+            
+            const func = (date) => {
+                console.log(date);
+                if ( date >= availableFrom && date <= availableTo ) {
+                    for (const transaction of previousTransactions) {
+                        if (date >= new Date(transaction.dateFrom) && date <= new Date(transaction.dateTo))
+                            return true;
+                    }
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            
+            console.log(typeof(func));
+            setDateDisableFunction({f: func});
         }
-        else {
-            return false;
-        }
-    }
 
-    const DepositComponent = () => {
-        let text;
-        if (deposit != null) {
-            text = `${deposit} points`
-        }
-        else {
-            text = 'not required'
-        }
-        return (
-            <Stack justifyContent='center' alignItems='center'>
-                <Typography variant='h6' color='secondary' fontWeight='bold'>
-                    Deposit
-                </Typography>
-                <Typography>
-                    {text}
-                </Typography>
-            </Stack>
-        )
-    }
+    }, [availableFrom, availableTo, previousTransactions])
+
+    useEffect(()=>{
+        console.log(dateDisableFunction)
+    }, [dateDisableFunction])
     
     return (
         <>
@@ -173,7 +165,14 @@ export const OfferDetails = () => {
                                     </Stack>
                                 </Paper>
                                 <Paper style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                    <DepositComponent/>
+                                    <Stack justifyContent='center' alignItems='center'>
+                                        <Typography variant='h6' color='secondary' fontWeight='bold'>
+                                            Deposit
+                                        </Typography>
+                                        <Typography>
+                                            {deposit} points
+                                        </Typography>
+                                    </Stack>
                                 </Paper>
                                 <Button variant='contained' component={NavLink} to='booking'>
                                     Rent this item
@@ -204,8 +203,8 @@ export const OfferDetails = () => {
                                     Availability
                                 </Typography>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <CalendarPicker shouldDisableDate={dateDisableFunction} minDate={Date.now()} maxDate={availableTo} onChange={function dummy() {}} sx={{minHeight: '100px'}}/>
-                            </LocalizationProvider> 
+                                    <CalendarPicker shouldDisableDate={dateDisableFunction ? dateDisableFunction.f : null} minDate={Date.now()} maxDate={availableTo} onChange={function dummy() {}} sx={{minHeight: '100px'}}/>
+                                </LocalizationProvider>
                             </Stack>
                         </Paper>
                     </Grid>
