@@ -92,26 +92,25 @@ export const OfferDetails = () => {
     }, [])
 
     useEffect( () => {
-        if (availableFrom != null && availableTo != null && previousTransactions != null) {
-            
-            const func = (date) => {
-                console.log(date);
+        if (availableFrom != null && availableTo != null && previousTransactions != null) { 
+            setDateDisableFunction( () => (date) => {
                 if ( date >= availableFrom && date <= availableTo ) {
                     for (const transaction of previousTransactions) {
-                        if (date >= new Date(transaction.dateFrom) && date <= new Date(transaction.dateTo))
+                        let transactionStart = new Date(transaction.dateFrom);
+                        let transactionEnd = new Date(transaction.dateTo);
+                        transactionStart.setHours(0, 0, 0, 0);
+                        transactionEnd.setHours(0, 0, 0, 0);
+                        if (date >= transactionStart && date <= transactionEnd) {
                             return true;
+                        }
                     }
                     return false;
                 }
                 else {
                     return true;
                 }
-            }
-            
-            console.log(typeof(func));
-            setDateDisableFunction({f: func});
+            });
         }
-
     }, [availableFrom, availableTo, previousTransactions])
 
     useEffect(()=>{
@@ -203,7 +202,7 @@ export const OfferDetails = () => {
                                     Availability
                                 </Typography>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <CalendarPicker shouldDisableDate={dateDisableFunction ? dateDisableFunction.f : null} minDate={Date.now()} maxDate={availableTo} onChange={function dummy() {}} sx={{minHeight: '100px'}}/>
+                                    <CalendarPicker shouldDisableDate={dateDisableFunction} minDate={Date.now()} maxDate={availableTo} onChange={function dummy() {}} sx={{minHeight: '100px'}}/>
                                 </LocalizationProvider>
                             </Stack>
                         </Paper>
