@@ -102,13 +102,17 @@ function App() {
                         <Route
                             path='offers/offerDetails/:id'
                             element={
-                                <OfferDetails />
+                                <RequireAuth>
+                                    <OfferDetails />
+                                </RequireAuth>
                             }
                         />
                         <Route 
                             path='offers/offerDetails/:id/booking' 
                             element={
-                                <Booking />
+                                <RequireAuth>
+                                    <Booking />
+                                </RequireAuth>
                                 } 
                         />
                         <Route
