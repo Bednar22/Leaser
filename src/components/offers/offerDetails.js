@@ -33,9 +33,6 @@ export const OfferDetails = () => {
 
     const [dateDisableFunction, setDateDisableFunction] = useState(null);
 
-    const [groupedResponseData, setgroupedResponseData] = useState(null);
-    const [loaded, setLoaded] = useState(false);
-
     const config = {
         headers: {
             'content-type': 'application/json',
@@ -83,12 +80,11 @@ export const OfferDetails = () => {
             .get(`/api/Transactions/${offerId}/Post`, config)
             .then( (res) => {
                 setPreviousTransactions(res.data);
+                
             })
             .catch((error) => {
                 console.log(error)
             });
-
-        setLoaded(true);
 
     }, [])
 
@@ -117,7 +113,13 @@ export const OfferDetails = () => {
 
     const TopLeftPanel = () => {
         return (
-            <img src={offerImage} alt={offerTitle} height='100%' width='100%' style={{objectFit: 'cover', borderRadius: '4px'}}/>
+            <>
+                {offerImage ? (
+                    <img src={offerImage} alt={offerTitle} height='100%' width='100%' style={{objectFit: 'cover', borderRadius: '4px'}}/>
+                ) : (
+                    <Skeleton variant='rectangular' height='100%'/>
+                )}
+            </>
         );
     }
 
@@ -126,54 +128,99 @@ export const OfferDetails = () => {
             <Stack spacing={1} height='100%'>
                 <Paper style={{ flex: '0.5', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <Stack p={1} alignItems='center'>
-                        <Typography variant='h6' sx={{wordWrap: 'break-word'}}>
-                            {renterNickname}
-                        </Typography>
-                        <Rating readOnly precision={0.1} value={renterScore}/>
+                        {renterNickname != null ? (
+                            <Typography variant='h6' sx={{wordWrap: 'break-word'}}>
+                                {renterNickname}
+                            </Typography>
+                        ) : (
+                            <Skeleton variant='text' width='150px'/>
+                        )}
+                        {renterScore != null ? (
+                            <Rating readOnly precision={0.1} value={renterScore}/>
+                        ) : (
+                            <Skeleton variant='text' width='100px'/>
+                        )}                 
                     </Stack>
                 </Paper>
                 <Stack spacing={1} style={{ flex: '1' }}>
                     <Paper style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                         <Stack direction='row' spacing={5} justifyContent='center' alignContent='center'>
                             <Stack justifyContent='center' alignItems='center'>
-                                <Typography color='secondary' fontWeight='bold' variant='h6'>
-                                    Day+
-                                </Typography>
-                                <Typography textAlign='center'>
-                                    {pricePerDay} points/day
-                                </Typography>
+                                {pricePerDay != null ? (
+                                    <Typography color='secondary' fontWeight='bold' variant='h6'>
+                                        Day+
+                                    </Typography>
+                                ) : (
+                                    <Skeleton variant='text' width='80px'/> 
+                                )}
+                                {pricePerDay != null ? (
+                                    <Typography textAlign='center'>
+                                        {pricePerDay} points/day
+                                    </Typography>
+                                ) : (
+                                    <Skeleton variant='text' width='100px'/> 
+                                )}
                             </Stack>
                             <Stack justifyContent='center' alignItems='center'>
-                                <Typography color='secondary' fontWeight='bold' variant='h6'>
-                                    Week+
-                                </Typography>
-                                <Typography textAlign='center'>
-                                    {pricePerWeek} points/day
-                                </Typography>
+                                {pricePerWeek != null ? (
+                                    <Typography color='secondary' fontWeight='bold' variant='h6'>
+                                        Week+
+                                    </Typography>
+                                ) : (
+                                    <Skeleton variant='text' width='80px'/> 
+                                )}
+                                {pricePerWeek != null ? (
+                                    <Typography textAlign='center'>
+                                        {pricePerWeek} points/day
+                                    </Typography>
+                                ) : (
+                                    <Skeleton variant='text' width='100px'/> 
+                                )}
                             </Stack>
                             <Stack justifyContent='center' alignItems='center'>
-                                <Typography color='secondary' fontWeight='bold' variant='h6'>
-                                    Month+
-                                </Typography>
-                                <Typography textAlign='center'>
-                                    {pricePerMonth} points/day
-                                </Typography>
+                                {pricePerMonth != null ? (
+                                    <Typography color='secondary' fontWeight='bold' variant='h6'>
+                                        Month+
+                                    </Typography>
+                                ) : (
+                                    <Skeleton variant='text' width='80px'/> 
+                                )}
+                                {pricePerMonth != null ? (
+                                    <Typography textAlign='center'>
+                                        {pricePerMonth} points/day
+                                    </Typography>
+                                ) : (
+                                    <Skeleton variant='text' width='100px'/> 
+                                )}
                             </Stack>
                         </Stack>
                     </Paper>
                     <Paper style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                         <Stack justifyContent='center' alignItems='center'>
-                            <Typography variant='h6' color='secondary' fontWeight='bold'>
-                                Deposit
-                            </Typography>
-                            <Typography>
-                                {deposit} points
-                            </Typography>
+                            {deposit != null ? (
+                                <Typography variant='h6' color='secondary' fontWeight='bold'>
+                                    Deposit
+                                </Typography>
+                            ) : (
+                                <Skeleton variant='text' width='100px'/> 
+                            )}
+                            {deposit != null ? (
+                                <Typography>
+                                    {deposit} points
+                                </Typography>
+                            ) : (
+                                <Skeleton variant='text' width='150px'/> 
+                            )}
                         </Stack>
                     </Paper>
-                    <Button variant='contained' component={NavLink} to='booking'>
-                        Rent this item
-                    </Button>
+                    {dateDisableFunction != null ? (
+                        <Button variant='contained' component={NavLink} to='booking'>
+                            Rent this item
+                        </Button>
+                    ) : (
+                        <Skeleton variant='rectangular' width='100%' height='40px'/> 
+                    )}
+
                 </Stack>
             </Stack>
         );
@@ -183,15 +230,31 @@ export const OfferDetails = () => {
         return (
             <Paper>
                 <Stack p={1}>
-                    <Typography variant='h5' fontWeight='bold' sx={{wordWrap: 'break-word'}}>
-                        {offerTitle}
-                    </Typography>
-                    <Typography variant='h6' fontWeight='bold' color='secondary' sx={{wordWrap: 'break-word'}}>
-                        In {offerCity}
-                    </Typography>
-                    <Typography sx={{wordWrap: 'break-word'}}>
-                        {offerDescription}
-                    </Typography>
+                    {offerTitle != null ? (
+                        <Typography variant='h5' fontWeight='bold' sx={{wordWrap: 'break-word'}}>
+                            {offerTitle}
+                        </Typography>
+                    ) : ( 
+                    <Skeleton variant='text' width='50%'/>
+                    )}
+                    {offerCity != null ? (
+                        <Typography variant='h6' fontWeight='bold' color='secondary' sx={{wordWrap: 'break-word'}}>
+                            In {offerCity}
+                        </Typography>
+                    ) : (
+                        <Skeleton variant='text' width='30%'/>
+                    )}
+                    {offerDescription != null ? (
+                        <Typography sx={{wordWrap: 'break-word'}}>
+                            {offerDescription}
+                        </Typography>
+                    ) : (
+                        <>
+                            <Skeleton variant='text' width='100%'/>
+                            <Skeleton variant='text' width='100%'/>
+                            <Skeleton variant='text' width='100%'/>
+                        </>
+                    )}
                 </Stack>
             </Paper>
         );
@@ -201,12 +264,22 @@ export const OfferDetails = () => {
         return (
             <Paper style={{ dispaly: 'flex', alignItems: 'center' }}>
                 <Stack p={1} alignItems='center'>
-                    <Typography variant='h6'>
-                        Availability
-                    </Typography>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <CalendarPicker shouldDisableDate={dateDisableFunction} minDate={Date.now()} maxDate={availableTo} onChange={function dummy() {}} sx={{minHeight: '100px'}}/>
-                    </LocalizationProvider>
+                    {dateDisableFunction != null ? (
+                        <Typography variant='h6'>
+                            Availability
+                        </Typography>
+                    ) : (
+                        <Skeleton variant='text' width='40%'/>
+                    )}
+
+                    {dateDisableFunction != null ? (
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <CalendarPicker shouldDisableDate={dateDisableFunction} minDate={Date.now()} maxDate={availableTo} onChange={function dummy() {}} sx={{minHeight: '100px'}}/>
+                        </LocalizationProvider>
+                    ) : (
+                        <Skeleton variant='rectangular' width='100%' height='300px'/>
+                    )}
+
                 </Stack>
             </Paper>
         );
@@ -217,17 +290,17 @@ export const OfferDetails = () => {
             <Container maxWidth='xl'>
                 <Grid container justifyContent='center' alignContent='center' spacing={2}>
                     <Grid item xs={9} md={6} lg={5} height='350px'>
-                        {loaded ? <TopLeftPanel/> : <Skeleton/> }
+                        <TopLeftPanel/>
                     </Grid>
                     <Grid item xs={9} md={5} lg={4} height='350px'>
-                        {loaded ? <TopRightPanel/> : <Skeleton/> }
+                        <TopRightPanel/>
                     </Grid>
                     <GridBreak></GridBreak>
-                    <Grid item xs={9} md={6} lg={5}>
-                        {loaded ? <BottomLeftPanel/> : <Skeleton/> }
+                    <Grid item xs={9} md={6} lg={5} height='350px'>
+                        <BottomLeftPanel/>
                     </Grid>
-                    <Grid item xs={9} md={5} lg={4}>
-                        {loaded ? <BottomRightPanel/> : <Skeleton/> }
+                    <Grid item xs={9} md={5} lg={4} height='350px'>
+                        <BottomRightPanel/>
                     </Grid>
                 </Grid>
             </Container>
