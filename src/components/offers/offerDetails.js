@@ -110,6 +110,13 @@ export const OfferDetails = () => {
         }
     }, [availableFrom, availableTo, previousTransactions])
 
+    const MultilineTextSkeleton = ({ lines, width }) => {
+        let skeletons = []
+        for (let line = 0; line < lines; line++) {
+            skeletons.push(<Skeleton variant='text' width={width} key={line}/>)
+        }
+        return skeletons;
+    }
 
     const TopLeftPanel = () => {
         return (
@@ -249,11 +256,7 @@ export const OfferDetails = () => {
                             {offerDescription}
                         </Typography>
                     ) : (
-                        <>
-                            <Skeleton variant='text' width='100%'/>
-                            <Skeleton variant='text' width='100%'/>
-                            <Skeleton variant='text' width='100%'/>
-                        </>
+                        <MultilineTextSkeleton lines={10} width='100%'/>
                     )}
                 </Stack>
             </Paper>
