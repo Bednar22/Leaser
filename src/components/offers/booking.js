@@ -73,7 +73,6 @@ export const Booking = () => {
             .get(`/api/Accounts/User`, config)
             .then( (res) => {
                 setcurrentUserId(res.data.id);
-                console.log(res.data.nickName);
             })
             .catch((error) => {
                 console.log(error)
@@ -239,7 +238,7 @@ export const Booking = () => {
                                             }}
                                             renderInput={(params) => <TextField {...params} size='small'/>}
                                             minDate={new Date()}
-                                            maxDate={ rentTo != null ? getPreviousDayFromDate(rentTo) : getNextYearFromDate(new Date())}
+                                            maxDate={ rentTo != null ? getPreviousDayFromDate(rentTo) : availableTo}
                                             shouldDisableDate={rentFromDateDisableFunction}
                                             clearable={true}
                                             onError={(error)=>{setFromError(error)}}
@@ -257,7 +256,7 @@ export const Booking = () => {
                                             setRentTo(newValue);
                                         }}
                                         minDate={rentFrom != null ? getNextDayFromDate(rentFrom): getNextDayFromDate(new Date())}
-                                        maxDate={getNextYearFromDate(new Date())}
+                                        maxDate={availableTo}
                                         shouldDisableDate={rentToDateDisableFunction}
                                         renderInput={(params) => <TextField {...params} size='small'/>}
                                         clearable={true}

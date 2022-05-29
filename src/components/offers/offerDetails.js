@@ -28,6 +28,7 @@ export const OfferDetails = () => {
     const [renterNickname, setRenterNickname] = useState(null);
     const [offerCity, setOfferCity] = useState(null);
     const [renterScore, setRenterScore] = useState(null);
+    const [renterUserId, setRenterUserId] = useState(null);
 
     const [previousTransactions, setPreviousTransactions] = useState(null);
 
@@ -62,6 +63,8 @@ export const OfferDetails = () => {
                 setAvailableFrom(new Date(res.data.availableFrom));
                 setAvailableTo(new Date(res.data.availableTo));
                 setRenterNickname(res.data.userNickName);
+                setRenterUserId(res.data.userId);
+                console.log(res.data);
             })
             .catch((error) => {
                 console.log(error)
@@ -135,10 +138,12 @@ export const OfferDetails = () => {
             <Stack spacing={1} height='100%'>
                 <Paper style={{ flex: '0.5', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <Stack p={1} alignItems='center'>
-                        {renterNickname != null ? (
-                            <Typography variant='h6' sx={{wordWrap: 'break-word'}}>
-                                {renterNickname}
-                            </Typography>
+                        {renterNickname != null && renterUserId != null ? (
+                            <NavLink to={`/user/profile/${renterUserId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                <Typography variant='h6' sx={{wordWrap: 'break-word'}} >
+                                    {renterNickname}
+                                </Typography>
+                            </NavLink>
                         ) : (
                             <Skeleton variant='text' width='150px'/>
                         )}
