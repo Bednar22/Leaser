@@ -64,7 +64,6 @@ export const OfferDetails = () => {
                 setAvailableTo(new Date(res.data.availableTo));
                 setRenterNickname(res.data.userNickName);
                 setRenterUserId(res.data.userId);
-                console.log(res.data);
             })
             .catch((error) => {
                 console.log(error)
@@ -304,7 +303,7 @@ export const OfferDetails = () => {
                         <TopRightPanel/>
                     </Grid>
                     <GridBreak></GridBreak>
-                    <Grid item xs={9} md={6} lg={5} height='350px'>
+                    <Grid item xs={9} md={6} lg={5}>
                         <BottomLeftPanel/>
                     </Grid>
                     <Grid item xs={9} md={5} lg={4} height='350px'>
