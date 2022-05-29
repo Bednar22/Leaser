@@ -1,6 +1,7 @@
 import { Grid, Container, Paper, Typography, Stack, Button, Box, TextField } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
@@ -15,47 +16,81 @@ export const Booking = () => {
 
     const [rentFrom, setRentFrom] = useState(null);
     const [rentTo, setRentTo] = useState(null);
-    const [deposit, setDeposit] = useState(100);
-    const [pricePerDay, setPricePerDay] = useState(10);
-    const [pricePerWeek, setPricePerWeek] = useState(8);
-    const [pricePerMonth, setPricePerMonth] = useState(5);
-    const [availableFrom, setAvailableFrom] = useState(new Date(2022, 3, 20));
-    const [availableTo, setAvailableTo] = useState(new Date(2022, 7, 26));
-    const [previousTransactionDates, setPreviousTransactionDates] = useState([
-        {dateFrom: new Date(2022, 5, 22), dateTo: new Date(2022, 5, 25)},
-        {dateFrom: new Date(2022, 6, 12), dateTo: new Date(2022, 6, 18)}
-    ])
+    const [deposit, setDeposit] = useState(null);
+    const [pricePerDay, setPricePerDay] = useState(null);
+    const [pricePerWeek, setPricePerWeek] = useState(null);
+    const [pricePerMonth, setPricePerMonth] = useState(null);
+    const [availableFrom, setAvailableFrom] = useState(null);
+    const [availableTo, setAvailableTo] = useState(null);
+    const [previousTransactions, setPreviousTransactions] = useState(null);
+
+    const [allDataLoaded, setAllDataLoaded] = useState(false);
+    const [dateDisableFunction, setDateDisableFunction] = useState(null);
+    const [rentFromDateDisableFunction, setRentFromDateDisableFunction] = useState(null);
+    const [rentToDateDisableFunction, setRentToDateDisableFunction] = useState(null);
+
     const [rentingPrice, setRentingPrice] = useState(null);
     const [total, setTotal] = useState(null);
     const [fromError, setFromError] = useState(null);
     const [toError, setToError] = useState(null);
 
 
+    const config = {
+        headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${window.localStorage.getItem('leaserToken')}`,
+        },
+    };
+
+    useEffect(() => {
+        axios
+            .get(`/api/Posts/${offerId}`, config)
+            .then( (res) => {
+                setPricePerDay(res.data.price);
+                setPricePerWeek(res.data.pricePerWeek);
+                setPricePerMonth(res.data.pricePerMonth);
+                setDeposit(res.data.depositValue);
+                setAvailableFrom(new Date(res.data.availableFrom));
+                setAvailableTo(new Date(res.data.availableTo));
+            })
+            .catch((error) => {
+                console.log(error)
+        });
+
+        axios
+            .get(`/api/Transactions/${offerId}/Post`, config)
+            .then( (res) => {
+                setPreviousTransactions(res.data);
+                
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+
+    }, [])
+
+    useEffect( () => {
+    }, [allDataLoaded, pricePerDay, pricePerWeek, pricePerMonth, deposit, availableFrom, availableTo, previousTransactions])
+
+
     useEffect(() => {
 
         let price = null;
 
-        if (rentFrom == null || rentTo == null) {
-            return;
-        }
-
-        if (fromError != null || toError != null) {
-            return;
-        }
-
-        const rentingTimeMs = rentTo - rentFrom;
-        const rentingDays = Math.round(rentingTimeMs / (1000 * 60 * 60 * 24));
-        if (rentingDays >= 30) {
-            price = Math.round(rentingDays * pricePerMonth);
-        }
-        else if (rentingDays < 30 && rentingDays >= 7) {
-            price = Math.round(rentingDays * pricePerWeek);
-        }
-        else if (rentingDays < 7 && rentingDays > 0) {
-            price = Math.round(rentingDays * pricePerDay);
-        }
-        else {
-            setRentingPrice(null);
+        if (rentFrom != null && rentTo != null) {
+            if (fromError == null && toError == null) {
+                const rentingTimeMs = rentTo - rentFrom;
+                const rentingDays = Math.round(rentingTimeMs / (1000 * 60 * 60 * 24));
+                if (rentingDays >= 30) {
+                    price = Math.round(rentingDays * pricePerMonth);
+                }
+                else if (rentingDays < 30 && rentingDays >= 7) {
+                    price = Math.round(rentingDays * pricePerWeek);
+                }
+                else if (rentingDays < 7 && rentingDays > 0) {
+                    price = Math.round(rentingDays * pricePerDay);
+                }
+            }
         }
 
         setRentingPrice(price)
@@ -86,14 +121,109 @@ export const Booking = () => {
         return returnDate;
     }
 
-    const dateDisableFunction = (date) => {
-        if ( date < availableFrom || date > availableTo ) {
-            return true;
+
+    useEffect( () => {
+        if (availableFrom != null && availableTo != null && previousTransactions != null) { 
+            setRentFromDateDisableFunction( () => (date) => {
+                if ( date >= availableFrom && date <= availableTo ) {
+                    for (const transaction of previousTransactions) {                        
+                        let transactionStart = new Date(transaction.dateFrom);
+                        let transactionEnd = new Date(transaction.dateTo);
+                        transactionStart.setHours(0, 0, 0, 0);
+                        transactionEnd.setHours(0, 0, 0, 0);
+                        if (rentTo == null || toError) {
+                            if (date >= transactionStart && date <= transactionEnd) {
+                                return true;
+                            }
+                        }
+                        else {
+                            if (date <= transactionEnd && transactionEnd <= rentTo) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            });
         }
-        else {
-            return false;
+    }, [availableFrom, availableTo, previousTransactions, rentFrom, rentTo, toError])
+
+    useEffect( () => {
+        if (availableFrom != null && availableTo != null && previousTransactions != null) { 
+            setRentToDateDisableFunction( () => (date) => {
+                if ( date >= availableFrom && date <= availableTo ) {
+                    for (const transaction of previousTransactions) {                        
+                        let transactionStart = new Date(transaction.dateFrom);
+                        let transactionEnd = new Date(transaction.dateTo);
+                        transactionStart.setHours(0, 0, 0, 0);
+                        transactionEnd.setHours(0, 0, 0, 0);
+                        if (rentFrom == null || fromError) {
+                            if (date >= transactionStart && date <= transactionEnd) {
+                                return true;
+                            }
+                        }
+                        else {
+                            if (date >= transactionStart && transactionStart >= rentFrom) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            });
         }
-    }
+    }, [availableFrom, availableTo, previousTransactions, rentFrom, rentTo, fromError])
+
+
+
+    // useEffect( () => {
+    //     if (availableFrom != null && availableTo != null && previousTransactions != null) { 
+    //         setDateDisableFunction( () => (date) => {
+    //             if ( date >= availableFrom && date <= availableTo ) {
+    //                 for (const transaction of previousTransactions) {
+    //                     if (rentFrom == null && rentTo == null) {
+    //                         let transactionStart = new Date(transaction.dateFrom);
+    //                         let transactionEnd = new Date(transaction.dateTo);
+    //                         transactionStart.setHours(0, 0, 0, 0);
+    //                         transactionEnd.setHours(0, 0, 0, 0);
+    //                         if (date >= transactionStart && date <= transactionEnd) {
+    //                             return true;
+    //                         }
+    //                     }
+    //                     else if (rentFrom == null && rentTo != null) {
+    //                         let transactionStart = new Date(transaction.dateFrom);
+    //                         let transactionEnd = new Date(transaction.dateTo);
+    //                         transactionStart.setHours(0, 0, 0, 0);
+    //                         transactionEnd.setHours(0, 0, 0, 0);
+    //                         if (date <= transactionEnd && transactionEnd <= rentTo ) {
+    //                             return true;
+    //                         }
+    //                     }
+    //                     else if (rentFrom != null && rentTo == null) {
+    //                         let transactionStart = new Date(transaction.dateFrom);
+    //                         let transactionEnd = new Date(transaction.dateTo);
+    //                         transactionStart.setHours(0, 0, 0, 0);
+    //                         transactionEnd.setHours(0, 0, 0, 0);
+    //                         if (date >= transactionStart && rentFrom <= transactionStart)
+    //                             return true;
+    //                     }
+
+    //                 }
+
+    //                 return false;
+    //             }
+    //             else {
+    //                 return true;
+    //             }
+    //         });
+    //     }
+    // }, [availableFrom, availableTo, previousTransactions, rentFrom, rentTo])
 
     return (
         <>
@@ -114,7 +244,7 @@ export const Booking = () => {
                                             renderInput={(params) => <TextField {...params} size='small'/>}
                                             minDate={new Date()}
                                             maxDate={ rentTo != null ? getPreviousDayFromDate(rentTo) : getNextYearFromDate(new Date())}
-                                            shouldDisableDate={dateDisableFunction}
+                                            shouldDisableDate={rentFromDateDisableFunction}
                                             clearable={true}
                                             onError={(error)=>{setFromError(error)}}
                                             onAccept={() => { setFromError(null) }}
@@ -127,7 +257,7 @@ export const Booking = () => {
                                             }}
                                             minDate={rentFrom != null ? getNextDayFromDate(rentFrom): getNextDayFromDate(new Date())}
                                             maxDate={getNextYearFromDate(new Date())}
-                                            shouldDisableDate={dateDisableFunction}
+                                            shouldDisableDate={rentToDateDisableFunction}
                                             renderInput={(params) => <TextField {...params} size='small'/>}
                                             clearable={true}
                                             onError={(error)=>{setToError(error)}}

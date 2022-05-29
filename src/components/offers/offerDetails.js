@@ -1,6 +1,6 @@
-import { Grid, Container, Paper, Typography, Stack, Button, Rating, Box, Skeleton } from '@mui/material';
+import { Grid, Container, Paper, Typography, Stack, Button, Rating, Skeleton } from '@mui/material';
 import { GridBreak } from '../utilities/gridBreak';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
