@@ -1,4 +1,4 @@
-import { Grid, Container, Paper, Typography, Stack, Button, Box, TextField } from '@mui/material';
+import { Grid, Container, Paper, Typography, Stack, Button, Box, TextField, Skeleton } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -25,7 +25,6 @@ export const Booking = () => {
     const [previousTransactions, setPreviousTransactions] = useState(null);
 
     const [allDataLoaded, setAllDataLoaded] = useState(false);
-    const [dateDisableFunction, setDateDisableFunction] = useState(null);
     const [rentFromDateDisableFunction, setRentFromDateDisableFunction] = useState(null);
     const [rentToDateDisableFunction, setRentToDateDisableFunction] = useState(null);
 
@@ -131,7 +130,7 @@ export const Booking = () => {
                         let transactionEnd = new Date(transaction.dateTo);
                         transactionStart.setHours(0, 0, 0, 0);
                         transactionEnd.setHours(0, 0, 0, 0);
-                        if (rentTo == null || toError) {
+                        if (rentTo == null || toError != null) {
                             if (date >= transactionStart && date <= transactionEnd) {
                                 return true;
                             }
@@ -160,7 +159,7 @@ export const Booking = () => {
                         let transactionEnd = new Date(transaction.dateTo);
                         transactionStart.setHours(0, 0, 0, 0);
                         transactionEnd.setHours(0, 0, 0, 0);
-                        if (rentFrom == null || fromError) {
+                        if (rentFrom == null || fromError != null) {
                             if (date >= transactionStart && date <= transactionEnd) {
                                 return true;
                             }
@@ -180,51 +179,6 @@ export const Booking = () => {
         }
     }, [availableFrom, availableTo, previousTransactions, rentFrom, rentTo, fromError])
 
-
-
-    // useEffect( () => {
-    //     if (availableFrom != null && availableTo != null && previousTransactions != null) { 
-    //         setDateDisableFunction( () => (date) => {
-    //             if ( date >= availableFrom && date <= availableTo ) {
-    //                 for (const transaction of previousTransactions) {
-    //                     if (rentFrom == null && rentTo == null) {
-    //                         let transactionStart = new Date(transaction.dateFrom);
-    //                         let transactionEnd = new Date(transaction.dateTo);
-    //                         transactionStart.setHours(0, 0, 0, 0);
-    //                         transactionEnd.setHours(0, 0, 0, 0);
-    //                         if (date >= transactionStart && date <= transactionEnd) {
-    //                             return true;
-    //                         }
-    //                     }
-    //                     else if (rentFrom == null && rentTo != null) {
-    //                         let transactionStart = new Date(transaction.dateFrom);
-    //                         let transactionEnd = new Date(transaction.dateTo);
-    //                         transactionStart.setHours(0, 0, 0, 0);
-    //                         transactionEnd.setHours(0, 0, 0, 0);
-    //                         if (date <= transactionEnd && transactionEnd <= rentTo ) {
-    //                             return true;
-    //                         }
-    //                     }
-    //                     else if (rentFrom != null && rentTo == null) {
-    //                         let transactionStart = new Date(transaction.dateFrom);
-    //                         let transactionEnd = new Date(transaction.dateTo);
-    //                         transactionStart.setHours(0, 0, 0, 0);
-    //                         transactionEnd.setHours(0, 0, 0, 0);
-    //                         if (date >= transactionStart && rentFrom <= transactionStart)
-    //                             return true;
-    //                     }
-
-    //                 }
-
-    //                 return false;
-    //             }
-    //             else {
-    //                 return true;
-    //             }
-    //         });
-    //     }
-    // }, [availableFrom, availableTo, previousTransactions, rentFrom, rentTo])
-
     return (
         <>
         <Container maxWidth='sm'>
@@ -235,21 +189,27 @@ export const Booking = () => {
                             <Grid item xs={12} sm={6}>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <Stack justifyContent='center' alignContent='center' spacing={1}>
-                                        <DatePicker 
-                                            label='Rent from'
-                                            value={rentFrom}
-                                            onChange={(newValue) => {
-                                                setRentFrom(newValue);
-                                            }}
-                                            renderInput={(params) => <TextField {...params} size='small'/>}
-                                            minDate={new Date()}
-                                            maxDate={ rentTo != null ? getPreviousDayFromDate(rentTo) : getNextYearFromDate(new Date())}
-                                            shouldDisableDate={rentFromDateDisableFunction}
-                                            clearable={true}
-                                            onError={(error)=>{setFromError(error)}}
-                                            onAccept={() => { setFromError(null) }}
-                                        />
-                                        <DatePicker
+                                        {rentFromDateDisableFunction ? (
+                                            <DatePicker 
+                                                label='Rent from'
+                                                value={rentFrom}
+                                                onChange={(newValue) => {
+                                                    setRentFrom(newValue);
+                                                }}
+                                                renderInput={(params) => <TextField {...params} size='small'/>}
+                                                minDate={new Date()}
+                                                maxDate={ rentTo != null ? getPreviousDayFromDate(rentTo) : getNextYearFromDate(new Date())}
+                                                shouldDisableDate={rentFromDateDisableFunction}
+                                                clearable={true}
+                                                onError={(error)=>{setFromError(error)}}
+                                                onAccept={() => { setFromError(null) }}
+                                                defaultCalendarMonth={rentTo ? rentTo : null}
+                                            />
+                                        ) : (
+                                            <Skeleton variant='rectangular' height='40px'/>
+                                        )}
+                                        {rentToDateDisableFunction ? (
+                                            <DatePicker
                                             label='Rent to'
                                             value={rentTo}
                                             onChange={(newValue) => {
@@ -262,54 +222,72 @@ export const Booking = () => {
                                             clearable={true}
                                             onError={(error)=>{setToError(error)}}
                                             onAccept={() => { setToError(null) }}
+                                            defaultCalendarMonth={rentFrom ? rentFrom : null}
                                         />
+                                        ) : (
+                                            <Skeleton variant='rectangular' height='40px'/>
+                                        )}
                                     </Stack>  
                                 </LocalizationProvider>
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <Grid container spacing={1}>
-                                    <Grid item xs={4} sm={5}>
-                                        <Typography fontWeight='bold'>
-                                            Deposit
-                                        </Typography>
+                                {(deposit != null && pricePerDay != null && pricePerWeek != null && pricePerMonth != null) ? (
+                                    <Grid container spacing={1}>
+                                        <Grid item xs={4} sm={5}>
+                                            <Typography fontWeight='bold'>
+                                                Deposit
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6} sm={5}>
+                                            <Typography>
+                                                {deposit != null ? (deposit + ' points') : null}
+                                            </Typography> 
+                                        </Grid>
+                                        <Grid item xs={4} sm={5}>
+                                            <Typography fontWeight='bold'>
+                                                Price
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography sx={{ pr: 1 }}>
+                                                {rentingPrice != null ? (rentingPrice + ' points') : null}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={4} sm={5}>
+                                            <Typography variant='h6' fontWeight='bold'>
+                                                Total
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant='h6'>
+                                                {total != null ? (total + ' points') : null}
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={6} sm={5}>
-                                        <Typography>
-                                            {deposit != null ? (deposit + ' points') : null}
-                                        </Typography> 
-                                    </Grid>
-                                    <Grid item xs={4} sm={5}>
-                                        <Typography fontWeight='bold'>
-                                            Price
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography sx={{ pr: 1 }}>
-                                            {rentingPrice != null ? (rentingPrice + ' points') : null}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={4} sm={5}>
-                                        <Typography variant='h6' fontWeight='bold'>
-                                            Total
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography variant='h6'>
-                                            {total != null ? (total + ' points') : null}
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
+                                ) : (
+                                    <Skeleton variant='rectangular' height='100%'/>
+                                )}
                             </Grid>
                             <GridBreak/>
                             <Grid item xs={12} sm={4}>
-                                <Button variant='outlined' color='secondary' component={NavLink} to={`/offers/offerDetails/${offerId}`} fullWidth>
-                                    Cancel
-                                </Button>
+                                {(rentFromDateDisableFunction && rentToDateDisableFunction) ? 
+                                (
+                                    <Button variant='outlined' color='secondary' component={NavLink} to={`/offers/offerDetails/${offerId}`} fullWidth>
+                                        Cancel
+                                    </Button>
+                                ) : (
+                                    <Skeleton variant='rectangular' height='40px'/>
+                                )}
                             </Grid>
                             <Grid item xs={12} sm={8}>
-                                <Button variant='contained' fullWidth>
-                                    Confirm and pay
-                                </Button>
+                                {(rentFromDateDisableFunction && rentToDateDisableFunction) ?
+                                (
+                                    <Button variant='contained' fullWidth>
+                                        Confirm and pay
+                                    </Button>
+                                ) : (
+                                    <Skeleton variant='rectangular' height='40px'/>
+                                )}
                             </Grid>
                         </Grid>
                     </Box>
