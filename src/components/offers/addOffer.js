@@ -37,7 +37,7 @@ export const AddOffer = (props) => {
         formData.append('price', pricePerDay);
         formData.append('pricePerWeek', pricePerWeek);
         formData.append('pricePerMonth', pricePerMonth);
-        formData.append('depositId', '');
+        formData.append('depositValue', deposit);
         formData.append('availableFrom', availableFrom.toISOString());
         formData.append('availableTo', availableTo.toISOString());
         formData.append('postImage', selectedImage);

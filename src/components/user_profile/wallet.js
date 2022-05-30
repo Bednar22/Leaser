@@ -1,7 +1,13 @@
+import { AddPoints } from './addPoints';
+import { Grid } from '@mui/material';
 export const Wallet = (props) => {
     return (
         <>
-            <h1>This will be wallet</h1>
+            <Grid container>
+                <Grid item>
+                    <AddPoints></AddPoints>
+                </Grid>
+            </Grid>
         </>
     );
 };
