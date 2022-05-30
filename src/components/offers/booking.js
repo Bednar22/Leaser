@@ -243,7 +243,7 @@ export const Booking = () => {
                                             clearable={true}
                                             onError={(error)=>{setFromError(error)}}
                                             onAccept={() => { setFromError(null) }}
-                                            defaultCalendarMonth={rentTo ? rentTo : null}
+                                            defaultCalendarMonth={rentTo && toError == null ? rentTo : null}
                                         />
                                     ) : (
                                         <Skeleton variant='rectangular' height='40px'/>
@@ -262,7 +262,7 @@ export const Booking = () => {
                                         clearable={true}
                                         onError={(error)=>{setToError(error)}}
                                         onAccept={() => { setToError(null) }}
-                                        defaultCalendarMonth={rentFrom ? rentFrom : null}
+                                        defaultCalendarMonth={rentFrom && fromError == null ? rentFrom : null}
                                     />
                                     ) : (
                                         <Skeleton variant='rectangular' height='40px'/>
