@@ -8,8 +8,10 @@ import { OfferTile } from './offerTile';
 import axios from 'axios';
 
 export const MainOffersPage = (props) => {
+    const token = window.localStorage.getItem('leaserToken');
     const [sortBy, setSortBy] = useState(null);
     const [categoryId, setCategoryId] = useState(null);
+    const [searchBy, setSearchBy] = useState('');
     const [offers, setOffers] = useState([]);
 
     const priceAscSort = (a, b) => {
@@ -29,7 +31,6 @@ export const MainOffersPage = (props) => {
     };
 
     const getOffersByCategory = () => {
-        const token = window.localStorage.getItem('leaserToken');
         axios
             .get(`/api/Posts/${categoryId}/Category/Detail`, {
                 headers: {
@@ -79,11 +80,8 @@ export const MainOffersPage = (props) => {
     }, [categoryId]);
 
     useEffect(() => {
-        // later it will be changed to getting all the posts at the beginning
-        const category = 2;
-        const token = window.localStorage.getItem('leaserToken');
         axios
-            .get(`/api/Posts/${category}/Category/Detail`, {
+            .get(`/api/Posts`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -96,6 +94,38 @@ export const MainOffersPage = (props) => {
                 console.log(err);
             });
     }, []);
+
+    useEffect(() => {
+        if (searchBy != '') {
+            axios
+                .get(`/api/Posts/${searchBy}/Detail`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((res) => {
+                    setOffers(res.data);
+                    console.log(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } else {
+            axios
+                .get(`/api/Posts`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((res) => {
+                    setOffers(res.data);
+                    console.log(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, [searchBy]);
 
     return (
         <>
@@ -112,7 +142,7 @@ export const MainOffersPage = (props) => {
                         <GridBreak></GridBreak>
                     </Grid>
                     <Grid item xs={4} md={4}>
-                        <SearchComponent />
+                        <SearchComponent setSearchBy={setSearchBy} />
                     </Grid>
                 </Grid>
 
