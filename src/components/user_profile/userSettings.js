@@ -49,13 +49,11 @@ export const UserSettings = (props) => {
     const onSubmit = (e) => {
         setEditPhase(false);
         const userData = {
-            email,
             surname,
             name,
             nickName,
             oldPassword: password,
             newPassword: password,
-            phoneNumber,
         };
 
         const addressData = {
