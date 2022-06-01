@@ -51,7 +51,7 @@ export const AddReview = ({ reviewedUserNickname, reviewedUserId, setAddedReview
 
     return (
         <>
-            <Container>
+            <Container sx={{ mb: 3 }}>
                 <Paper>
                     <Stack sx={{ p: 2 }}>
                         <Typography variant='h5' fontWeight='bold' sx={{ mb: 1 }}>
