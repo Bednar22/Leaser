@@ -105,7 +105,6 @@ export const MainOffersPage = (props) => {
             getAllPosts();
         } else {
             setCategoryId(searchCat);
-            // getOffersByCategory();
         }
     }, []);
 

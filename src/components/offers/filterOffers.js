@@ -24,7 +24,6 @@ export const FilterOffers = ({ categoryIdMain, changeCategoryIdMain, setSearchPa
                 },
             })
             .then((res) => {
-                // console.log(res.data);
                 setCategories(res.data);
             })
             .catch((err) => {});

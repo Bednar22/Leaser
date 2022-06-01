@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { GridBreak } from '../utilities/gridBreak';
 import axios from 'axios';
 import { useAuth } from '../utilities/auth';
+import { PasswordConfirm } from './passwordConfirm';
 
 export const UserSettings = (props) => {
+    const navigate = useNavigate();
     const auth = useAuth();
     const [error, setError] = useState('');
     const [editPhase, setEditPhase] = useState(false);
@@ -21,8 +23,17 @@ export const UserSettings = (props) => {
     const [country, setCountry] = useState('');
     const [street, setStreet] = useState('');
     const [postalCode, setPostalCode] = useState('');
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState(auth.user.password);
     const [addressId, setAddressId] = useState('');
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const getAddressData = () => {
         const token = window.localStorage.getItem('leaserToken');
@@ -47,6 +58,7 @@ export const UserSettings = (props) => {
     };
 
     const onSubmit = (e) => {
+        console.log(auth.user);
         setEditPhase(false);
         const userData = {
             surname,
@@ -71,16 +83,14 @@ export const UserSettings = (props) => {
             },
         };
 
-        // axios
-        //     .put(`/api/Accounts/${auth.user.id}`, userData, config)
-        //     .then((res) => {
-        //         console.log('Bez problemów');
-        //         console.log(res.data);
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //         setError(err.response.data);
-        //     });
+        axios
+            .put(`/api/Accounts/${auth.user.id}`, userData, config)
+            .then((res) => {
+                auth.updateUser(nickName, name, surname);
+            })
+            .catch((err) => {
+                setError(err.response.data);
+            });
 
         axios
             .put(`/api/Addresses/${addressId}`, addressData, config)
@@ -92,8 +102,7 @@ export const UserSettings = (props) => {
                 console.log(err);
                 setError(err.response.data);
             });
-        // getAddressData();
-        e.preventDefault();
+        // navigate(`/user/profile/${auth.user.id}`);
     };
 
     useEffect(() => {
@@ -109,7 +118,7 @@ export const UserSettings = (props) => {
                         <Grid container alignItems='center' justifyContent='center' spacing={{ xs: 2, md: 3 }}>
                             <Grid item xs={10} md={10}>
                                 <Typography align='center' variant='h6'>
-                                    Data
+                                    User data
                                 </Typography>
                             </Grid>
 
@@ -269,21 +278,7 @@ export const UserSettings = (props) => {
                                 </Stack>
                             </Grid>
                             <GridBreak />
-                            {/* Later it will be a dialog ?? */}
-                            <GridBreak />
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    InputProps={{
-                                        readOnly: readOnlyProp,
-                                    }}
-                                    required
-                                    label='Confirm password'
-                                    size='small'
-                                    fullWidth
-                                ></TextField>
-                            </Grid>
+
                             <GridBreak />
 
                             {error ? (
@@ -302,11 +297,18 @@ export const UserSettings = (props) => {
                                             variant='contained'
                                             sx={{ width: 1 / 1 }}
                                             onClick={(e) => {
-                                                onSubmit(e);
+                                                handleClickOpen();
                                             }}
                                         >
                                             Save
                                         </Button>
+                                        <PasswordConfirm
+                                            open={open}
+                                            handleClose={handleClose}
+                                            setPassword={setPassword}
+                                            onSubmit={onSubmit}
+                                            password={password}
+                                        ></PasswordConfirm>
                                     </Grid>
                                     <GridBreak />
                                 </>

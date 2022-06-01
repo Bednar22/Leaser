@@ -14,6 +14,15 @@ export const AuthProvider = ({ children }) => {
         window.localStorage.removeItem('leaserToken');
     };
 
+    const updateUser = (nickName, name, surname) => {
+        setUser((prevState) => ({
+            ...prevState,
+            nickName: nickName,
+            name: name,
+            surname: surname,
+        }));
+    };
+
     const checkUser = () => {
         if (window.localStorage.getItem('leaserToken')) {
             const token = window.localStorage.getItem('leaserToken');
@@ -39,7 +48,7 @@ export const AuthProvider = ({ children }) => {
         checkUser();
     }, []);
 
-    return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ user, login, logout, updateUser }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
