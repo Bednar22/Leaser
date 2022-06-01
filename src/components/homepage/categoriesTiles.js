@@ -9,7 +9,7 @@ export const CategoriesTiles = (props) => {
     const navigate = useNavigate();
 
     const cateogoryClick = (category) => {
-        navigate(`/offers/${category}`);
+        navigate(`/offers?category=${category}`);
     };
 
     const tile_size = 244;
@@ -31,17 +31,17 @@ export const CategoriesTiles = (props) => {
     return (
         <>
             <Grid container justifyContent='center'>
-                <Grid item xs={12} md={8}>
+                <Grid item xs={10} md={8}>
                     <ImageList cols={4}>
                         {categories.map((item) => (
                             <ImageListItem
                                 key={item.id}
-                                onClick={() => cateogoryClick(item.categoryName)}
+                                onClick={() => cateogoryClick(item.id)}
                                 className='category-tile'
                             >
                                 <img
                                     src={`${item.imageURL}?w=${tile_size}&h=${tile_size}&fit=crop&auto=format`}
-                                    // srcSet={`${item.imageURL}?w=${tile_size}&h=${tile_size}&fit=crop&auto=format&dpr=2 2x`}
+                                    srcSet={`${item.imageURL}?w=${tile_size}&h=${tile_size}&fit=crop&auto=format&dpr=2 2x`}
                                     alt={item.categoryName}
                                     loading='lazy'
                                 />

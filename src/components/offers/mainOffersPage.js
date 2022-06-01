@@ -6,12 +6,14 @@ import { FilterOffers } from './filterOffers';
 import { SortOffers } from './sortOffers';
 import { OfferTile } from './offerTile';
 import axios from 'axios';
+import { useSearchParams } from 'react-router-dom';
 
 export const MainOffersPage = (props) => {
     const token = window.localStorage.getItem('leaserToken');
+    const [searchParams, setSearchParams] = useSearchParams();
     const [sortBy, setSortBy] = useState(null);
-    const [categoryId, setCategoryId] = useState(null);
-    const [searchBy, setSearchBy] = useState('');
+    const [categoryId, setCategoryId] = useState(searchParams.get('category'));
+    const [searchBy, setSearchBy] = useState(null);
     const [offers, setOffers] = useState([]);
 
     const priceAscSort = (a, b) => {
@@ -31,19 +33,21 @@ export const MainOffersPage = (props) => {
     };
 
     const getOffersByCategory = () => {
-        axios
-            .get(`/api/Posts/${categoryId}/Category/Detail`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then((res) => {
-                setOffers(res.data);
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        if (categoryId === -1) {
+            getAllPosts();
+        } else
+            axios
+                .get(`/api/Posts/${categoryId}/Category/Detail`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((res) => {
+                    setOffers(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
     };
 
     const getSortedOffers = () => {
@@ -70,16 +74,7 @@ export const MainOffersPage = (props) => {
         }
     };
 
-    useEffect(() => {
-        getSortedOffers();
-    }, [sortBy]);
-
-    useEffect(() => {
-        console.log(`category: ${categoryId}`);
-        getOffersByCategory();
-    }, [categoryId]);
-
-    useEffect(() => {
+    const getAllPosts = () => {
         axios
             .get(`/api/Posts`, {
                 headers: {
@@ -88,15 +83,33 @@ export const MainOffersPage = (props) => {
             })
             .then((res) => {
                 setOffers(res.data);
-                console.log(res.data);
+                console.log('BIORE WSZYSTKO');
             })
             .catch((err) => {
                 console.log(err);
             });
+    };
+
+    useEffect(() => {
+        getSortedOffers();
+    }, [sortBy]);
+
+    useEffect(() => {
+        getOffersByCategory();
+    }, [categoryId]);
+
+    useEffect(() => {
+        let searchCat = searchParams.get('category');
+        console.log(searchCat);
+        if (!searchCat) {
+            getAllPosts();
+        } else {
+            setCategoryId(searchCat);
+        }
     }, []);
 
     useEffect(() => {
-        if (searchBy != '') {
+        if (searchBy !== '') {
             axios
                 .get(`/api/Posts/${searchBy}/Detail`, {
                     headers: {
@@ -111,19 +124,8 @@ export const MainOffersPage = (props) => {
                     console.log(err);
                 });
         } else {
-            axios
-                .get(`/api/Posts`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-                .then((res) => {
-                    setOffers(res.data);
-                    console.log(res.data);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            getAllPosts();
+            console.log('Gówno search');
         }
     }, [searchBy]);
 
@@ -132,7 +134,11 @@ export const MainOffersPage = (props) => {
             <Container maxWidth='xl'>
                 <Grid container direction='row' alignItems='center' justifyContent='space-evenly'>
                     <Grid item xs={3} md={2}>
-                        <FilterOffers categoryIdMain={categoryId} changeCategoryIdMain={setCategoryId} />
+                        <FilterOffers
+                            categoryIdMain={categoryId}
+                            changeCategoryIdMain={setCategoryId}
+                            setSearchParams={setSearchParams}
+                        />
                     </Grid>
                     <Grid item xs={1} md={1}></Grid>
                     <Grid item xs={3} md={2}>
