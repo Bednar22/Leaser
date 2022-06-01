@@ -5,7 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export const FilterOffers = ({ categoryIdMain, changeCategoryIdMain }) => {
+export const FilterOffers = ({ categoryIdMain, changeCategoryIdMain, setSearchParams }) => {
     const [categories, setCategories] = useState([]);
 
     const MenuProps = {
@@ -24,13 +24,13 @@ export const FilterOffers = ({ categoryIdMain, changeCategoryIdMain }) => {
                 },
             })
             .then((res) => {
-                console.log(res.data);
                 setCategories(res.data);
             })
             .catch((err) => {});
     }, []);
 
     const handleCategoryChange = (event) => {
+        setSearchParams({ category: event.target.value });
         changeCategoryIdMain(event.target.value);
     };
 
@@ -45,8 +45,10 @@ export const FilterOffers = ({ categoryIdMain, changeCategoryIdMain }) => {
                     labelId='demo-simple-select-label'
                     id='demo-simple-select'
                     label='Category'
+                    value={categoryIdMain ? categoryIdMain : -1}
                     onChange={handleCategoryChange}
                 >
+                    <MenuItem value={-1}>None</MenuItem>
                     {categories.map((item) => {
                         return (
                             <MenuItem key={item.id} value={item.id}>

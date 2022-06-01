@@ -88,8 +88,7 @@ export const SingleOffer = ({
             <Card sx={{ mb: 3, p: 2 }}>
                 <CardHeader
                     title={
-                        // zdodac id oferty do linku
-                        <Link to={`/offerDetails`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <Link to={`/offers/offerDetails/${id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                             {title}
                         </Link>
                     }

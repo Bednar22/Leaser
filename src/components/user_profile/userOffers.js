@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../utilities/auth';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { SingleOffer } from './singleOffer';
-import { Snackbar, Alert, Button, Typography } from '@mui/material';
+import { Snackbar, Alert, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
 export const UserOffers = ({ currentUser }) => {
@@ -14,8 +14,13 @@ export const UserOffers = ({ currentUser }) => {
 
     const removeOffer = (index) => {
         let tempArr = offers;
-        tempArr.splice(index, index);
-        // setOffers((prevOffer) => tempArr);
+
+        if (index === 0) {
+            tempArr.shift();
+        } else {
+            tempArr.splice(index, index);
+        }
+
         setOffers(tempArr);
     };
 
@@ -52,7 +57,7 @@ export const UserOffers = ({ currentUser }) => {
         <>
             <Grid container justifyContent='center'>
                 <Grid item xs={10} md={8}>
-                    {offers.length != 0 ? (
+                    {offers.length !== 0 ? (
                         offers.map((item, index) => {
                             return (
                                 <SingleOffer

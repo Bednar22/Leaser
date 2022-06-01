@@ -35,10 +35,10 @@ export const EditOffer = (props) => {
         let formData = new FormData();
         formData.append('title', title);
         formData.append('description', description);
-        formData.append('pricePerDay', pricePerDay);
+        formData.append('price', pricePerDay);
         formData.append('pricePerWeek', pricePerWeek);
         formData.append('pricePerMonth', pricePerMonth);
-        formData.append('depositId', '');
+        formData.append('depositValue', deposit);
         formData.append('availableFrom', availableFrom.toISOString());
         formData.append('availableTo', availableTo.toISOString());
         formData.append('postImage', selectedImage);
@@ -95,6 +95,7 @@ export const EditOffer = (props) => {
                 setAvailableTo(new Date(res.data.availableTo));
                 setCategoryId(res.data.categoryId);
                 setUserId(res.data.userId);
+                setDeposit(res.data.depositValue);
             })
             .catch((err) => {});
 
