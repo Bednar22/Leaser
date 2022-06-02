@@ -8,6 +8,7 @@ import Tab from '@mui/material/Tab';
 import { LeasedTrans } from './leasedTrans';
 import { BorrowedTrans } from './borrowedTrans';
 import '../../App.css';
+import { AddPoints } from './addPoints';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -47,6 +48,7 @@ export const TransactionsMain = (props) => {
     return (
         <>
             <Box sx={{ width: 1 / 1 }}>
+                <AddPoints></AddPoints>
                 <Container sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs
                         centered

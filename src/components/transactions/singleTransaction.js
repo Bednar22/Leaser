@@ -33,19 +33,55 @@ import RotateRightIcon from '@mui/icons-material/RotateRight';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import { GridBreak } from '../utilities/gridBreak';
 
-export const SingleTransaction = ({ postId, payerId, dateFrom, dateTo, price, status, leaser, transId }) => {
+export const SingleTransaction = ({
+    postId,
+    payerId,
+    dateFrom,
+    dateTo,
+    price,
+    status,
+    leaser,
+    transId,
+    getTransactions,
+}) => {
     const [postInfo, setPostInfo] = useState({});
     const token = window.localStorage.getItem('leaserToken');
+    const auth = useAuth();
 
-    const cancelAccept = () => {
+    const acceptItem = () => {
         axios
-            .post(`/api/Transactions/${transId}/Accept`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
+            .post(
+                `/api/Transactions/${transId}/Accept`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
             .then((res) => {
-                console.log('Item returned');
+                console.log('Item accepted');
+                getTransactions();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    const reportItem = () => {
+        axios
+            .post(
+                `/api/Transactions/${transId}/NonAccept`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
+            .then((res) => {
+                console.log('Item reported');
+                getTransactions();
             })
             .catch((err) => {
                 console.log(err);
@@ -65,6 +101,7 @@ export const SingleTransaction = ({ postId, payerId, dateFrom, dateTo, price, st
             )
             .then((res) => {
                 console.log('Item returned');
+                getTransactions();
             })
             .catch((err) => {
                 console.log(err);
@@ -170,7 +207,7 @@ export const SingleTransaction = ({ postId, payerId, dateFrom, dateTo, price, st
 
                 <CardActions>
                     <>
-                        {status == 'Borrowed' ? (
+                        {status == 'Borrowed' && auth.user.id == payerId ? (
                             <>
                                 <Stack
                                     sx={{ width: 1 / 1 }}
@@ -190,25 +227,40 @@ export const SingleTransaction = ({ postId, payerId, dateFrom, dateTo, price, st
                                 </Stack>
                             </>
                         ) : null}
+
+                        {status == 'Returned' && auth.user.id == postInfo.userId ? (
+                            <>
+                                <Stack
+                                    sx={{ width: 1 / 1 }}
+                                    k
+                                    direction='row'
+                                    spacing={2}
+                                    justifyContent='flex-end'
+                                    alignItems='center'
+                                >
+                                    <Button
+                                        onClick={reportItem}
+                                        variant='outlined'
+                                        color='error'
+                                        startIcon={<CloseIcon></CloseIcon>}
+                                    >
+                                        Report
+                                    </Button>
+
+                                    <Button
+                                        onClick={acceptItem}
+                                        variant='outlined'
+                                        color='success'
+                                        startIcon={<CheckIcon></CheckIcon>}
+                                    >
+                                        Accept
+                                    </Button>
+                                </Stack>
+                            </>
+                        ) : null}
                     </>
                 </CardActions>
             </Card>
         </>
     );
 };
-
-{
-    /* <Typography>Do you accept return?</Typography>
-                        <Button variant='outlined' color='error' startIcon={<CloseIcon></CloseIcon>}>
-                            Cancel
-                        </Button>
-
-                        <Button
-                            onClick={() => returnItem()}
-                            variant='outlined'
-                            color='success'
-                            startIcon={<CheckIcon></CheckIcon>}
-                        >
-                            Return
-                        </Button> */
-}

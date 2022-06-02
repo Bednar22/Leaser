@@ -6,6 +6,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export const FilterTransactions = ({ setFilterBy }) => {
+    const [localFilterValue, setLocalFilterValue] = useState(0);
+
     const MenuProps = {
         PaperProps: {
             style: {
@@ -15,21 +17,27 @@ export const FilterTransactions = ({ setFilterBy }) => {
     };
 
     const handleFilterChange = (e) => {
+        setLocalFilterValue(e.target.value);
         switch (e.target.value) {
             case 0:
                 setFilterBy('None');
+
                 break;
             case 1:
                 setFilterBy('Borrowed');
+
                 break;
             case 2:
                 setFilterBy('Returned');
+
                 break;
             case 3:
                 setFilterBy('Accepted');
+
                 break;
             case 4:
                 setFilterBy('Nonaccepted');
+
                 break;
         }
     };
@@ -45,7 +53,7 @@ export const FilterTransactions = ({ setFilterBy }) => {
                     labelId='demo-simple-select-label'
                     id='demo-simple-select'
                     label='Status'
-                    value={0}
+                    value={localFilterValue}
                     onChange={handleFilterChange}
                 >
                     <MenuItem value={0}>All</MenuItem>
