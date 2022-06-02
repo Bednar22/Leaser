@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Grid, Container } from '@mui/material';
+import { Grid, Container, Pagination, Box, Skeleton } from '@mui/material';
 import { SearchComponent } from './searchComponent';
 import { GridBreak } from '../utilities/gridBreak';
 import { FilterOffers } from './filterOffers';
@@ -10,6 +10,11 @@ import { useSearchParams } from 'react-router-dom';
 
 export const MainOffersPage = (props) => {
     const token = window.localStorage.getItem('leaserToken');
+    const maxOffersPerPage = 8;
+    const [totalPages, setTotalPages] = useState(null);
+    const [lowerIndex, setLowerIndex] = useState(null);
+    const [upperIndex, setUpperIndex] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
     const [sortBy, setSortBy] = useState(null);
     const [categoryId, setCategoryId] = useState(searchParams.get('category'));
@@ -83,7 +88,6 @@ export const MainOffersPage = (props) => {
             })
             .then((res) => {
                 setOffers(res.data);
-                console.log('BIORE WSZYSTKO');
             })
             .catch((err) => {
                 console.log(err);
@@ -125,13 +129,26 @@ export const MainOffersPage = (props) => {
                 });
         } else {
             getAllPosts();
-            console.log('Gówno search');
         }
     }, [searchBy]);
 
+    const handlePaginationChange = (event, value) => {
+        setCurrentPage(value);
+        setLowerIndex( (value - 1) * maxOffersPerPage );
+        if ( value * maxOffersPerPage > offers.length ) {
+            setUpperIndex(offers.length);
+        }
+        setUpperIndex( value * maxOffersPerPage );
+    }
+
+    useEffect(() => {
+        setTotalPages(Math.ceil(offers.length / maxOffersPerPage));
+        handlePaginationChange(null, 1);
+    }, [offers])
+
     return (
         <>
-            <Container maxWidth='xl'>
+            <Container maxWidth='xl' justifyItems='center' alignItems='center'>
                 <Grid container direction='row' alignItems='center' justifyContent='space-evenly'>
                     <Grid item xs={3} md={2}>
                         <FilterOffers
@@ -152,9 +169,9 @@ export const MainOffersPage = (props) => {
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={4} sx={{ my: 2 }}>
+                <Grid container spacing={4} sx={{ my: 2 }} >
                     {offers &&
-                        offers.map((item) => {
+                        offers.slice(lowerIndex, upperIndex).map((item) => {
                             return (
                                 <Grid item xs={10} sm={8} md={6} lg={4} xl={3}>
                                     <OfferTile
@@ -169,6 +186,19 @@ export const MainOffersPage = (props) => {
                             );
                         })}
                 </Grid>
+                <Box display='flex' justifyContent='center' sx={{pb: 4}}>
+                    { totalPages && offers ? (
+                        <Pagination 
+                            count={totalPages}
+                            color='primary'
+                            onChange={handlePaginationChange}
+                            page={currentPage}
+                        />
+                    ) : (
+                        <Skeleton variant='rectangular' />
+                    )}
+
+                </Box>
             </Container>
         </>
     );
