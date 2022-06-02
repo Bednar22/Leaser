@@ -25,6 +25,7 @@ import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
 import BubbleChartIcon from '@mui/icons-material/BubbleChart';
 import SellIcon from '@mui/icons-material/Sell';
+import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
 import '../../App.css';
 
 export const SingleTransaction = ({ postId, payerId, dateFrom, dateTo, price, status }) => {

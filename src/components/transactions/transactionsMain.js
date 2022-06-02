@@ -1,47 +1,89 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../utilities/auth';
 import axios from 'axios';
-import { SingleTransaction } from './singleTransaction';
-import { Grid } from '@mui/material';
+import { Grid, Box, Typography, Container } from '@mui/material';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import { LeasedTrans } from './leasedTrans';
+import { BorrowedTrans } from './borrowedTrans';
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role='tabpanel'
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
 
 export const TransactionsMain = (props) => {
-    const auth = useAuth();
-    const token = window.localStorage.getItem('leaserToken');
-    const [transactions, setTransactions] = useState([]);
+    const [value, setValue] = useState(0);
 
-    useEffect(() => {
-        axios
-            .get(`/api/Transactions/${auth.user.id}/Payer`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then((res) => {
-                console.log(res.data);
-                setTransactions(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, []);
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
     return (
         <>
             <Grid container justifyContent='center'>
-                <Grid item sm={12} md={8}>
-                    {transactions.map((item) => {
-                        return (
-                            <SingleTransaction
-                                payerId={item.payerId}
-                                status={item.status}
-                                price={item.price}
-                                postId={item.postId}
-                                dateFrom={item.dateFrom}
-                                dateTo={item.dateTo}
-                            ></SingleTransaction>
-                        );
-                    })}
-                </Grid>
+                {/* HERE START TAB COMPONENT */}
+                <Container sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Tabs
+                        centered
+                        value={value}
+                        onChange={handleChange}
+                        aria-label='basic tabs example'
+                        variant='fullWidth'
+                    >
+                        <Tab
+                            label={
+                                <>
+                                    <Box className='tab'>
+                                        <Typography> Leased</Typography>
+                                    </Box>
+                                </>
+                            }
+                            {...a11yProps(0)}
+                        />
+                        <Tab
+                            label={
+                                <>
+                                    <Box className='tab'>
+                                        <Typography> Borrowed</Typography>
+                                    </Box>
+                                </>
+                            }
+                            {...a11yProps(1)}
+                        />
+                    </Tabs>
+                </Container>
+                <TabPanel value={value} index={0}>
+                    <LeasedTrans></LeasedTrans>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    <BorrowedTrans></BorrowedTrans>
+                </TabPanel>
             </Grid>
         </>
     );
