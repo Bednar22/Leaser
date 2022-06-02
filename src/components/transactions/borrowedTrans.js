@@ -20,7 +20,7 @@ export const BorrowedTrans = (props) => {
         }
     };
 
-    useEffect(() => {
+    const getTransactions = () => {
         axios
             .get(`/api/Transactions/${auth.user.id}/Payer`, {
                 headers: {
@@ -33,6 +33,10 @@ export const BorrowedTrans = (props) => {
             .catch((err) => {
                 console.log(err);
             });
+    };
+
+    useEffect(() => {
+        getTransactions();
     }, []);
 
     return (
@@ -58,6 +62,7 @@ export const BorrowedTrans = (props) => {
                                 dateTo={item.dateTo}
                                 leaser={true}
                                 transId={item.id}
+                                getTransactions={getTransactions}
                             ></SingleTransaction>
                         );
                     })}

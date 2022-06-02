@@ -15,9 +15,9 @@ import {
     Button,
     CardActions,
 } from '@mui/material';
-// import { grey } from '@mui/material/colors';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import '../../App.css';
 //icons
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import BubbleChartIcon from '@mui/icons-material/BubbleChart';
@@ -26,8 +26,6 @@ import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
 import PersonIcon from '@mui/icons-material/Person';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import '../../App.css';
-import Close from '@mui/icons-material/Close';
 import { useAuth } from '../utilities/auth';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
@@ -45,6 +43,7 @@ export const SingleTransaction = ({
     getTransactions,
 }) => {
     const [postInfo, setPostInfo] = useState({});
+    const [postImage, setPostImage] = useState(null);
     const token = window.localStorage.getItem('leaserToken');
     const auth = useAuth();
 
@@ -98,7 +97,6 @@ export const SingleTransaction = ({
                 }
             )
             .then((res) => {
-                console.log('Item returned');
                 getTransactions();
             })
             .catch((err) => {
@@ -114,8 +112,23 @@ export const SingleTransaction = ({
                 },
             })
             .then((res) => {
-                console.log(res.data);
                 setPostInfo(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
+    useEffect(() => {
+        axios
+            .get(`/api/Posts/${postId}/Image`, {
+                responseType: 'blob',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                setPostImage(res.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -134,71 +147,101 @@ export const SingleTransaction = ({
                             {postInfo.title}
                         </Link>
                     }
-                    // action={
-                    //     <>
-                    //         {Date.now() && (
-                    //             <Tooltip title='You should return item soon' disableInteractive>
-                    //                 <PriorityHighIcon color='warning'></PriorityHighIcon>
-                    //             </Tooltip>
-                    //         )}
-                    //     </>
-                    // }
+                    action={
+                        <>
+                            {status == 'Returned' && (
+                                <Tooltip title='Item is returned and waiting for acceptance' disableInteractive>
+                                    <RotateRightIcon></RotateRightIcon>
+                                </Tooltip>
+                            )}
+                            {status == 'Accepted' && (
+                                <Tooltip title='Item is returned and accepted by the owner' disableInteractive>
+                                    <CheckIcon color='success'></CheckIcon>
+                                </Tooltip>
+                            )}
+                            {status == 'NonAccepted' && (
+                                <Tooltip title='There was and issue reported' disableInteractive>
+                                    <CloseIcon color='error'></CloseIcon>
+                                </Tooltip>
+                            )}
+
+                            {status == 'Borrowed' &&
+                                (new Date(dateTo).getTime() - new Date().getTime()) / (1000 * 3600 * 24) < 2 && (
+                                    <Tooltip title='Item should be returned soon' disableInteractive>
+                                        <PriorityHighIcon color='warning'></PriorityHighIcon>
+                                    </Tooltip>
+                                )}
+                        </>
+                    }
                 ></CardHeader>
                 <Divider sx={{ mb: 2 }}></Divider>
 
                 <CardContent>
-                    <Grid container direction='row'>
-                        {leaser == true ? (
+                    <Grid container direction='row' spacing={8}>
+                        <Grid item xs={4}>
+                            {postImage ? (
+                                <CardMedia
+                                    component='img'
+                                    image={URL.createObjectURL(postImage)}
+                                    alt='offer image'
+                                ></CardMedia>
+                            ) : (
+                                <Skeleton variant='rectangular' sx={{ height: 150 }}></Skeleton>
+                            )}
+                        </Grid>
+                        <Grid item xs={8}>
+                            {leaser == true ? (
+                                <Grid item xs={12} sx={{ mb: 1 }}>
+                                    <Stack direction='row' spacing={2}>
+                                        <PersonIcon></PersonIcon>
+                                        <Typography>
+                                            Leaser:{' '}
+                                            <Link
+                                                to={`/user/profile/${postInfo.userId}`}
+                                                style={{ textDecoration: 'none', color: 'inherit' }}
+                                            >
+                                                {postInfo.userNickName}
+                                            </Link>
+                                        </Typography>
+                                    </Stack>
+                                </Grid>
+                            ) : (
+                                <Grid item xs={12} sx={{ mb: 1 }}>
+                                    <Stack direction='row' spacing={2}>
+                                        <PersonIcon></PersonIcon>
+                                        <Typography>Borrower: {}</Typography>
+                                    </Stack>
+                                </Grid>
+                            )}
+
                             <Grid item xs={12} sx={{ mb: 1 }}>
                                 <Stack direction='row' spacing={2}>
-                                    <PersonIcon></PersonIcon>
+                                    <DateRangeIcon></DateRangeIcon>
                                     <Typography>
-                                        Leaser:{' '}
-                                        <Link
-                                            to={`/user/profile/${postInfo.userId}`}
-                                            style={{ textDecoration: 'none', color: 'inherit' }}
-                                        >
-                                            {postInfo.userNickName}
-                                        </Link>
+                                        Date range: {dateFrom.slice(0, 10)} - {dateTo.slice(0, 10)}
                                     </Typography>
                                 </Stack>
                             </Grid>
-                        ) : (
                             <Grid item xs={12} sx={{ mb: 1 }}>
                                 <Stack direction='row' spacing={2}>
-                                    <PersonIcon></PersonIcon>
-                                    <Typography>Borrower: {}</Typography>
+                                    <SellIcon></SellIcon>
+                                    <Typography>Price: {price} points</Typography>
                                 </Stack>
                             </Grid>
-                        )}
 
-                        <Grid item xs={12} sx={{ mb: 1 }}>
-                            <Stack direction='row' spacing={2}>
-                                <DateRangeIcon></DateRangeIcon>
-                                <Typography>
-                                    Date range: {dateFrom.slice(0, 10)} - {dateTo.slice(0, 10)}
-                                </Typography>
-                            </Stack>
-                        </Grid>
-                        <Grid item xs={12} sx={{ mb: 1 }}>
-                            <Stack direction='row' spacing={2}>
-                                <SellIcon></SellIcon>
-                                <Typography>Price: {price} points</Typography>
-                            </Stack>
-                        </Grid>
+                            <Grid item xs={12} sx={{ mb: 1 }}>
+                                <Stack direction='row' spacing={2}>
+                                    <AssignmentReturnIcon></AssignmentReturnIcon>
+                                    <Typography>Deposit: {[postInfo.depositValue]} points</Typography>
+                                </Stack>
+                            </Grid>
 
-                        <Grid item xs={12} sx={{ mb: 1 }}>
-                            <Stack direction='row' spacing={2}>
-                                <AssignmentReturnIcon></AssignmentReturnIcon>
-                                <Typography>Deposit: {[postInfo.depositValue]} points</Typography>
-                            </Stack>
-                        </Grid>
-
-                        <Grid item xs={12} sx={{ mb: 1 }}>
-                            <Stack direction='row' spacing={2}>
-                                <BubbleChartIcon></BubbleChartIcon>
-                                <Typography>Status: {status}</Typography>
-                            </Stack>
+                            <Grid item xs={12} sx={{ mb: 1 }}>
+                                <Stack direction='row' spacing={2}>
+                                    <BubbleChartIcon></BubbleChartIcon>
+                                    <Typography>Status: {status}</Typography>
+                                </Stack>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </CardContent>
