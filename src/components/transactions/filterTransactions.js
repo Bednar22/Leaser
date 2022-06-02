@@ -5,7 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export const FilterTransactions = (props) => {
+export const FilterTransactions = ({ setFilterBy }) => {
     const MenuProps = {
         PaperProps: {
             style: {
@@ -14,24 +14,45 @@ export const FilterTransactions = (props) => {
         },
     };
 
+    const handleFilterChange = (e) => {
+        switch (e.target.value) {
+            case 0:
+                setFilterBy('None');
+                break;
+            case 1:
+                setFilterBy('Borrowed');
+                break;
+            case 2:
+                setFilterBy('Returned');
+                break;
+            case 3:
+                setFilterBy('Accepted');
+                break;
+            case 4:
+                setFilterBy('Nonaccepted');
+                break;
+        }
+    };
+
     return (
         <>
             <FormControl color='secondary' fullWidth size='small'>
-                <InputLabel id='demo-simple-select-label'>Category</InputLabel>
+                <InputLabel id='demo-simple-select-label'>Status</InputLabel>
                 <Select
                     MenuProps={MenuProps}
                     color='secondary'
                     fullWidth
                     labelId='demo-simple-select-label'
                     id='demo-simple-select'
-                    label='Category'
-                    // value={categoryIdMain ? categoryIdMain : -1}
-                    // onChange={handleCategoryChange}
+                    label='Status'
+                    value={0}
+                    onChange={handleFilterChange}
                 >
                     <MenuItem value={0}>All</MenuItem>
-                    <MenuItem value={1}>My rents</MenuItem>
-                    <MenuItem value={2}>Rented from me</MenuItem>
+                    <MenuItem value={1}>Borrowed</MenuItem>
+                    <MenuItem value={2}>Returned</MenuItem>
                     <MenuItem value={3}>Accepted</MenuItem>
+                    <MenuItem value={4}>Not accepted</MenuItem>
                 </Select>
             </FormControl>
         </>

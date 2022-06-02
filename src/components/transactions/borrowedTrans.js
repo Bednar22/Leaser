@@ -1,13 +1,24 @@
 import { useState, useEffect } from 'react';
 import { SingleTransaction } from './singleTransaction';
-import { Grid } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from '../utilities/auth';
+import { FilterTransactions } from './filterTransactions';
+import { GridBreak } from '../utilities/gridBreak';
 
 export const BorrowedTrans = (props) => {
     const auth = useAuth();
     const token = window.localStorage.getItem('leaserToken');
     const [transactions, setTransactions] = useState([]);
+    const [filterBy, setFilterBy] = useState('None');
+
+    const filterAll = (element, index, array) => {
+        if (filterBy == 'None') {
+            return element;
+        } else {
+            return element.status == filterBy;
+        }
+    };
 
     useEffect(() => {
         axios
@@ -27,10 +38,17 @@ export const BorrowedTrans = (props) => {
 
     return (
         <>
+            <Grid container justifyContent='flex-start' sx={{ my: 2 }}>
+                <Grid item sm={1}></Grid>
+                <Grid item sm={3}>
+                    <FilterTransactions setFilterBy={setFilterBy}></FilterTransactions>
+                </Grid>
+                <GridBreak></GridBreak>
+            </Grid>
+
             <Grid container justifyContent='center'>
                 <Grid item sm={12} md={10}>
-                    <h1>These are transactions that user borrowed from someone</h1>
-                    {transactions.map((item) => {
+                    {transactions.filter(filterAll).map((item) => {
                         return (
                             <SingleTransaction
                                 payerId={item.payerId}
@@ -39,6 +57,8 @@ export const BorrowedTrans = (props) => {
                                 postId={item.postId}
                                 dateFrom={item.dateFrom}
                                 dateTo={item.dateTo}
+                                leaser={true}
+                                transId={item.id}
                             ></SingleTransaction>
                         );
                     })}

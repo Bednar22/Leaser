@@ -22,11 +22,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 
 import { OfferDetails } from './components/offers/offerDetails';
-import SampleImage from './assets/sample-image.jpg';
 import { ReviewList } from './components/reviews/reviewList';
 import { AddReview } from './components/reviews/addReview';
 import { Booking } from './components/offers/booking';
 import { EditOffer } from './components/offers/editOffer';
+import { TransactionsMain } from './components/transactions/transactionsMain';
 
 const theme = createTheme({
     palette: {
@@ -135,7 +135,7 @@ function App() {
                             path='user/wallet'
                             element={
                                 <RequireAuth>
-                                    <Wallet />
+                                    <TransactionsMain />
                                 </RequireAuth>
                             }
                         />

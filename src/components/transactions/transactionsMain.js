@@ -7,7 +7,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { LeasedTrans } from './leasedTrans';
 import { BorrowedTrans } from './borrowedTrans';
-
+import '../../App.css';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -46,8 +46,7 @@ export const TransactionsMain = (props) => {
 
     return (
         <>
-            <Grid container justifyContent='center'>
-                {/* HERE START TAB COMPONENT */}
+            <Box sx={{ width: 1 / 1 }}>
                 <Container sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs
                         centered
@@ -84,7 +83,7 @@ export const TransactionsMain = (props) => {
                 <TabPanel value={value} index={1}>
                     <BorrowedTrans></BorrowedTrans>
                 </TabPanel>
-            </Grid>
+            </Box>
         </>
     );
 };
