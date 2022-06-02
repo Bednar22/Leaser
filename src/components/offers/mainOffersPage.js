@@ -14,6 +14,7 @@ export const MainOffersPage = (props) => {
     const [totalPages, setTotalPages] = useState(null);
     const [lowerIndex, setLowerIndex] = useState(null);
     const [upperIndex, setUpperIndex] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
     const [sortBy, setSortBy] = useState(null);
     const [categoryId, setCategoryId] = useState(searchParams.get('category'));
@@ -133,19 +134,27 @@ export const MainOffersPage = (props) => {
         }
     }, [searchBy]);
 
-    const handlePaginationChange = (page) => {
-        setLowerIndex( (page - 1) * maxOffersPerPage );
-        if ( page * maxOffersPerPage > offers.length ) {
+    const handlePaginationChange = (event, value) => {
+        console.log(value)
+        setCurrentPage(value);
+        setLowerIndex( (value - 1) * maxOffersPerPage );
+        if ( value * maxOffersPerPage > offers.length ) {
             setUpperIndex(offers.length);
         }
-        setUpperIndex( page * maxOffersPerPage );
+        setUpperIndex( value * maxOffersPerPage );
     }
 
     useEffect(() => {
         setTotalPages(Math.ceil(offers.length / maxOffersPerPage));
-        handlePaginationChange(1);
     }, [offers])
 
+    useEffect(() => {
+        console.log(lowerIndex);
+    }, [lowerIndex])
+
+    useEffect(() => {
+        console.log(upperIndex);
+    }, [upperIndex])
 
     return (
         <>
@@ -192,7 +201,7 @@ export const MainOffersPage = (props) => {
                         <Pagination 
                             count={totalPages}
                             color='primary'
-                            onChange={(e) => handlePaginationChange(e.target.textContent)}
+                            onChange={handlePaginationChange}
                         />
                     ) : (
                         <Skeleton variant='rectangular' />
