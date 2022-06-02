@@ -28,7 +28,6 @@ export const BorrowedTrans = (props) => {
                 },
             })
             .then((res) => {
-                console.log(res.data);
                 setTransactions(res.data);
             })
             .catch((err) => {

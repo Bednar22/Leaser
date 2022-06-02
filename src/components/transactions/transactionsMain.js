@@ -48,43 +48,49 @@ export const TransactionsMain = (props) => {
     return (
         <>
             <Box sx={{ width: 1 / 1 }}>
-                <AddPoints></AddPoints>
-                <Container sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs
-                        centered
-                        value={value}
-                        onChange={handleChange}
-                        aria-label='basic tabs example'
-                        variant='fullWidth'
-                    >
-                        <Tab
-                            label={
-                                <>
-                                    <Box className='tab'>
-                                        <Typography> Leased</Typography>
-                                    </Box>
-                                </>
-                            }
-                            {...a11yProps(0)}
-                        />
-                        <Tab
-                            label={
-                                <>
-                                    <Box className='tab'>
-                                        <Typography> Borrowed</Typography>
-                                    </Box>
-                                </>
-                            }
-                            {...a11yProps(1)}
-                        />
-                    </Tabs>
-                </Container>
-                <TabPanel value={value} index={0}>
-                    <LeasedTrans></LeasedTrans>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                    <BorrowedTrans></BorrowedTrans>
-                </TabPanel>
+                <Grid container justifyContent='center'>
+                    <Grid item xs={8}>
+                        <AddPoints></AddPoints>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Container sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <Tabs
+                                centered
+                                value={value}
+                                onChange={handleChange}
+                                aria-label='basic tabs example'
+                                variant='fullWidth'
+                            >
+                                <Tab
+                                    label={
+                                        <>
+                                            <Box className='tab'>
+                                                <Typography> Leased</Typography>
+                                            </Box>
+                                        </>
+                                    }
+                                    {...a11yProps(0)}
+                                />
+                                <Tab
+                                    label={
+                                        <>
+                                            <Box className='tab'>
+                                                <Typography> Borrowed</Typography>
+                                            </Box>
+                                        </>
+                                    }
+                                    {...a11yProps(1)}
+                                />
+                            </Tabs>
+                        </Container>
+                        <TabPanel value={value} index={0}>
+                            <LeasedTrans></LeasedTrans>
+                        </TabPanel>
+                        <TabPanel value={value} index={1}>
+                            <BorrowedTrans></BorrowedTrans>
+                        </TabPanel>
+                    </Grid>
+                </Grid>
             </Box>
         </>
     );

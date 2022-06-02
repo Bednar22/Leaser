@@ -60,7 +60,6 @@ export const SingleTransaction = ({
                 }
             )
             .then((res) => {
-                console.log('Item accepted');
                 getTransactions();
             })
             .catch((err) => {
@@ -80,7 +79,6 @@ export const SingleTransaction = ({
                 }
             )
             .then((res) => {
-                console.log('Item reported');
                 getTransactions();
             })
             .catch((err) => {

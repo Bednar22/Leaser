@@ -28,12 +28,10 @@ export const LeasedTrans = (props) => {
                 },
             })
             .then((res) => {
-                console.log(res.data);
                 let filteredArr = res.data.filter((element, index, array) => {
                     return element.payerId != auth.user.id;
                 });
                 setTransactions(filteredArr);
-                console.log(filteredArr);
             })
             .catch((err) => {
                 console.log(err);
