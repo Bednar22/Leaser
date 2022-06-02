@@ -88,7 +88,6 @@ export const MainOffersPage = (props) => {
             })
             .then((res) => {
                 setOffers(res.data);
-                console.log('BIORE WSZYSTKO');
             })
             .catch((err) => {
                 console.log(err);
@@ -130,12 +129,10 @@ export const MainOffersPage = (props) => {
                 });
         } else {
             getAllPosts();
-            console.log('Gówno search');
         }
     }, [searchBy]);
 
     const handlePaginationChange = (event, value) => {
-        console.log(value)
         setCurrentPage(value);
         setLowerIndex( (value - 1) * maxOffersPerPage );
         if ( value * maxOffersPerPage > offers.length ) {
@@ -146,15 +143,8 @@ export const MainOffersPage = (props) => {
 
     useEffect(() => {
         setTotalPages(Math.ceil(offers.length / maxOffersPerPage));
+        handlePaginationChange(null, 1);
     }, [offers])
-
-    useEffect(() => {
-        console.log(lowerIndex);
-    }, [lowerIndex])
-
-    useEffect(() => {
-        console.log(upperIndex);
-    }, [upperIndex])
 
     return (
         <>
@@ -202,6 +192,7 @@ export const MainOffersPage = (props) => {
                             count={totalPages}
                             color='primary'
                             onChange={handlePaginationChange}
+                            page={currentPage}
                         />
                     ) : (
                         <Skeleton variant='rectangular' />
