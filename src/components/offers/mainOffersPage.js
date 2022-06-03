@@ -81,7 +81,7 @@ export const MainOffersPage = (props) => {
 
     const getAllPosts = () => {
         axios
-            .get(`/api/Posts`, {
+            .get(`/api/Posts/Detail`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

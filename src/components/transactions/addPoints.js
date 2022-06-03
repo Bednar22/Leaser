@@ -6,13 +6,16 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Stack } from '@mui/material';
+import { Paper, Stack, Card, CardHeader, CardContent, CardMedia, Typography } from '@mui/material';
 import { useAuth } from '../utilities/auth';
 import axios from 'axios';
 
+import AddIcon from '@mui/icons-material/Add';
+
 export const AddPoints = (props) => {
     const [open, setOpen] = useState(false);
-    const [pointsAmmount, setpointsAmmount] = useState(10);
+    const [pointsAmmount, setpointsAmmount] = useState(0);
+    const [points, setPoints] = useState();
     const auth = useAuth();
     const handleClickOpen = () => {
         setOpen(true);
@@ -36,17 +39,53 @@ export const AddPoints = (props) => {
             .then((res) => {
                 console.log(res.data);
                 handleClose();
+                getUserPoints();
             })
             .catch((error) => {
                 console.log(error.response);
             });
     };
 
+    const getUserPoints = () => {
+        const token = window.localStorage.getItem('leaserToken');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+        axios
+            .get(`/api/Accounts/User`, config)
+            .then((res) => {
+                console.log(res.data);
+                setPoints(res.data.points);
+            })
+            .catch((error) => {
+                console.log(error.response);
+            });
+    };
+
+    useEffect(() => {
+        getUserPoints();
+    }, []);
+
     return (
         <>
-            <Button variant='contained' color='secondary' onClick={handleClickOpen}>
-                Add points
-            </Button>
+            <Card sx={{ px: 4, py: 3, mb: 4 }}>
+                <CardHeader
+                    title={`Account balance: ${points} points`}
+                    action={
+                        <Button
+                            endIcon={<AddIcon></AddIcon>}
+                            variant='contained'
+                            color='secondary'
+                            onClick={handleClickOpen}
+                        >
+                            Add points
+                        </Button>
+                    }
+                ></CardHeader>
+                
+            </Card>
             <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
                 <DialogTitle>Choose ammount</DialogTitle>
                 <DialogContent>

@@ -10,7 +10,6 @@ import { MainOffersPage } from './components/offers/mainOffersPage';
 import { Homepage } from './components/homepage/homepage';
 import { NoMatch } from './components/noMatch';
 import { Profile } from './components/user_profile/profile';
-import { Wallet } from './components/user_profile/wallet';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AddOffer } from './components/offers/addOffer';
 import { AuthProvider, useAuth } from './components/utilities/auth';
@@ -22,11 +21,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 
 import { OfferDetails } from './components/offers/offerDetails';
-import SampleImage from './assets/sample-image.jpg';
 import { ReviewList } from './components/reviews/reviewList';
 import { AddReview } from './components/reviews/addReview';
 import { Booking } from './components/offers/booking';
 import { EditOffer } from './components/offers/editOffer';
+import { TransactionsMain } from './components/transactions/transactionsMain';
 
 const theme = createTheme({
     palette: {
@@ -107,13 +106,13 @@ function App() {
                                 </RequireAuth>
                             }
                         />
-                        <Route 
-                            path='offers/offerDetails/:id/booking' 
+                        <Route
+                            path='offers/offerDetails/:id/booking'
                             element={
                                 <RequireAuth>
                                     <Booking />
                                 </RequireAuth>
-                                } 
+                            }
                         />
                         <Route
                             path='addOffer'
@@ -135,7 +134,7 @@ function App() {
                             path='user/wallet'
                             element={
                                 <RequireAuth>
-                                    <Wallet />
+                                    <TransactionsMain />
                                 </RequireAuth>
                             }
                         />
