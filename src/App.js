@@ -10,7 +10,6 @@ import { MainOffersPage } from './components/offers/mainOffersPage';
 import { Homepage } from './components/homepage/homepage';
 import { NoMatch } from './components/noMatch';
 import { Profile } from './components/user_profile/profile';
-import { Wallet } from './components/transactions/wallet';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AddOffer } from './components/offers/addOffer';
 import { AuthProvider, useAuth } from './components/utilities/auth';

@@ -7,7 +7,6 @@ import {
     Typography,
     Tooltip,
     Stack,
-    Box,
     Grid,
     Divider,
     Skeleton,
@@ -18,8 +17,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../../App.css';
 import { ReportIssue } from './reportIssue';
+import { TransactionsAlerts } from './transactionsAlerts';
 import { useAuth } from '../utilities/auth';
-import { GridBreak } from '../utilities/gridBreak';
 //icons
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import BubbleChartIcon from '@mui/icons-material/BubbleChart';
@@ -47,7 +46,10 @@ export const SingleTransaction = ({
     const token = window.localStorage.getItem('leaserToken');
     const auth = useAuth();
     const [open, setOpen] = useState(false);
+    const [snackBar, setSnackBar] = useState(false);
+    const [alertType, setAlertType] = useState('');
 
+    //handle report dialog
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -56,6 +58,13 @@ export const SingleTransaction = ({
         setOpen(false);
     };
 
+    //handle snackbar function
+    const handleClickSnackbar = (alertType) => {
+        setAlertType(alertType);
+        setSnackBar(true);
+    };
+
+    //status changes functions
     const acceptItem = () => {
         axios
             .post(
@@ -69,6 +78,7 @@ export const SingleTransaction = ({
             )
             .then((res) => {
                 getTransactions();
+                handleClickSnackbar('accepted');
             })
             .catch((err) => {
                 console.log(err);
@@ -88,6 +98,7 @@ export const SingleTransaction = ({
             )
             .then((res) => {
                 getTransactions();
+                handleClickSnackbar('report');
             })
             .catch((err) => {
                 console.log(err);
@@ -107,6 +118,7 @@ export const SingleTransaction = ({
             )
             .then((res) => {
                 getTransactions();
+                handleClickSnackbar('return');
             })
             .catch((err) => {
                 console.log(err);
@@ -312,6 +324,11 @@ export const SingleTransaction = ({
                 </CardActions>
             </Card>
             <ReportIssue handleClose={handleClose} open={open} confirmClick={reportItem}></ReportIssue>
+            <TransactionsAlerts
+                alertType={alertType}
+                snackBar={snackBar}
+                setSnackBar={setSnackBar}
+            ></TransactionsAlerts>
         </>
     );
 };

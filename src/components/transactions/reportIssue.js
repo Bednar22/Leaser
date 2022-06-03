@@ -11,6 +11,8 @@ import {
     Divider,
     Typography,
 } from '@mui/material';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
 import '../../App.css';
 
 export const ReportIssue = ({ open, handleClose, confirmClick }) => {
@@ -31,9 +33,18 @@ export const ReportIssue = ({ open, handleClose, confirmClick }) => {
                 <DialogContent sx={{ p: 4 }}>
                     <DialogContentText sx={{ mb: 1 }}>
                         <Typography>
-                            Your report will be reported to our issue department and we will contact your if need,
-                            describe your problem below
+                            Your report will be sent to our issue department and we will contact your if need, describe
+                            your problem below.
                         </Typography>
+                        <Typography>More contact info: </Typography>
+                        <Stack direction='row' spacing={1}>
+                            <EmailIcon></EmailIcon>
+                            <Typography>leaser.help@gmail.com</Typography>
+                        </Stack>
+                        <Stack direction='row' spacing={1}>
+                            <PhoneIcon></PhoneIcon>
+                            <Typography>+48123456789</Typography>
+                        </Stack>
                     </DialogContentText>
                     <TextField
                         multiline={true}
