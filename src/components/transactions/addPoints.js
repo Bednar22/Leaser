@@ -84,19 +84,7 @@ export const AddPoints = (props) => {
                         </Button>
                     }
                 ></CardHeader>
-                {/* <CardContent>
-                    <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                        <Typography style={{ fontSize: 20 }}>{points} points</Typography>
-                        <Button
-                            endIcon={<AddIcon></AddIcon>}
-                            variant='contained'
-                            color='secondary'
-                            onClick={handleClickOpen}
-                        >
-                            Add points
-                        </Button>
-                    </Stack>
-                </CardContent> */}
+                
             </Card>
             <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
                 <DialogTitle>Choose ammount</DialogTitle>

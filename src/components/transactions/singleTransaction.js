@@ -5,7 +5,6 @@ import {
     CardContent,
     CardMedia,
     Typography,
-    IconButton,
     Tooltip,
     Stack,
     Box,
@@ -18,6 +17,9 @@ import {
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../../App.css';
+import { ReportIssue } from './reportIssue';
+import { useAuth } from '../utilities/auth';
+import { GridBreak } from '../utilities/gridBreak';
 //icons
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import BubbleChartIcon from '@mui/icons-material/BubbleChart';
@@ -26,10 +28,8 @@ import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
 import PersonIcon from '@mui/icons-material/Person';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { useAuth } from '../utilities/auth';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
-import { GridBreak } from '../utilities/gridBreak';
 
 export const SingleTransaction = ({
     postId,
@@ -46,6 +46,15 @@ export const SingleTransaction = ({
     const [postImage, setPostImage] = useState(null);
     const token = window.localStorage.getItem('leaserToken');
     const auth = useAuth();
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const acceptItem = () => {
         axios
@@ -149,23 +158,23 @@ export const SingleTransaction = ({
                     }
                     action={
                         <>
-                            {status == 'Returned' && (
+                            {status === 'Returned' && (
                                 <Tooltip title='Item is returned and waiting for acceptance' disableInteractive>
                                     <RotateRightIcon></RotateRightIcon>
                                 </Tooltip>
                             )}
-                            {status == 'Accepted' && (
+                            {status === 'Accepted' && (
                                 <Tooltip title='Item is returned and accepted by the owner' disableInteractive>
                                     <CheckIcon color='success'></CheckIcon>
                                 </Tooltip>
                             )}
-                            {status == 'NonAccepted' && (
+                            {status === 'NonAccepted' && (
                                 <Tooltip title='There was and issue reported' disableInteractive>
                                     <CloseIcon color='error'></CloseIcon>
                                 </Tooltip>
                             )}
 
-                            {status == 'Borrowed' &&
+                            {status === 'Borrowed' &&
                                 (new Date(dateTo).getTime() - new Date().getTime()) / (1000 * 3600 * 24) < 2 && (
                                     <Tooltip title='Item should be returned soon' disableInteractive>
                                         <PriorityHighIcon color='warning'></PriorityHighIcon>
@@ -190,7 +199,7 @@ export const SingleTransaction = ({
                             )}
                         </Grid>
                         <Grid item xs={8}>
-                            {leaser == true ? (
+                            {leaser === true ? (
                                 <Grid item xs={12} sx={{ mb: 1 }}>
                                     <Stack direction='row' spacing={2}>
                                         <PersonIcon></PersonIcon>
@@ -248,7 +257,7 @@ export const SingleTransaction = ({
 
                 <CardActions>
                     <>
-                        {status == 'Borrowed' && auth.user.id == payerId ? (
+                        {status === 'Borrowed' && auth.user.id === payerId ? (
                             <>
                                 <Stack
                                     sx={{ width: 1 / 1 }}
@@ -269,7 +278,7 @@ export const SingleTransaction = ({
                             </>
                         ) : null}
 
-                        {status == 'Returned' && auth.user.id == postInfo.userId ? (
+                        {status === 'Returned' && auth.user.id === postInfo.userId ? (
                             <>
                                 <Stack
                                     sx={{ width: 1 / 1 }}
@@ -280,7 +289,7 @@ export const SingleTransaction = ({
                                     alignItems='center'
                                 >
                                     <Button
-                                        onClick={reportItem}
+                                        onClick={handleClickOpen}
                                         variant='outlined'
                                         color='error'
                                         startIcon={<CloseIcon></CloseIcon>}
@@ -302,6 +311,7 @@ export const SingleTransaction = ({
                     </>
                 </CardActions>
             </Card>
+            <ReportIssue handleClose={handleClose} open={open} confirmClick={reportItem}></ReportIssue>
         </>
     );
 };
