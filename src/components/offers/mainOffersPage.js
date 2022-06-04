@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Grid, Container, Pagination, Box, Skeleton } from '@mui/material';
+import { Grid, Container, Pagination, Box, Skeleton, Typography } from '@mui/material';
 import { SearchComponent } from './searchComponent';
 import { GridBreak } from '../utilities/gridBreak';
 import { FilterOffers } from './filterOffers';
@@ -8,7 +8,7 @@ import { OfferTile } from './offerTile';
 import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 
-export const MainOffersPage = ({ search }) => {
+export const MainOffersPage = ({ search, setSearch }) => {
     const token = window.localStorage.getItem('leaserToken');
     const maxOffersPerPage = 8;
     const [totalPages, setTotalPages] = useState(null);
@@ -121,8 +121,6 @@ export const MainOffersPage = ({ search }) => {
                     } else {
                         getSortedOffers(sortBy, res.data);
                     }
-
-                    console.log(res.data);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -135,9 +133,10 @@ export const MainOffersPage = ({ search }) => {
     useEffect(() => {
         if (search) {
             searchForOffers(search);
+            setSearch(null);
         } else {
             let searchCat = searchParams.get('category');
-            setCategoryId(searchCat);
+            getOffersByCategory(searchCat);
         }
     }, []);
 
@@ -183,7 +182,7 @@ export const MainOffersPage = ({ search }) => {
                 </Grid>
 
                 <Grid container spacing={4} sx={{ my: 2 }}>
-                    {offers &&
+                    {offers.length !== 0 ? (
                         offers.slice(lowerIndex, upperIndex).map((item) => {
                             return (
                                 <Grid item xs={10} sm={8} md={6} lg={4} xl={3}>
@@ -197,7 +196,19 @@ export const MainOffersPage = ({ search }) => {
                                     ></OfferTile>
                                 </Grid>
                             );
-                        })}
+                        })
+                    ) : (
+                        <>
+                            <Grid item xs={12} sx={{ mt: 3, mb: 7 }}>
+                                <Typography align='center' paragraph={true} variant='h4'>
+                                    No offers fulfill your conditions
+                                </Typography>
+                                <Typography align='center' variant='h5'>
+                                    Look for something else!
+                                </Typography>
+                            </Grid>
+                        </>
+                    )}
                 </Grid>
                 <Box display='flex' justifyContent='center' sx={{ pb: 4 }}>
                     {totalPages && offers ? (

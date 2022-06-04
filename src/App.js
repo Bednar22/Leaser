@@ -90,7 +90,7 @@ function App() {
                             path='offers'
                             element={
                                 <RequireAuth>
-                                    <MainOffersPage search={search} />
+                                    <MainOffersPage search={search} setSearch={setSearch} />
                                 </RequireAuth>
                             }
                         />
