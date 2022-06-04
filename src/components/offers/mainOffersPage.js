@@ -8,7 +8,7 @@ import { OfferTile } from './offerTile';
 import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 
-export const MainOffersPage = (props) => {
+export const MainOffersPage = ({ search }) => {
     const token = window.localStorage.getItem('leaserToken');
     const maxOffersPerPage = 8;
     const [totalPages, setTotalPages] = useState(null);
@@ -17,28 +17,48 @@ export const MainOffersPage = (props) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
     const [sortBy, setSortBy] = useState(null);
-    const [categoryId, setCategoryId] = useState(searchParams.get('category'));
+    const [categoryId, setCategoryId] = useState(null);
     const [searchBy, setSearchBy] = useState(null);
     const [offers, setOffers] = useState([]);
 
+    //sorting functions
     const priceAscSort = (a, b) => {
-        return b.price - a.price;
-    };
-
-    const priceDscSort = (a, b) => {
         return a.price - b.price;
     };
 
-    const ratingAscSort = (a, b) => {
-        return b.rating - a.rating;
+    const priceDscSort = (a, b) => {
+        return b.price - a.price;
     };
 
-    const ratingDscSort = (a, b) => {
+    const ratingAscSort = (a, b) => {
         return a.rating - b.rating;
     };
 
+    const ratingDscSort = (a, b) => {
+        return b.rating - a.rating;
+    };
+
+    const getAllPosts = () => {
+        axios
+            .get(`/api/Posts/Detail`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                if (sortBy !== null) {
+                    getSortedOffers(sortBy, res.data);
+                } else {
+                    setOffers(res.data);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     const getOffersByCategory = () => {
-        if (categoryId === -1) {
+        if (categoryId === -1 || categoryId === null || categoryId === undefined) {
             getAllPosts();
         } else
             axios
@@ -48,16 +68,21 @@ export const MainOffersPage = (props) => {
                     },
                 })
                 .then((res) => {
-                    setOffers(res.data);
+                    if (sortBy !== null) {
+                        getSortedOffers(sortBy, res.data);
+                    } else {
+                        setOffers(res.data);
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
                 });
     };
 
-    const getSortedOffers = () => {
-        let arrCopy = offers;
-        switch (sortBy) {
+    const getSortedOffers = (sortPar, offersArray = offers) => {
+        setSortBy(sortPar);
+        let arrCopy = [...offersArray];
+        switch (sortPar) {
             case 'priceAsc':
                 arrCopy.sort(priceAscSort);
                 setOffers(arrCopy);
@@ -75,28 +100,14 @@ export const MainOffersPage = (props) => {
                 setOffers(arrCopy);
                 break;
             default:
+                console.log(`Nic`);
                 break;
         }
     };
 
-    const getAllPosts = () => {
-        axios
-            .get(`/api/Posts/Detail`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then((res) => {
-                setOffers(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    useEffect(() => {
-        getSortedOffers();
-    }, [sortBy]);
+    // useEffect(() => {
+    //     getSortedOffers();
+    // }, [sortBy]);
 
     useEffect(() => {
         getOffersByCategory();
@@ -104,12 +115,7 @@ export const MainOffersPage = (props) => {
 
     useEffect(() => {
         let searchCat = searchParams.get('category');
-        console.log(searchCat);
-        if (!searchCat) {
-            getAllPosts();
-        } else {
-            setCategoryId(searchCat);
-        }
+        setCategoryId(searchCat);
     }, []);
 
     useEffect(() => {
@@ -134,17 +140,17 @@ export const MainOffersPage = (props) => {
 
     const handlePaginationChange = (event, value) => {
         setCurrentPage(value);
-        setLowerIndex( (value - 1) * maxOffersPerPage );
-        if ( value * maxOffersPerPage > offers.length ) {
+        setLowerIndex((value - 1) * maxOffersPerPage);
+        if (value * maxOffersPerPage > offers.length) {
             setUpperIndex(offers.length);
         }
-        setUpperIndex( value * maxOffersPerPage );
-    }
+        setUpperIndex(value * maxOffersPerPage);
+    };
 
     useEffect(() => {
         setTotalPages(Math.ceil(offers.length / maxOffersPerPage));
         handlePaginationChange(null, 1);
-    }, [offers])
+    }, [offers]);
 
     return (
         <>
@@ -159,7 +165,11 @@ export const MainOffersPage = (props) => {
                     </Grid>
                     <Grid item xs={1} md={1}></Grid>
                     <Grid item xs={3} md={2}>
-                        <SortOffers sortByMain={sortBy} changeSortByMain={setSortBy} />
+                        <SortOffers
+                            sortByMain={sortBy}
+                            changeSortByMain={setSortBy}
+                            getSortedOffers={getSortedOffers}
+                        />
                     </Grid>
                     <Grid item xs={0} md={3}>
                         <GridBreak></GridBreak>
@@ -169,7 +179,7 @@ export const MainOffersPage = (props) => {
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={4} sx={{ my: 2 }} >
+                <Grid container spacing={4} sx={{ my: 2 }}>
                     {offers &&
                         offers.slice(lowerIndex, upperIndex).map((item) => {
                             return (
@@ -186,9 +196,9 @@ export const MainOffersPage = (props) => {
                             );
                         })}
                 </Grid>
-                <Box display='flex' justifyContent='center' sx={{pb: 4}}>
-                    { totalPages && offers ? (
-                        <Pagination 
+                <Box display='flex' justifyContent='center' sx={{ pb: 4 }}>
+                    {totalPages && offers ? (
+                        <Pagination
                             count={totalPages}
                             color='primary'
                             onChange={handlePaginationChange}
@@ -197,7 +207,6 @@ export const MainOffersPage = (props) => {
                     ) : (
                         <Skeleton variant='rectangular' />
                     )}
-
                 </Box>
             </Container>
         </>

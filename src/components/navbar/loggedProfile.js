@@ -77,22 +77,28 @@ export const LoggedProfile = (props) => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <Link to={`/user/profile/${auth.user.id}`} className='link-text'>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <Person fontSize='small' />
-                        </ListItemIcon>
-                        <Typography color='MenuText'>Profile</Typography>
-                    </MenuItem>
-                </Link>
-                <Link to='/user/wallet' className='link-text'>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <AccountBalanceWalletIcon fontSize='small' />
-                        </ListItemIcon>
-                        <Typography color='MenuText'>Wallet</Typography>
-                    </MenuItem>
-                </Link>
+                <MenuItem
+                    onClick={() => {
+                        navigate(`/user/profile/${auth.user.id}`);
+                    }}
+                >
+                    <ListItemIcon>
+                        <Person fontSize='small' />
+                    </ListItemIcon>
+                    <Typography color='MenuText'>Profile</Typography>
+                </MenuItem>
+
+                <MenuItem
+                    onClick={() => {
+                        navigate(`/user/wallet`);
+                    }}
+                >
+                    <ListItemIcon>
+                        <AccountBalanceWalletIcon fontSize='small' />
+                    </ListItemIcon>
+                    <Typography color='MenuText'>Wallet</Typography>
+                </MenuItem>
+
                 <Divider />
                 <MenuItem onClick={() => logout()}>
                     <ListItemIcon>

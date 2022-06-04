@@ -15,17 +15,15 @@ import { AddOffer } from './components/offers/addOffer';
 import { AuthProvider, useAuth } from './components/utilities/auth';
 import { RequireAuth } from './components/utilities/requireAuth';
 import { NoAuthPath } from './components/utilities/noAuthPath';
+import { OfferDetails } from './components/offers/offerDetails';
+import { Booking } from './components/offers/booking';
+import { EditOffer } from './components/offers/editOffer';
+import { TransactionsMain } from './components/transactions/transactionsMain';
+
 //mui imports
 import { Snackbar, Alert } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
-
-import { OfferDetails } from './components/offers/offerDetails';
-import { ReviewList } from './components/reviews/reviewList';
-import { AddReview } from './components/reviews/addReview';
-import { Booking } from './components/offers/booking';
-import { EditOffer } from './components/offers/editOffer';
-import { TransactionsMain } from './components/transactions/transactionsMain';
 
 const theme = createTheme({
     palette: {
@@ -43,7 +41,7 @@ const theme = createTheme({
 /*podstawowy component, w ktorym beda sciezki  */
 function App() {
     const [open, setOpen] = useState(false);
-    const auth = useAuth();
+    const [search, setSearch] = useState(null);
 
     const handleClickSnackbar = () => {
         setOpen(true);
@@ -88,12 +86,19 @@ function App() {
                                 </NoAuthPath>
                             }
                         />
-                        <Route path='offers' element={<MainOffersPage />} />
+                        <Route
+                            path='offers'
+                            element={
+                                <RequireAuth>
+                                    <MainOffersPage search={search} />
+                                </RequireAuth>
+                            }
+                        />
                         <Route
                             path='home'
                             element={
                                 <RequireAuth>
-                                    <Homepage />
+                                    <Homepage setSearch={setSearch} />
                                 </RequireAuth>
                             }
                         />
@@ -147,18 +152,6 @@ function App() {
                             }
                         />
                         <Route path='*' element={<NoMatch />} />
-                        <Route
-                            path='addReview'
-                            element={
-                                <RequireAuth>
-                                    <AddReview
-                                        reviewedUserNickname='jkowalski'
-                                        reviewedUserId='53C3E28D-D310-4DAA-F76E-08DA2B9E9D15'
-                                    />
-                                </RequireAuth>
-                            }
-                        />
-                        <Route path='reviewList' element={<ReviewList />} />
                     </Routes>
                     <Snackbar
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
