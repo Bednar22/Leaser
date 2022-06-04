@@ -6,10 +6,11 @@ import FormControl from '@mui/material/FormControl';
 
 import SearchIcon from '@mui/icons-material/Search';
 
-export const SearchComponent = ({ setSearchBy }) => {
+export const SearchComponent = ({ searchForOffers }) => {
     const [search, setSearch] = useState('');
+    
     const handleSearch = () => {
-        setSearchBy(search);
+        searchForOffers(search);
     };
     return (
         <>

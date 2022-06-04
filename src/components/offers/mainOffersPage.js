@@ -57,12 +57,13 @@ export const MainOffersPage = ({ search }) => {
             });
     };
 
-    const getOffersByCategory = () => {
-        if (categoryId === -1 || categoryId === null || categoryId === undefined) {
+    const getOffersByCategory = (category) => {
+        setCategoryId(category);
+        if (category === -1 || category === null || category === undefined) {
             getAllPosts();
         } else
             axios
-                .get(`/api/Posts/${categoryId}/Category/Detail`, {
+                .get(`/api/Posts/${category}/Category/Detail`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -100,34 +101,27 @@ export const MainOffersPage = ({ search }) => {
                 setOffers(arrCopy);
                 break;
             default:
-                console.log(`Nic`);
                 break;
         }
     };
 
-    // useEffect(() => {
-    //     getSortedOffers();
-    // }, [sortBy]);
-
-    useEffect(() => {
-        getOffersByCategory();
-    }, [categoryId]);
-
-    useEffect(() => {
-        let searchCat = searchParams.get('category');
-        setCategoryId(searchCat);
-    }, []);
-
-    useEffect(() => {
+    const searchForOffers = (searchPhrase) => {
+        setSearchBy(searchPhrase);
+        setCategoryId(-1);
         if (searchBy !== '') {
             axios
-                .get(`/api/Posts/${searchBy}/Detail`, {
+                .get(`/api/Posts/${searchPhrase}/Detail`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 })
                 .then((res) => {
-                    setOffers(res.data);
+                    if (sortBy === null) {
+                        setOffers(res.data);
+                    } else {
+                        getSortedOffers(sortBy, res.data);
+                    }
+
                     console.log(res.data);
                 })
                 .catch((err) => {
@@ -136,7 +130,16 @@ export const MainOffersPage = ({ search }) => {
         } else {
             getAllPosts();
         }
-    }, [searchBy]);
+    };
+
+    useEffect(() => {
+        if (search) {
+            searchForOffers(search);
+        } else {
+            let searchCat = searchParams.get('category');
+            setCategoryId(searchCat);
+        }
+    }, []);
 
     const handlePaginationChange = (event, value) => {
         setCurrentPage(value);
@@ -159,8 +162,8 @@ export const MainOffersPage = ({ search }) => {
                     <Grid item xs={3} md={2}>
                         <FilterOffers
                             categoryIdMain={categoryId}
-                            changeCategoryIdMain={setCategoryId}
                             setSearchParams={setSearchParams}
+                            getOffersByCategory={getOffersByCategory}
                         />
                     </Grid>
                     <Grid item xs={1} md={1}></Grid>
@@ -175,7 +178,7 @@ export const MainOffersPage = ({ search }) => {
                         <GridBreak></GridBreak>
                     </Grid>
                     <Grid item xs={4} md={4}>
-                        <SearchComponent setSearchBy={setSearchBy} />
+                        <SearchComponent searchForOffers={searchForOffers} />
                     </Grid>
                 </Grid>
 
