@@ -95,7 +95,6 @@ export const UserSettings = (props) => {
         axios
             .put(`/api/Addresses/${addressId}`, addressData, config)
             .then((res) => {
-                console.log('Bez problemów');
                 console.log(res);
             })
             .catch((err) => {
