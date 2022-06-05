@@ -1,19 +1,16 @@
-import { Grid, Container, Paper, Typography, Stack, Button, Box, TextField, Skeleton, Card, CardHeader, CardMedia, CardContent, Divider, CardActions } from '@mui/material';
+import { Grid, Container, Typography, Stack, Button, Skeleton, Card, CardHeader, CardMedia, CardContent, Divider, CardActions } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, NavLink } from 'react-router-dom';
+import { useParams, NavLink } from 'react-router-dom';
 import axios from 'axios';
 
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import SellIcon from '@mui/icons-material/Sell';
 import PersonIcon from '@mui/icons-material/Person';
-import TitleIcon from '@mui/icons-material/Title';
 
 export const TransactionSummary = () => {
 
     const params = useParams();
     const transactionId = params.id;
-
-    const navigate = useNavigate();
 
     const [offerId, setOfferId] = useState(null);
     const [renterNickname, setRenterNickname] = useState(null);
