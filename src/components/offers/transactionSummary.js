@@ -4,14 +4,9 @@ import { useParams, useNavigate, NavLink } from 'react-router-dom';
 import axios from 'axios';
 
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import BubbleChartIcon from '@mui/icons-material/BubbleChart';
 import SellIcon from '@mui/icons-material/Sell';
-import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
 import PersonIcon from '@mui/icons-material/Person';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import RotateRightIcon from '@mui/icons-material/RotateRight';
-import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import TitleIcon from '@mui/icons-material/Title';
 
 export const TransactionSummary = () => {
 
@@ -100,18 +95,6 @@ export const TransactionSummary = () => {
                 <CardContent>
                 <Grid container spacing={4}>
                     <Grid item xs={5}>
-                        {offerTitle ? (
-                            <NavLink
-                                to={`/offers/offerDetails/${offerId}`}
-                                style={{ textDecoration: 'none', color: 'inherit' }}
-                            >
-                                <Typography variant='h6' fontWeight='bold' sx={{wordWrap: 'break-word'}}>
-                                    {offerTitle}
-                                </Typography>
-                            </NavLink>
-                        ) : (
-                            <Skeleton width='250px'/>
-                        )}
                         {(offerImage != null && offerId != null) ? (
                             <NavLink
                                 to={`/offers/offerDetails/${offerId}`}
@@ -134,6 +117,20 @@ export const TransactionSummary = () => {
                     
                     <Grid item xs={5}>
                         <Grid item xs={12} sx={{ mb: 1 }}>
+                            {(offerTitle != null && offerId != null)? (
+                                <Typography fontWeight='bold' variant='h5' sx={{wordWrap: 'break-word'}}>
+                                        <NavLink
+                                            to={`/offers/offerDetails/${offerId}`}
+                                            style={{ textDecoration: 'none', color: 'inherit' }}
+                                        >
+                                            {offerTitle}
+                                        </NavLink>
+                                </Typography>
+                            ) : (
+                                <Skeleton width='250px'/>
+                            )}
+                        </Grid>
+                        <Grid item xs={12} sx={{ mb: 1 }}>
                             {(renterNickname != null && renterId != null) ? (
                                     <Stack direction='row' spacing={2}>
                                         <PersonIcon/>
@@ -147,7 +144,6 @@ export const TransactionSummary = () => {
                                                 </NavLink>
                                         </Typography>
                                     </Stack>
-                                
                             ) : (
                                 <Skeleton width='250px'/>
                             )}
@@ -190,7 +186,7 @@ export const TransactionSummary = () => {
                     )}
                     {offerId != null ? (
                         <Button size='small' variant='outlined' color='secondary' component={NavLink} to='/home'>
-                            Back to Homepage
+                            Return to Homepage
                         </Button>
                     ) : (
                         <Skeleton variant='rectangular' width='170px' height='30px' />
