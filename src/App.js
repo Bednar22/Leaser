@@ -24,6 +24,7 @@ import { OfferDetails } from './components/offers/offerDetails';
 import { ReviewList } from './components/reviews/reviewList';
 import { AddReview } from './components/reviews/addReview';
 import { Booking } from './components/offers/booking';
+import { TransactionSummary } from './components/offers/transactionSummary';
 import { EditOffer } from './components/offers/editOffer';
 import { TransactionsMain } from './components/transactions/transactionsMain';
 
@@ -88,7 +89,14 @@ function App() {
                                 </NoAuthPath>
                             }
                         />
-                        <Route path='offers' element={<MainOffersPage />} />
+                        <Route 
+                            path='offers'
+                            element={
+                                <RequireAuth>
+                                    <MainOffersPage />
+                                </RequireAuth>
+                            } 
+                        />
                         <Route
                             path='home'
                             element={
@@ -97,7 +105,6 @@ function App() {
                                 </RequireAuth>
                             }
                         />
-
                         <Route
                             path='offers/offerDetails/:id'
                             element={
@@ -111,6 +118,14 @@ function App() {
                             element={
                                 <RequireAuth>
                                     <Booking />
+                                </RequireAuth>
+                            }
+                        />
+                        <Route
+                            path='offers/transactionSummary/:id'
+                            element={
+                                <RequireAuth>
+                                    <TransactionSummary />
                                 </RequireAuth>
                             }
                         />
