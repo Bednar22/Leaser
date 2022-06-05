@@ -1,4 +1,4 @@
-import { ImageList, ImageListItem, ImageListItemBar, Grid } from '@mui/material';
+import { ImageList, ImageListItem, ImageListItemBar, Grid, Typography, Divider } from '@mui/material';
 import '../../App.css';
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
@@ -31,6 +31,12 @@ export const CategoriesTiles = (props) => {
     return (
         <>
             <Grid container justifyContent='center'>
+                <Grid item xs={10} md={8}>
+                    <Typography align='center' paragraph={true} variant='overline' fontSize={18} sx={{ mb: 0 }}>
+                        Find offers that will interest you in these categories
+                    </Typography>
+                    <Divider></Divider>
+                </Grid>
                 <Grid item xs={10} md={8}>
                     <ImageList cols={4}>
                         {categories.map((item) => (

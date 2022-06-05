@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { SingleTransaction } from './singleTransaction';
-import { Grid, Box } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from '../utilities/auth';
 import { FilterTransactions } from './filterTransactions';
@@ -51,21 +51,29 @@ export const BorrowedTrans = (props) => {
 
             <Grid container justifyContent='center'>
                 <Grid item sm={12} md={10}>
-                    {transactions.filter(filterAll).map((item) => {
-                        return (
-                            <SingleTransaction
-                                payerId={item.payerId}
-                                status={item.status}
-                                price={item.price}
-                                postId={item.postId}
-                                dateFrom={item.dateFrom}
-                                dateTo={item.dateTo}
-                                leaser={true}
-                                transId={item.id}
-                                getTransactions={getTransactions}
-                            ></SingleTransaction>
-                        );
-                    })}
+                    {transactions.length !== 0 ? (
+                        transactions.filter(filterAll).map((item) => {
+                            return (
+                                <SingleTransaction
+                                    payerId={item.payerId}
+                                    status={item.status}
+                                    price={item.price}
+                                    postId={item.postId}
+                                    dateFrom={item.dateFrom}
+                                    dateTo={item.dateTo}
+                                    leaser={true}
+                                    transId={item.id}
+                                    getTransactions={getTransactions}
+                                ></SingleTransaction>
+                            );
+                        })
+                    ) : (
+                        <>
+                            <Typography sx={{ my: 4 }} variant='h4' align='center'>
+                                You have no borrowed items yet
+                            </Typography>
+                        </>
+                    )}
                 </Grid>
             </Grid>
         </>

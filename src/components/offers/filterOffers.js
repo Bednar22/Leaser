@@ -5,7 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export const FilterOffers = ({ categoryIdMain, changeCategoryIdMain, setSearchParams }) => {
+export const FilterOffers = ({ categoryIdMain, setSearchParams, getOffersByCategory }) => {
     const [categories, setCategories] = useState([]);
 
     const MenuProps = {
@@ -31,7 +31,7 @@ export const FilterOffers = ({ categoryIdMain, changeCategoryIdMain, setSearchPa
 
     const handleCategoryChange = (event) => {
         setSearchParams({ category: event.target.value });
-        changeCategoryIdMain(event.target.value);
+        getOffersByCategory(event.target.value);
     };
 
     return (
