@@ -19,11 +19,13 @@ import { OfferDetails } from './components/offers/offerDetails';
 import { Booking } from './components/offers/booking';
 import { EditOffer } from './components/offers/editOffer';
 import { TransactionsMain } from './components/transactions/transactionsMain';
+import { TransactionSummary } from './components/offers/transactionSummary';
 
 //mui imports
 import { Snackbar, Alert } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
+
 
 const theme = createTheme({
     palette: {
@@ -102,7 +104,6 @@ function App() {
                                 </RequireAuth>
                             }
                         />
-
                         <Route
                             path='offers/offerDetails/:id'
                             element={
@@ -116,6 +117,14 @@ function App() {
                             element={
                                 <RequireAuth>
                                     <Booking />
+                                </RequireAuth>
+                            }
+                        />
+                        <Route
+                            path='offers/transactionSummary/:id'
+                            element={
+                                <RequireAuth>
+                                    <TransactionSummary />
                                 </RequireAuth>
                             }
                         />

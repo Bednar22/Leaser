@@ -213,7 +213,7 @@ export const Booking = () => {
         .then((res) => {
             console.log(res);
             setTransactionError(null);
-            navigate(`/offers/offerDetails/${offerId}`);
+            navigate(`/offers/transactionSummary/${res.data.id}`);
         })
         .catch((error) => {
             setTransactionError(error.response.data);

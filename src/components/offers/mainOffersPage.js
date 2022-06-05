@@ -10,7 +10,7 @@ import { useSearchParams } from 'react-router-dom';
 
 export const MainOffersPage = ({ search, setSearch }) => {
     const token = window.localStorage.getItem('leaserToken');
-    const maxOffersPerPage = 8;
+    const maxOffersPerPage = 12;
     const [totalPages, setTotalPages] = useState(null);
     const [lowerIndex, setLowerIndex] = useState(null);
     const [upperIndex, setUpperIndex] = useState(null);
