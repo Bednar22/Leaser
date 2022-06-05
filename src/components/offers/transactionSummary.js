@@ -22,6 +22,7 @@ export const TransactionSummary = () => {
 
     const [offerId, setOfferId] = useState(null);
     const [renterNickname, setRenterNickname] = useState(null);
+    const [renterId, setRenterId] = useState(null);
     const [offerTitle, setOfferTitle] = useState(null);
     const [offerImage, setOfferImage] = useState(null);
     const [paidPrice, setPaidPrice] = useState(null);
@@ -61,6 +62,7 @@ export const TransactionSummary = () => {
                 .then( (res) => {
                     setOfferTitle(res.data.title);
                     setRenterNickname(res.data.userNickName);
+                    setRenterId(res.data.userId);
                 })
                 .catch((error) => {
                     console.log(error)
@@ -98,53 +100,71 @@ export const TransactionSummary = () => {
                 <CardContent>
                 <Grid container spacing={4}>
                     <Grid item xs={5}>
-                        <Stack>
-                            {offerTitle ? (
+                        {offerTitle ? (
+                            <NavLink
+                                to={`/offers/offerDetails/${offerId}`}
+                                style={{ textDecoration: 'none', color: 'inherit' }}
+                            >
                                 <Typography variant='h6' fontWeight='bold' sx={{wordWrap: 'break-word'}}>
                                     {offerTitle}
                                 </Typography>
-                            ) : (
-                                <Skeleton width='250px'/>
-                            )}
-                            {offerImage ? (
+                            </NavLink>
+                        ) : (
+                            <Skeleton width='250px'/>
+                        )}
+                        {(offerImage != null && offerId != null) ? (
+                            <NavLink
+                                to={`/offers/offerDetails/${offerId}`}
+                                style={{ textDecoration: 'none', color: 'inherit' }}
+                            >
                                 <CardMedia
                                     component='img'
                                     image={offerImage}
                                     alt='offer image'
                                 />
-                            ) : (
-                                <Skeleton variant='rectangular' width='300px' height='200px'/>
-                            )}
-                        </Stack>
+                            </NavLink>
+                        ) : (
+                            <Skeleton variant='rectangular' width='300px' height='200px'/>
+                        )}
                     </Grid>
 
                     <Grid item sx={1}>
                         <Divider orientation='vertical'/>
                     </Grid>
                     
-
-                    <Grid item>
-                        <Stack> 
-                            {renterNickname ? (
+                    <Grid item xs={5}>
+                        <Grid item xs={12} sx={{ mb: 1 }}>
+                            {(renterNickname != null && renterId != null) ? (
                                     <Stack direction='row' spacing={2}>
                                         <PersonIcon/>
                                         <Typography sx={{wordWrap: 'break-word'}}>
-                                            Leaser: {renterNickname}
+                                            Leaser:{' '}
+                                                <NavLink
+                                                    to={`/user/profile/${renterId}`}
+                                                    style={{ textDecoration: 'none', color: 'inherit' }}
+                                                >
+                                                    {renterNickname}
+                                                </NavLink>
                                         </Typography>
                                     </Stack>
-                                ) : (
-                                    <Skeleton width='250px'/>
-                                )}        
-                            {rentFrom && rentTo ? (
+                                
+                            ) : (
+                                <Skeleton width='250px'/>
+                            )}
+                        </Grid>  
+                        <Grid item xs={12} sx={{ mb: 1 }}>
+                            {rentFrom && rentTo ? (  
                                 <Stack direction='row' spacing={2}>     
                                     <DateRangeIcon/>
                                     <Typography sx={{wordWrap: 'break-word'}}>
                                         Date range: {rentFrom.slice(0, 10)} - {rentTo.slice(0, 10)}
                                     </Typography>
-                                </Stack>
+                                </Stack>  
                             ) : (
                                 <Skeleton />
                             )}
+                        </Grid>
+                        <Grid item xs={12} sx={{ mb: 1 }}>
                             {paidPrice != null ? (
                                 <Stack direction='row' spacing={2}>     
                                     <SellIcon/>
@@ -155,7 +175,7 @@ export const TransactionSummary = () => {
                             ) : (
                                 <Skeleton/>
                             )}
-                        </Stack>
+                        </Grid>
                     </Grid>
 
                 </Grid>
