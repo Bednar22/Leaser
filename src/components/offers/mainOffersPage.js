@@ -10,7 +10,7 @@ import { useSearchParams } from 'react-router-dom';
 
 export const MainOffersPage = (props) => {
     const token = window.localStorage.getItem('leaserToken');
-    const maxOffersPerPage = 8;
+    const maxOffersPerPage = 12;
     const [totalPages, setTotalPages] = useState(null);
     const [lowerIndex, setLowerIndex] = useState(null);
     const [upperIndex, setUpperIndex] = useState(null);
@@ -169,7 +169,7 @@ export const MainOffersPage = (props) => {
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={4} sx={{ my: 2 }} >
+                <Grid container spacing={4} sx={{ my: 2 }}>
                     {offers &&
                         offers.slice(lowerIndex, upperIndex).map((item) => {
                             return (
