@@ -33,7 +33,6 @@ export const Booking = () => {
     const [fromError, setFromError] = useState(null);
     const [toError, setToError] = useState(null);
     const [transactionError, setTransactionError] = useState(null);
-    const [transactionId, setTransactionId] = useState(null);
 
     const [currentUserId, setcurrentUserId] = useState(null);
 
@@ -214,8 +213,7 @@ export const Booking = () => {
         .then((res) => {
             console.log(res);
             setTransactionError(null);
-            setTransactionId(res.data.id);
-            navigate(`/offers/transactionSummary/${transactionId}`);
+            navigate(`/offers/transactionSummary/${res.data.id}`);
         })
         .catch((error) => {
             setTransactionError(error.response.data);
