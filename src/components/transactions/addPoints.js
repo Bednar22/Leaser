@@ -40,6 +40,7 @@ export const AddPoints = (props) => {
                 console.log(res.data);
                 handleClose();
                 getUserPoints();
+                window.location.reload(false);
             })
             .catch((error) => {
                 console.log(error.response);

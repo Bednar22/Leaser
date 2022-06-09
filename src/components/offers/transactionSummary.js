@@ -16,6 +16,7 @@ export const TransactionSummary = () => {
     const [renterNickname, setRenterNickname] = useState(null);
     const [renterId, setRenterId] = useState(null);
     const [offerTitle, setOfferTitle] = useState(null);
+    const [phoneNumber, setPhoneNumber] = useState(null);
     const [offerImage, setOfferImage] = useState(null);
     const [paidPrice, setPaidPrice] = useState(null);
     const [rentFrom, setRentFrom] = useState(null);
@@ -54,7 +55,9 @@ export const TransactionSummary = () => {
                 .then( (res) => {
                     setOfferTitle(res.data.title);
                     setRenterNickname(res.data.userNickName);
+                    setPhoneNumber(res.data.phoneNumber);
                     setRenterId(res.data.userId);
+                    console.log(res);
                 })
                 .catch((error) => {
                     console.log(error)
@@ -167,6 +170,16 @@ export const TransactionSummary = () => {
                                 </Stack>
                             ) : (
                                 <Skeleton/>
+                            )}
+                        </Grid>
+                        <Grid item xs={12} sx={{ mb: 1 }}>
+                            {(phoneNumber != null && phoneNumber != null)? (
+                                <Typography sx={{wordWrap: 'break-word'}}>
+                                        Arrage the meeting by calling the owner: {"\n"}
+                                        {phoneNumber}
+                                </Typography>
+                            ) : (
+                                <Skeleton width='400px'/>
                             )}
                         </Grid>
                     </Grid>

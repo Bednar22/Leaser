@@ -214,6 +214,7 @@ export const Booking = () => {
             console.log(res);
             setTransactionError(null);
             navigate(`/offers/transactionSummary/${res.data.id}`);
+            window.location.reload(false);
         })
         .catch((error) => {
             setTransactionError(error.response.data);
