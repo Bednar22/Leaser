@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { LoggedProfile } from './loggedProfile';
 import { NotLoggedProfile } from './notLoggedProfile';
 import { useAuth } from '../utilities/auth';
+import LogoPath from '../../assets/logo.svg';
 
 export const Navbar = (props) => {
     const auth = useAuth();
@@ -13,8 +14,8 @@ export const Navbar = (props) => {
     return (
         <>
             <Box className='menu' sx={{ mb: 8 }}>
-                <Link className='menu-button' to='/'>
-                    LOGO
+                <Link className='menu-button' to='/' style={{padding: 0}}>
+                    <img src={LogoPath} alt='logo' width='190px'/>
                 </Link>
                 <Stack direction='row'>
                     <NavLink className='menu-button' to='home'>

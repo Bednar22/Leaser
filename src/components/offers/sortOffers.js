@@ -3,7 +3,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export const SortOffers = ({ sortByMain, changeSortByMain }) => {
+export const SortOffers = ({ sortByMain, changeSortByMain, getSortedOffers }) => {
     const MenuProps = {
         PaperProps: {
             style: {
@@ -13,7 +13,8 @@ export const SortOffers = ({ sortByMain, changeSortByMain }) => {
     };
 
     const handleSort = (event) => {
-        changeSortByMain(event.target.value);
+        // changeSortByMain(event.target.value);
+        getSortedOffers(event.target.value);
     };
 
     return (

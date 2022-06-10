@@ -1,19 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import IconButton from '@mui/material/IconButton';
 import Person from '@mui/icons-material/Person';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import Logout from '@mui/icons-material/Logout';
-import { Typography, Avatar, Menu, MenuItem, Divider, Box } from '@mui/material';
+import { Typography, Avatar, Menu, MenuItem, Divider, Box, Stack } from '@mui/material';
 import '../../App.css';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../utilities/auth';
+import axios from 'axios';
 
 export const LoggedProfile = (props) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const auth = useAuth();
+    const [points, setPoints] = useState(null);
+    const [nickName, setNickName] = useState(auth.user.nickName);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -27,8 +30,30 @@ export const LoggedProfile = (props) => {
         navigate('/');
     };
 
+    const config = {
+        headers: {
+            Authorization: `Bearer ${window.localStorage.getItem('leaserToken')}`,
+        },
+    };
+
+    const getPoints = () => {
+        axios
+            .get(`/api/Accounts/${auth.user.id}/User`, config)
+            .then((res) => {
+                setPoints(res.data.points);
+            })
+            .catch((err) => {
+                console.log(err.response.data);
+        });
+    }
+
+    useEffect(() => {
+        getPoints();
+    }, []);
+
     return (
-        <>
+        <> 
+        <Stack direction='row' spacing={1}>   
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
                 <IconButton
                     onClick={handleClick}
@@ -41,7 +66,18 @@ export const LoggedProfile = (props) => {
                         <Person />
                     </Avatar>
                 </IconButton>
+                  
+
             </Box>
+            <Stack direction='column' spacing={0} style={{ left: 2 }}>   
+                    <Typography sx={{wordWrap: 'break-word'}} style={{ color: '#FFFFFF', fontSize: 14, fontWeight: 'bold' }}>
+                        {nickName}
+                    </Typography>
+                    <Typography sx={{wordWrap: 'break-word'}} style={{ color: '#FFFFFF', fontSize: 13 }}>
+                        Points: {points}
+                    </Typography>
+                </Stack>
+                </Stack>
             <Menu
                 anchorEl={anchorEl}
                 id='account-menu'
@@ -77,22 +113,28 @@ export const LoggedProfile = (props) => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <Link to={`/user/profile/${auth.user.id}`} className='link-text'>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <Person fontSize='small' />
-                        </ListItemIcon>
-                        <Typography color='MenuText'>Profile</Typography>
-                    </MenuItem>
-                </Link>
-                <Link to='/user/wallet' className='link-text'>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <AccountBalanceWalletIcon fontSize='small' />
-                        </ListItemIcon>
-                        <Typography color='MenuText'>Wallet</Typography>
-                    </MenuItem>
-                </Link>
+                <MenuItem
+                    onClick={() => {
+                        navigate(`/user/profile/${auth.user.id}`);
+                    }}
+                >
+                    <ListItemIcon>
+                        <Person fontSize='small' />
+                    </ListItemIcon>
+                    <Typography color='MenuText'>Profile</Typography>
+                </MenuItem>
+
+                <MenuItem
+                    onClick={() => {
+                        navigate(`/user/wallet`);
+                    }}
+                >
+                    <ListItemIcon>
+                        <AccountBalanceWalletIcon fontSize='small' />
+                    </ListItemIcon>
+                    <Typography color='MenuText'>Wallet</Typography>
+                </MenuItem>
+
                 <Divider />
                 <MenuItem onClick={() => logout()}>
                     <ListItemIcon>

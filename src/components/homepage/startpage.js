@@ -29,6 +29,11 @@ export const Startpage = (props) => {
                 alignItems='center'
                 height='100vh'
             >
+                <NavLink to='/login' style={{ textDecoration: 'none', margin: '32px' }}>
+                    <Button variant='contained' style={{ backgroundColor: '#FFA89A', position: 'absolute', right: 17, top: 17 }}>
+                        <Typography variant='h6'>Log in</Typography>
+                    </Button>
+                </NavLink>
                 <Stack alignItems='center' direction='column'>
                     <Typography variant='h4' align='center' fontWeight='bold' color='#FAF7F0'>
                         Tired of buying new things you will use only once?
